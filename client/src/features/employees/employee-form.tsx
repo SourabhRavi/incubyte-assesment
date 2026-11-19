@@ -72,7 +72,7 @@ const EmployeeForm = ({
 
     if (!values.email.trim()) {
       nextErrors.email = "Email is required."
-    } else if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(values.email.trim())) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) {
       nextErrors.email = "Enter a valid email address."
     }
 
