@@ -30,7 +30,7 @@ const AppLayout = () => {
         <header className="sticky top-0 z-30 flex h-20 shrink-0 items-center justify-between gap-4 border-b border-border bg-card px-4 sm:px-6 lg:px-10">
           <div className="flex min-w-0 items-center gap-4">
             <SidebarTrigger
-              className="shrink-0"
+              className="shrink-0 lg:hidden"
               aria-label="Toggle navigation sidebar"
               title="Toggle navigation sidebar"
             />
