@@ -118,7 +118,22 @@
 }
 @layer components {
   .peopleops-inset { background: var(--background); }
-  .peopleops-topbar { background: color-mix(in srgb,var(--card) 96%,transparent); }
+  .peopleops-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: color-mix(in srgb, var(--card) 78%, transparent);
+    -webkit-backdrop-filter: blur(20px) saturate(165%);
+    backdrop-filter: blur(20px) saturate(165%);
+    border-bottom-color: color-mix(in srgb, var(--border) 72%, transparent);
+    box-shadow: 0 4px 20px rgb(30 41 59 / 3%);
+    isolation: isolate;
+  }
+  .dark .peopleops-topbar {
+    background: color-mix(in srgb, var(--card) 76%, transparent);
+    border-bottom-color: color-mix(in srgb, var(--border) 78%, transparent);
+    box-shadow: 0 4px 22px rgb(0 0 0 / 12%);
+  }
   .peopleops-page-shell { min-height: calc(100svh - 52px); }
   .peopleops-sidebar [data-slot="sidebar-inner"] { background: var(--sidebar); }
   .peopleops-overview { gap: 14px; width: 100%; }
