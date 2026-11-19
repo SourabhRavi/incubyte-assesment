@@ -1,5 +1,6 @@
 import { useMemo, useState, type ComponentType, type ReactNode } from "react"
-import { ArrowUpRight, Globe2, LoaderCircle, RefreshCw, Users, Wallet } from "lucide-react"
+import { ArrowUpRight, Globe2, LoaderCircle, RefreshCw, Users, Wallet, X } from "lucide-react"
+import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 import { Link } from "react-router"
 import { useAllSalarySummaries, useJobTitleAverages, useSalarySummary } from "@/features/analytics/analytics-queries"
 import { COUNTRIES, COUNTRY_CURRENCIES, type Country } from "@/features/employees/employee-types"
@@ -43,6 +44,7 @@ function EmptyState({ children }: { children: ReactNode }) {
 
 export default function OverviewPage() {
   const [selectedCountry, setSelectedCountry] = useState<Country>(COUNTRIES[0])
+  const [activeRole, setActiveRole] = useState<string | null>(null)
   const allMarkets = useAllSalarySummaries()
   const summaryQuery = useSalarySummary(selectedCountry)
   const rolesQuery = useJobTitleAverages(selectedCountry)
@@ -50,9 +52,6 @@ export default function OverviewPage() {
   const roles = rolesQuery.data?.data ?? []
   const currency = summary?.currency ?? rolesQuery.data?.currency ?? COUNTRY_CURRENCIES[selectedCountry]
   const count = summary?.employeeCount ?? roles.reduce((total, role) => total + role.employeeCount, 0)
-  const min = Number(summary?.minSalary ?? 0)
-  const avg = Number(summary?.averageSalary ?? 0)
-  const max = Number(summary?.maxSalary ?? 0)
   const maxRole = Math.max(1, ...roles.map((role) => Number(role.averageSalary)))
   const totalRoleEmployees = roles.reduce((total, role) => total + role.employeeCount, 0)
   const isRefreshing = summaryQuery.isFetching || rolesQuery.isFetching || allMarkets.some((query) => query.isFetching)
@@ -85,7 +84,7 @@ export default function OverviewPage() {
         <label className="relative">
           <span className="sr-only">Reporting country</span>
           <Globe2 className="pointer-events-none absolute left-[15px] top-1/2 size-[16px] -translate-y-1/2 text-[#5146D8]" />
-          <NativeSelect id="overview-country" value={selectedCountry} onChange={(event) => setSelectedCountry(event.target.value as Country)} className="h-[43px] w-[199px] rounded-[8px] border-[#E3E7F0] bg-white pl-[39px] pr-8 text-[12px] font-semibold text-[#30354A]">
+          <NativeSelect id="overview-country" value={selectedCountry} onChange={(event) => { setSelectedCountry(event.target.value as Country); setActiveRole(null) }} size="lg" className="w-[199px] rounded-[8px] border-[#E3E7F0] bg-white [&>select]:h-[43px] [&>select]:rounded-[8px] [&>select]:border-[#E3E7F0] [&>select]:bg-white [&>select]:pl-[39px] [&>select]:pr-8 [&>select]:text-[12px] [&>select]:font-semibold [&>select]:text-[#30354A]">
             {COUNTRIES.map((country) => <NativeSelectOption key={country} value={country}>{country}</NativeSelectOption>)}
           </NativeSelect>
         </label>
@@ -105,57 +104,65 @@ export default function OverviewPage() {
     </div>
 
     <div className="grid items-stretch gap-6 xl:grid-cols-[1.18fr_0.88fr]">
-      <Panel title="Average salary by role" subtitle={`Annual compensation · ${currency}`}>
+      <Panel title="Average salary by role" subtitle={"Annual compensation · " + currency}>
         {rolesQuery.isPending ? <EmptyState>Loading salary breakdown…</EmptyState> : rolesQuery.isError ? <EmptyState>Unable to load role salary data.</EmptyState> : roles.length === 0 ? <EmptyState>No active employee data for {selectedCountry} yet.</EmptyState> :
-          <div className="px-[22px] pb-[16px] pt-[28px]">
-            <div className="space-y-[21px]">
-              {roles.map((role, index) => <div key={role.jobTitle} className="grid grid-cols-[105px_minmax(0,1fr)_108px] items-center gap-3 max-sm:grid-cols-[78px_minmax(0,1fr)]">
-                <span className="truncate text-[12px] font-medium text-[#30354A]">{role.jobTitle}</span>
-                <div className="h-[16px] overflow-hidden rounded-[4px] bg-[#F4F5FA]">
-                  <div className="h-full rounded-[4px]" style={{ width: `${Math.max(2, (Number(role.averageSalary) / maxRole) * 100)}%`, background: index === 0 ? "#5146D8" : "#EDEBFF" }} />
-                </div>
-                <span className="text-right text-[12px] font-semibold text-[#30354A] tabular-nums max-sm:col-start-2 max-sm:text-left">{money(role.averageSalary, currency)}</span>
-              </div>)}
+          <div className="px-4 pb-4 pt-5">
+            <div className="mb-3 flex items-center justify-between gap-2 px-2">
+              <span className="text-[10px] text-[#78839A]">Select a bar or legend item to focus a role in the table</span>
+              {activeRole && <button type="button" onClick={() => setActiveRole(null)} className="inline-flex items-center gap-1 text-[10px] font-medium text-[#5146D8] hover:underline">Clear focus <X className="size-3" /></button>}
             </div>
-            <div className="ml-[118px] mr-[108px] mt-[31px] flex justify-between text-[9px] text-[#78839A] max-sm:ml-[90px] max-sm:mr-0">
-              <span>{compactMoney(0, currency)}</span><span>{compactMoney(maxRole / 3, currency)}</span><span>{compactMoney((maxRole * 2) / 3, currency)}</span><span>{compactMoney(maxRole, currency)}</span>
+            <div style={{ height: Math.max(270, roles.length * 43) }} className="w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={roles} layout="vertical" margin={{ top: 4, right: 18, bottom: 4, left: 8 }} barCategoryGap={12}>
+                  <CartesianGrid horizontal={false} stroke="#E9ECF3" strokeDasharray="3 4" />
+                  <XAxis type="number" tickFormatter={(value: number) => compactMoney(value, currency)} tick={{ fill: "#78839A", fontSize: 10 }} axisLine={false} tickLine={false} tickMargin={9} />
+                  <YAxis type="category" dataKey="jobTitle" width={112} interval={0} tick={{ fill: "#46516A", fontSize: 10 }} axisLine={false} tickLine={false} />
+                  <Tooltip cursor={{ fill: "#F6F5FF" }} contentStyle={{ border: "1px solid #E3E7F0", borderRadius: 10, boxShadow: "0 8px 24px rgb(35 45 75 / 10%)", fontSize: 12 }} formatter={(value) => [money(Number(value), currency), "Average annual salary"]} />
+                  <Bar dataKey="averageSalary" name="Average salary" radius={[0, 5, 5, 0]} maxBarSize={18} onClick={(entry) => setActiveRole(String(entry.jobTitle ?? ""))}>
+                    {roles.map((role, index) => <Cell key={role.jobTitle} fill={activeRole && activeRole !== role.jobTitle ? "#E9E7F8" : COLORS[index % COLORS.length]} />)}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           </div>}
       </Panel>
 
-      <Panel title="Workforce mix" subtitle={`Employees by job title · ${selectedCountry}`}>
+      <Panel title="Workforce mix" subtitle={"Employees by job title · " + selectedCountry}>
         {rolesQuery.isPending ? <EmptyState>Loading workforce mix…</EmptyState> : rolesQuery.isError || roles.length === 0 ? <EmptyState>No workforce data to display yet.</EmptyState> :
-          <div className="flex min-h-[280px] items-center justify-center gap-5 px-5 pb-5 pt-7 max-sm:flex-col">
-            <div className="relative h-[184px] w-[184px] shrink-0">
-              <svg viewBox="0 0 160 160" className="h-full w-full -rotate-90" role="img" aria-label={`Workforce distribution across ${roles.length} job titles`}>
-                <circle cx="80" cy="80" r="57" fill="none" stroke="#F0F1F6" strokeWidth="17" />
-                {donut.map((segment) => <circle key={segment.jobTitle} cx="80" cy="80" r="57" fill="none" stroke={segment.color} strokeWidth="17" strokeDasharray={segment.dash} strokeDashoffset={segment.offset} />)}
-              </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <div className="flex min-h-[300px] items-center justify-center gap-3 px-4 pb-5 pt-5 max-sm:flex-col">
+            <div className="relative h-[205px] w-[205px] shrink-0">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie data={roles} dataKey="employeeCount" nameKey="jobTitle" cx="50%" cy="50%" innerRadius={59} outerRadius={83} paddingAngle={2} stroke="#fff" strokeWidth={2} onClick={(entry) => setActiveRole(String(entry.jobTitle ?? ""))}>
+                    {roles.map((role, index) => <Cell key={role.jobTitle} fill={COLORS[index % COLORS.length]} opacity={activeRole && activeRole !== role.jobTitle ? 0.35 : 1} className="cursor-pointer outline-none" />)}
+                  </Pie>
+                  <Tooltip contentStyle={{ border: "1px solid #E3E7F0", borderRadius: 10, boxShadow: "0 8px 24px rgb(35 45 75 / 10%)", fontSize: 12 }} formatter={(value, _name, item) => [Number(value).toLocaleString("en-IN") + " employees (" + (totalRoleEmployees ? Math.round(Number(value) / totalRoleEmployees * 100) : 0) + "%)", String(item.payload.jobTitle)]} />
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
                 <strong className="text-[27px] font-semibold tracking-[-0.8px] text-[#292D40] tabular-nums">{totalRoleEmployees.toLocaleString("en-IN")}</strong>
                 <span className="mt-1 text-[10px] text-[#78839A]">employees</span>
               </div>
             </div>
-            <div className="min-w-[145px] space-y-[11px]">
-              {donut.map((item) => <div key={item.jobTitle} className="flex items-start gap-[11px]">
-                <span className="mt-[4px] size-[8px] shrink-0 rounded-[2px]" style={{ background: item.color }} />
-                <div className="min-w-0"><p className="text-[12px] font-medium leading-[1.2] text-[#30354A]">{item.jobTitle}</p><p className="mt-[3px] text-[10px] text-[#78839A]">{item.employeeCount.toLocaleString("en-IN")} · {item.percent}%</p></div>
-              </div>)}
+            <div className="max-h-[260px] min-w-[145px] flex-1 space-y-[8px] overflow-y-auto pr-1">
+              {roles.map((item, index) => <button type="button" key={item.jobTitle} onClick={() => setActiveRole(activeRole === item.jobTitle ? null : item.jobTitle)} className={"flex w-full items-start gap-[10px] rounded-md px-1.5 py-1 text-left transition-colors hover:bg-[#F7F8FC] " + (activeRole === item.jobTitle ? "bg-[#F1EFFF]" : "")}>
+                <span className="mt-[4px] size-[8px] shrink-0 rounded-[2px]" style={{ background: COLORS[index % COLORS.length] }} />
+                <span className="min-w-0 flex-1"><span className="block truncate text-[11px] font-medium leading-[1.2] text-[#30354A]">{item.jobTitle}</span><span className="mt-[3px] block text-[10px] text-[#78839A]">{item.employeeCount.toLocaleString("en-IN")} · {totalRoleEmployees ? Math.round(item.employeeCount / totalRoleEmployees * 100) : 0}%</span></span>
+              </button>)}
             </div>
           </div>}
       </Panel>
     </div>
-
     <section className="overflow-hidden rounded-[12px] border border-[#E3E7F0] bg-white">
       <header className="flex items-center justify-between gap-3 px-[22px] py-[19px]">
-        <div><h2 className="text-[16px] font-semibold tracking-[-0.25px] text-[#292D40]">Compensation by role</h2><p className="mt-[4px] text-[11px] text-[#78839A]">{selectedCountry} · {roles.length} job titles</p></div>
+        <div><h2 className="text-[16px] font-semibold tracking-[-0.25px] text-[#292D40]">Compensation by role</h2><p className="mt-[4px] text-[11px] text-[#78839A]">{selectedCountry} · {activeRole ? "Filtered: " + activeRole : roles.length + " job titles"}</p></div>
         <Link to="/employees" className="inline-flex items-center gap-2 text-[12px] font-semibold text-[#5146D8] hover:text-[#3F35B8]">View employees <ArrowUpRight className="size-[14px]" /></Link>
       </header>
       {rolesQuery.isPending ? <EmptyState>Loading role details…</EmptyState> : rolesQuery.isError ? <EmptyState>Unable to load compensation details.</EmptyState> : roles.length === 0 ? <EmptyState>No active employees for {selectedCountry}.</EmptyState> :
         <div className="overflow-x-auto">
           <table className="w-full min-w-[560px] border-collapse text-left">
             <thead className="bg-[#F7F8FC] text-[9px] font-semibold uppercase text-[#78839A]"><tr><th className="px-[22px] py-[10px]">Job title</th><th className="px-[22px] py-[10px] text-right">Employees</th><th className="px-[22px] py-[10px] text-right">Average annual salary</th></tr></thead>
-            <tbody>{roles.map((role, index) => <tr key={role.jobTitle} className="border-t border-[#E3E7F0] hover:bg-[#FAFBFD]"><td className="px-[22px] py-[7px]"><span className="inline-flex items-center gap-[13px] text-[12px] text-[#30354A]"><span className="size-[7px] rounded-[2px]" style={{ background: COLORS[index % COLORS.length] }} />{role.jobTitle}</span></td><td className="px-[22px] py-[7px] text-right text-[12px] text-[#30354A] tabular-nums">{role.employeeCount.toLocaleString("en-IN")}</td><td className="px-[22px] py-[7px] text-right text-[12px] font-medium text-[#30354A] tabular-nums">{money(role.averageSalary, currency)} {currency}</td></tr>)}</tbody>
+            <tbody>{roles.filter((role) => !activeRole || role.jobTitle === activeRole).map((role, index) => <tr key={role.jobTitle} className="border-t border-[#E3E7F0] hover:bg-[#FAFBFD]"><td className="px-[22px] py-[7px]"><span className="inline-flex items-center gap-[13px] text-[12px] text-[#30354A]"><span className="size-[7px] rounded-[2px]" style={{ background: COLORS[index % COLORS.length] }} />{role.jobTitle}</span></td><td className="px-[22px] py-[7px] text-right text-[12px] text-[#30354A] tabular-nums">{role.employeeCount.toLocaleString("en-IN")}</td><td className="px-[22px] py-[7px] text-right text-[12px] font-medium text-[#30354A] tabular-nums">{money(role.averageSalary, currency)} {currency}</td></tr>)}</tbody>
           </table>
         </div>}
     </section>
