@@ -76,7 +76,7 @@ export default function OverviewPage() {
               className="h-[43px] w-[199px] rounded-[9px] border-[#E3E7F0] bg-white px-3 text-[12px] font-semibold text-[#30354A] shadow-[0_1px_2px_rgb(24_32_56_/_3%)] hover:border-[#C9C5F7] hover:bg-[#FCFCFF] focus-visible:border-[#8C83EF] focus-visible:ring-2 focus-visible:ring-[#5146D8]/15 dark:border-border dark:bg-card dark:text-foreground"
             >
               <Globe2 className="size-[15px] text-[#5146D8]" />
-              <SelectValue />
+              <SelectValue>{selectedCountry}</SelectValue>
             </SelectTrigger>
             <SelectContent
               align="end"
