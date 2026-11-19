@@ -114,28 +114,35 @@ export default function OverviewPage() {
           </div>}
       </Panel>
 
-      <Panel title="Workforce mix" subtitle={"Employees by job title · " + selectedCountry}>
+      <Panel title="Workforce mix" subtitle={"Share of active employees by job title · " + selectedCountry}>
         {rolesQuery.isPending ? <EmptyState>Loading workforce mix…</EmptyState> : rolesQuery.isError || roles.length === 0 ? <EmptyState>No workforce data to display yet.</EmptyState> :
-          <div className="peopleops-chart-body flex min-h-[300px] items-center justify-center gap-4 px-5 pb-5 pt-5 max-sm:flex-col">
-            <div className="peopleops-donut-wrap relative h-[225px] w-[225px] shrink-0">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie data={roles} dataKey="employeeCount" nameKey="jobTitle" cx="50%" cy="50%" innerRadius={59} outerRadius={83} paddingAngle={2} stroke="#fff" strokeWidth={2} onClick={(entry) => setActiveRole(String(entry.jobTitle ?? ""))}>
-                    {roles.map((role, index) => <Cell key={role.jobTitle} fill={COLORS[index % COLORS.length]} opacity={activeRole && activeRole !== role.jobTitle ? 0.35 : 1} className="cursor-pointer outline-none" />)}
-                  </Pie>
-                  <Tooltip contentStyle={{ border: "1px solid #E3E7F0", borderRadius: 10, boxShadow: "0 8px 24px rgb(35 45 75 / 10%)", fontSize: 12 }} formatter={(value, _name, item) => [Number(value).toLocaleString("en-IN") + " employees (" + (totalRoleEmployees ? Math.round(Number(value) / totalRoleEmployees * 100) : 0) + "%)", String(item.payload.jobTitle)]} />
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-                <strong className="text-[27px] font-semibold tracking-[-0.8px] text-[#292D40] tabular-nums">{totalRoleEmployees.toLocaleString("en-IN")}</strong>
-                <span className="mt-1 text-[10px] text-[#78839A]">employees</span>
+          <div className="peopleops-chart-body space-y-4 px-5 pb-5 pt-4">
+            <div className="rounded-[10px] border border-border bg-muted/50 px-3 pb-2 pt-3">
+              <div className="mb-2 flex items-center justify-between gap-3">
+                <span className="text-[10px] font-medium text-muted-foreground">Workforce distribution</span>
+                <span className="text-[10px] tabular-nums text-muted-foreground">{totalRoleEmployees.toLocaleString("en-IN")} employees</span>
+              </div>
+              <div className="h-[76px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={[roles.reduce<Record<string, string | number>>((row, role) => { row[role.jobTitle] = role.employeeCount; return row }, { workforce: "All employees" })]} layout="vertical" margin={{ top: 7, right: 2, bottom: 7, left: 2 }} barCategoryGap={8}>
+                    <XAxis type="number" hide domain={[0, "dataMax"]} />
+                    <YAxis type="category" dataKey="workforce" hide />
+                    <Tooltip cursor={false} contentStyle={{ border: "1px solid var(--border)", borderRadius: 9, background: "var(--popover)", color: "var(--popover-foreground)", boxShadow: "0 8px 24px rgb(24 32 56 / 10%)", fontSize: 11 }} formatter={(value, name) => { const role = roles.find((item) => item.jobTitle === String(name)); const amount = Number(value); return [amount.toLocaleString("en-IN") + " employees · " + (totalRoleEmployees ? Math.round(amount / totalRoleEmployees * 100) : 0) + "%", role?.jobTitle ?? String(name)] }} />
+                    {roles.map((role, index) => <Bar key={role.jobTitle} dataKey={role.jobTitle} name={role.jobTitle} stackId="workforce" fill={COLORS[index % COLORS.length]} barSize={34} radius={index === 0 ? [6, 0, 0, 6] : index === roles.length - 1 ? [0, 6, 6, 0] : 0} onClick={() => setActiveRole(activeRole === role.jobTitle ? null : role.jobTitle)} className="cursor-pointer" />)}
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
             </div>
-            <div className="peopleops-role-legend max-h-[260px] min-w-[145px] flex-1 space-y-[6px] overflow-y-auto pr-1">
-              {roles.map((item, index) => <button type="button" aria-pressed={activeRole === item.jobTitle} key={item.jobTitle} onClick={() => setActiveRole(activeRole === item.jobTitle ? null : item.jobTitle)} className={"flex w-full items-start gap-[10px] rounded-md px-1.5 py-1 text-left transition-colors hover:bg-[#F7F8FC] " + (activeRole === item.jobTitle ? "bg-[#F1EFFF]" : "")}>
-                <span className="mt-[4px] size-[8px] shrink-0 rounded-[2px]" style={{ background: COLORS[index % COLORS.length] }} />
-                <span className="min-w-0 flex-1"><span className="block truncate text-[11px] font-medium leading-[1.2] text-[#30354A]">{item.jobTitle}</span><span className="mt-[3px] block text-[10px] text-[#78839A]">{item.employeeCount.toLocaleString("en-IN")} · {totalRoleEmployees ? Math.round(item.employeeCount / totalRoleEmployees * 100) : 0}%</span></span>
-              </button>)}
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+              {roles.map((role, index) => { const share = totalRoleEmployees ? role.employeeCount / totalRoleEmployees * 100 : 0; const selected = activeRole === role.jobTitle; return <button type="button" key={role.jobTitle} aria-pressed={selected} onClick={() => setActiveRole(selected ? null : role.jobTitle)} className={"group flex min-w-0 items-center gap-2 rounded-lg border px-2.5 py-2 text-left transition-colors " + (selected ? "border-primary/40 bg-accent" : "border-transparent bg-muted/55 hover:border-border hover:bg-muted")}>
+                <span className="h-7 w-[3px] shrink-0 rounded-full" style={{ background: COLORS[index % COLORS.length] }} />
+                <span className="min-w-0 flex-1"><span className="block truncate text-[10px] font-medium text-foreground">{role.jobTitle}</span><span className="mt-0.5 block text-[10px] text-muted-foreground tabular-nums">{role.employeeCount.toLocaleString("en-IN")} employees</span></span>
+                <span className="shrink-0 text-[11px] font-semibold text-foreground tabular-nums">{share.toFixed(1)}%</span>
+              </button> })}
+            </div>
+            <div className="flex items-center justify-between border-t border-border pt-3">
+              <p className="text-[10px] text-muted-foreground">{activeRole ? "Focused: " + activeRole : "Select a segment to filter the compensation table"}</p>
+              {activeRole && <button type="button" onClick={() => setActiveRole(null)} className="text-[10px] font-semibold text-primary hover:underline">Clear filter</button>}
             </div>
           </div>}
       </Panel>
