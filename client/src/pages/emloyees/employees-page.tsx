@@ -242,7 +242,7 @@ const EmployeesPage = () => {
   const employees = data?.data ?? []
 
   return (
-    <main className="flex min-h-0 flex-col gap-6 p-4 md:h-full md:overflow-hidden md:p-8">
+    <main className="peopleops-employees flex min-h-0 flex-col gap-6 p-4 md:h-full md:overflow-hidden md:p-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           {/* <p className="text-sm text-muted-foreground/60">People management</p> */}
