@@ -11,21 +11,15 @@ function NativeSelect({
   ...props
 }: NativeSelectProps) {
   return (
-    <div
+    <select
+      data-slot="native-select"
+      data-size={size}
       className={cn(
-        "group/native-select relative w-fit has-[select:disabled]:opacity-50",
+        "h-9 w-full min-w-0 appearance-auto rounded-lg border border-input bg-background px-3 py-1 pr-2 text-sm text-foreground shadow-none outline-none transition-colors focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/15 data-[size=sm]:h-8 data-[size=lg]:h-10",
         className
       )}
-      data-slot="native-select-wrapper"
-      data-size={size}
-    >
-      <select
-        data-slot="native-select"
-        data-size={size}
-        className="h-9 w-full min-w-0 appearance-auto rounded-lg border border-input bg-background py-1 pl-3 pr-2 text-sm text-foreground transition-colors outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/15 data-[size=sm]:h-7 data-[size=sm]:py-0.5"
-        {...props}
-      />
-    </div>
+      {...props}
+    />
   )
 }
 
