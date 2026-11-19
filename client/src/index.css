@@ -604,3 +604,29 @@
   font-family: "Geist", sans-serif !important;
   font-variant-numeric: tabular-nums lining-nums;
 }
+
+
+/* PeopleOps button scale: shared actions use one predictable control height. */
+@layer components {
+  .peopleops-overview .overview-heading button,
+  .peopleops-employees > div:first-child button {
+    min-height: 36px;
+    height: 36px;
+    padding-inline: 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1;
+  }
+
+  .peopleops-overview .overview-heading button:has(svg:only-child),
+  .peopleops-employees button[aria-label]:has(svg:only-child) {
+    width: 36px;
+    min-width: 36px;
+    padding-inline: 0;
+  }
+
+  .peopleops-overview button,
+  .peopleops-employees button {
+    line-height: 1.25;
+  }
+}
