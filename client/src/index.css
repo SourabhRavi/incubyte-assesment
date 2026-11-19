@@ -3,121 +3,135 @@
 @import "shadcn/tailwind.css";
 @import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap");
 
-
 @custom-variant dark (&:is(.dark *));
 
 :root {
-    --background: #F7F8FC;
-    --foreground: #25283A;
-    --card: #FFFFFF;
-    --card-foreground: #25283A;
-    --popover: #FFFFFF;
-    --popover-foreground: #25283A;
-    --primary: #5146D8;
-    --primary-foreground: #FFFFFF;
-    --secondary: #EDEBFF;
-    --secondary-foreground: #5146D8;
-    --muted: #F7F8FC;
-    --muted-foreground: #777F92;
-    --accent: #EDEBFF;
-    --accent-foreground: #5146D8;
-    --destructive: oklch(0.577 0.245 27.325);
-    --border: #E7EAF2;
-    --input: #E7EAF2;
-    --ring: oklch(0.708 0 0);
-    --chart-1: oklch(0.811 0.111 293.571);
-    --chart-2: oklch(0.606 0.25 292.717);
-    --chart-3: oklch(0.541 0.281 293.009);
-    --chart-4: oklch(0.491 0.27 292.581);
-    --chart-5: oklch(0.432 0.232 292.759);
-    --radius: 0.5rem;
-    --sidebar: #FFFFFF;
-    --sidebar-foreground: #25283A;
-    --sidebar-primary: #5146D8;
-    --sidebar-primary-foreground: #FFFFFF;
-    --sidebar-accent: #EDEBFF;
-    --sidebar-accent-foreground: #5146D8;
-    --sidebar-border: #E7EAF2;
-    --sidebar-ring: oklch(0.708 0 0);
+  --background: #f7f8fc;
+  --foreground: #25283a;
+  --card: #ffffff;
+  --card-foreground: #25283a;
+  --popover: #ffffff;
+  --popover-foreground: #25283a;
+  --primary: #5146d8;
+  --primary-foreground: #ffffff;
+  --secondary: #edebff;
+  --secondary-foreground: #5146d8;
+  --muted: #f7f8fc;
+  --muted-foreground: #777f92;
+  --accent: #edebff;
+  --accent-foreground: #5146d8;
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: #e7eaf2;
+  --input: #e7eaf2;
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.811 0.111 293.571);
+  --chart-2: oklch(0.606 0.25 292.717);
+  --chart-3: oklch(0.541 0.281 293.009);
+  --chart-4: oklch(0.491 0.27 292.581);
+  --chart-5: oklch(0.432 0.232 292.759);
+  --radius: 0.5rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #25283a;
+  --sidebar-primary: #5146d8;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #edebff;
+  --sidebar-accent-foreground: #5146d8;
+  --sidebar-border: #e7eaf2;
+  --sidebar-ring: oklch(0.708 0 0);
 }
 .dark {
-  --background: #171C25;
-  --foreground: #EDF1F7;
+  --background: #171c25;
+  --foreground: #edf1f7;
   --card: #202735;
-  --card-foreground: #EDF1F7;
+  --card-foreground: #edf1f7;
   --popover: #202735;
-  --popover-foreground: #EDF1F7;
-  --primary: #91A8FF;
-  --primary-foreground: #17203A;
+  --popover-foreground: #edf1f7;
+  --primary: #91a8ff;
+  --primary-foreground: #17203a;
   --secondary: #293345;
-  --secondary-foreground: #E5EBF5;
-  --muted: #252F3E;
-  --muted-foreground: #A1AEC1;
-  --accent: #2B3A5E;
-  --accent-foreground: #DDE5FF;
-  --destructive: #F07878;
-  --border: #303C4E;
-  --input: #39465A;
-  --ring: #91A8FF;
-  --sidebar: #1C2431;
-  --sidebar-foreground: #EDF1F7;
-  --sidebar-primary: #91A8FF;
-  --sidebar-primary-foreground: #17203A;
+  --secondary-foreground: #e5ebf5;
+  --muted: #252f3e;
+  --muted-foreground: #a1aec1;
+  --accent: #2b3a5e;
+  --accent-foreground: #dde5ff;
+  --destructive: #f07878;
+  --border: #303c4e;
+  --input: #39465a;
+  --ring: #91a8ff;
+  --sidebar: #1c2431;
+  --sidebar-foreground: #edf1f7;
+  --sidebar-primary: #91a8ff;
+  --sidebar-primary-foreground: #17203a;
   --sidebar-accent: #293345;
-  --sidebar-accent-foreground: #EDF1F7;
-  --sidebar-border: #303C4E;
+  --sidebar-accent-foreground: #edf1f7;
+  --sidebar-border: #303c4e;
 }
 @theme inline {
-    --font-sans: 'Manrope', sans-serif;
-    --font-heading: 'Geist', sans-serif;
-    --color-sidebar-ring: var(--sidebar-ring);
-    --color-sidebar-border: var(--sidebar-border);
-    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-    --color-sidebar-accent: var(--sidebar-accent);
-    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-    --color-sidebar-primary: var(--sidebar-primary);
-    --color-sidebar-foreground: var(--sidebar-foreground);
-    --color-sidebar: var(--sidebar);
-    --color-chart-5: var(--chart-5);
-    --color-chart-4: var(--chart-4);
-    --color-chart-3: var(--chart-3);
-    --color-chart-2: var(--chart-2);
-    --color-chart-1: var(--chart-1);
-    --color-ring: var(--ring);
-    --color-input: var(--input);
-    --color-border: var(--border);
-    --color-destructive: var(--destructive);
-    --color-accent-foreground: var(--accent-foreground);
-    --color-accent: var(--accent);
-    --color-muted-foreground: var(--muted-foreground);
-    --color-muted: var(--muted);
-    --color-secondary-foreground: var(--secondary-foreground);
-    --color-secondary: var(--secondary);
-    --color-primary-foreground: var(--primary-foreground);
-    --color-primary: var(--primary);
-    --color-popover-foreground: var(--popover-foreground);
-    --color-popover: var(--popover);
-    --color-card-foreground: var(--card-foreground);
-    --color-card: var(--card);
-    --color-foreground: var(--foreground);
-    --color-background: var(--background);
-    --radius-sm: calc(var(--radius) * 0.6);
-    --radius-md: calc(var(--radius) * 0.8);
-    --radius-lg: var(--radius);
-    --radius-xl: calc(var(--radius) * 1.4);
-    --radius-2xl: calc(var(--radius) * 1.8);
-    --radius-3xl: calc(var(--radius) * 2.2);
-    --radius-4xl: calc(var(--radius) * 2.6);
+  --font-sans: "Manrope", sans-serif;
+  --font-heading: "Geist", sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 @layer base {
-  * { @apply border-border outline-ring/50; }
-  html { @apply font-sans; }
-  body { @apply bg-background text-foreground; background: var(--background); }
-  button,input,select { font: inherit; }
-  ::selection { background: rgb(151 169 247 / 28%); }
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+  }
+  body {
+    @apply bg-background text-foreground;
+    background: var(--background);
+  }
+  button,
+  input,
+  select {
+    font: inherit;
+  }
+  ::selection {
+    background: rgb(151 169 247 / 28%);
+  }
 }
 @layer components {
-  .peopleops-inset { background: var(--background); }
+  .peopleops-inset {
+    background: var(--background);
+  }
   .peopleops-topbar {
     position: sticky;
     top: 0;
@@ -134,149 +148,406 @@
     border-bottom-color: color-mix(in srgb, var(--border) 78%, transparent);
     box-shadow: 0 4px 22px rgb(0 0 0 / 12%);
   }
-  .peopleops-page-shell { min-height: calc(100svh - 52px); }
-  .peopleops-sidebar [data-slot="sidebar-inner"] { background: var(--sidebar); }
-  .peopleops-overview { gap: 14px; width: 100%; }
-  .overview-dashboard-grid { align-items: start; }
-  .overview-dashboard-grid > div { min-width: 0; }
-  .overview-heading { margin-bottom: 1px; }
-  .overview-chart-card { min-width: 0; }
-  .overview-chart-card .recharts-wrapper { max-width: 100%; }
-  .overview-chart-card .recharts-cartesian-axis-tick-value { font-family: 'Manrope', sans-serif; }
-  .overview-metric-card { min-width: 0; }
-  .overview-metric-card > div:first-of-type p { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .overview-data-table { margin-top: 0; }
-  .overview-heading { min-height: 62px; }
-  .overview-heading h1,.peopleops-employees h1 { color:var(--foreground);font-size:clamp(21px,2vw,25px);line-height:1.2;letter-spacing:-.045em; }
-  .overview-heading p { color:var(--muted-foreground);font-size:12px; }
-  .overview-heading label { color:var(--muted-foreground);font-size:10px; }
-  .overview-heading select,.overview-heading button { min-height:32px;height:32px;border-radius:7px;font-size:11px;box-shadow:none;background:var(--card);border-color:var(--border); }
-  .overview-metric-card { min-height:106px;padding:12px 13px;border:1px solid var(--border);border-radius:11px;background:var(--card);box-shadow:0 1px 3px rgb(34 48 70 / 3%); }
-  .overview-metric-card>div:first-of-type { align-items:center; }
-  .overview-metric-card>div:first-of-type p { color:#596579;font-size:10px;font-weight:600; }
-  .overview-metric-card>div:first-of-type span { width:23px;height:23px;border-radius:6px;background:color-mix(in srgb,var(--primary) 10%,white);color:var(--primary);box-shadow:none; }
-  .overview-metric-card>div:first-of-type span svg { width:12px;height:12px; }
-  .overview-metric-card>div:nth-of-type(2) { margin-top:10px; }
-  .overview-metric-card>div:nth-of-type(2) p { color:var(--foreground);font-family:'Geist',sans-serif;font-size:21px;font-weight:650;letter-spacing:-.045em; }
-  .overview-metric-card>p:last-child { margin-top:2px;color:var(--muted-foreground);font-size:9px; }
-  .overview-chart-card,.overview-data-table { border:1px solid var(--border);border-radius:11px;background:var(--card);box-shadow:0 1px 3px rgb(34 48 70 / 3%); }
-  .overview-chart-card>div:first-child { padding:12px 14px;border-color:var(--border); }
-  .overview-chart-card h2,.overview-data-table h2 { color:var(--foreground);font-size:12px;font-weight:650;letter-spacing:-.015em; }
-  .overview-chart-card>div:first-child p { margin-top:3px;font-size:10px;color:var(--muted-foreground); }
-  .overview-data-table>div:first-child { padding:12px 14px;border-color:var(--border); }
-  .overview-data-table thead,.peopleops-employees thead { background:#F7F9FA; }
-  .dark .overview-data-table thead,.dark .peopleops-employees thead { background:#252F3E; }
-  .overview-data-table th,.peopleops-employees thead th { font-size:10px; }
-  .overview-data-table td,.peopleops-employees tbody td { font-size:11px; }
-  .peopleops-employees { gap:14px;padding:18px 20px; }
-  .peopleops-employees>div:first-child p { font-size:11px; }
-  .peopleops-employees>div:first-child button { height:34px;border-radius:7px;font-size:11px; }
-  .peopleops-employees>section { border:1px solid var(--border);border-radius:11px;background:var(--card);box-shadow:0 1px 3px rgb(34 48 70 / 3%); }
-  .peopleops-employees section>div:first-child { padding:12px 14px; }
-  .peopleops-employees section h2 { font-size:12px; }
-  .peopleops-employees section p { font-size:10px; }
-  .peopleops-employees tbody td { padding-top:11px;padding-bottom:11px; }
-  .peopleops-employees tbody tr:hover { background:color-mix(in srgb,var(--primary) 4%,var(--card)); }
-  .peopleops-employees input,.peopleops-employees select { height:33px;border-radius:7px;font-size:11px; }
-  .peopleops-overview button,.peopleops-employees button { transition:background-color 140ms ease,border-color 140ms ease; }
-  .peopleops-overview button:not(:disabled):hover,.peopleops-employees button:not(:disabled):hover { transform:none; }
+  .peopleops-page-shell {
+    min-height: calc(100svh - 52px);
+  }
+  .peopleops-sidebar [data-slot="sidebar-inner"] {
+    background: var(--sidebar);
+  }
+  .peopleops-overview {
+    gap: 14px;
+    width: 100%;
+  }
+  .overview-dashboard-grid {
+    align-items: start;
+  }
+  .overview-dashboard-grid > div {
+    min-width: 0;
+  }
+  .overview-heading {
+    margin-bottom: 1px;
+  }
+  .overview-chart-card {
+    min-width: 0;
+  }
+  .overview-chart-card .recharts-wrapper {
+    max-width: 100%;
+  }
+  .overview-chart-card .recharts-cartesian-axis-tick-value {
+    font-family: "Manrope", sans-serif;
+  }
+  .overview-metric-card {
+    min-width: 0;
+  }
+  .overview-metric-card > div:first-of-type p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .overview-data-table {
+    margin-top: 0;
+  }
+  .overview-heading {
+    min-height: 62px;
+  }
+  .overview-heading h1,
+  .peopleops-employees h1 {
+    color: var(--foreground);
+    font-size: clamp(21px, 2vw, 25px);
+    line-height: 1.2;
+    letter-spacing: -0.045em;
+  }
+  .overview-heading p {
+    color: var(--muted-foreground);
+    font-size: 12px;
+  }
+  .overview-heading label {
+    color: var(--muted-foreground);
+    font-size: 10px;
+  }
+  .overview-heading select,
+  .overview-heading button {
+    min-height: 32px;
+    height: 32px;
+    border-radius: 7px;
+    font-size: 11px;
+    box-shadow: none;
+    background: var(--card);
+    border-color: var(--border);
+  }
+  .overview-metric-card {
+    min-height: 106px;
+    padding: 12px 13px;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    background: var(--card);
+    box-shadow: 0 1px 3px rgb(34 48 70 / 3%);
+  }
+  .overview-metric-card > div:first-of-type {
+    align-items: center;
+  }
+  .overview-metric-card > div:first-of-type p {
+    color: #596579;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .overview-metric-card > div:first-of-type span {
+    width: 23px;
+    height: 23px;
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--primary) 10%, white);
+    color: var(--primary);
+    box-shadow: none;
+  }
+  .overview-metric-card > div:first-of-type span svg {
+    width: 12px;
+    height: 12px;
+  }
+  .overview-metric-card > div:nth-of-type(2) {
+    margin-top: 10px;
+  }
+  .overview-metric-card > div:nth-of-type(2) p {
+    color: var(--foreground);
+    font-family: "Geist", sans-serif;
+    font-size: 21px;
+    font-weight: 650;
+    letter-spacing: -0.045em;
+  }
+  .overview-metric-card > p:last-child {
+    margin-top: 2px;
+    color: var(--muted-foreground);
+    font-size: 9px;
+  }
+  .overview-chart-card,
+  .overview-data-table {
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    background: var(--card);
+    box-shadow: 0 1px 3px rgb(34 48 70 / 3%);
+  }
+  .overview-chart-card > div:first-child {
+    padding: 12px 14px;
+    border-color: var(--border);
+  }
+  .overview-chart-card h2,
+  .overview-data-table h2 {
+    color: var(--foreground);
+    font-size: 12px;
+    font-weight: 650;
+    letter-spacing: -0.015em;
+  }
+  .overview-chart-card > div:first-child p {
+    margin-top: 3px;
+    font-size: 10px;
+    color: var(--muted-foreground);
+  }
+  .overview-data-table > div:first-child {
+    padding: 12px 14px;
+    border-color: var(--border);
+  }
+  .overview-data-table thead,
+  .peopleops-employees thead {
+    background: #f7f9fa;
+  }
+  .dark .overview-data-table thead,
+  .dark .peopleops-employees thead {
+    background: #252f3e;
+  }
+  .overview-data-table th,
+  .peopleops-employees thead th {
+    font-size: 10px;
+  }
+  .overview-data-table td,
+  .peopleops-employees tbody td {
+    font-size: 11px;
+  }
+  .peopleops-employees {
+    gap: 14px;
+    padding: 18px 20px;
+  }
+  .peopleops-employees > div:first-child p {
+    font-size: 11px;
+  }
+  .peopleops-employees > div:first-child button {
+    height: 34px;
+    border-radius: 7px;
+    font-size: 11px;
+  }
+  .peopleops-employees > section {
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    background: var(--card);
+    box-shadow: 0 1px 3px rgb(34 48 70 / 3%);
+  }
+  .peopleops-employees section > div:first-child {
+    padding: 12px 14px;
+  }
+  .peopleops-employees section h2 {
+    font-size: 12px;
+  }
+  .peopleops-employees section p {
+    font-size: 10px;
+  }
+  .peopleops-employees tbody td {
+    padding-top: 11px;
+    padding-bottom: 11px;
+  }
+  .peopleops-employees tbody tr:hover {
+    background: color-mix(in srgb, var(--primary) 4%, var(--card));
+  }
+  .peopleops-employees input,
+  .peopleops-employees select {
+    height: 33px;
+    border-radius: 7px;
+    font-size: 11px;
+  }
+  .peopleops-overview button,
+  .peopleops-employees button {
+    transition:
+      background-color 140ms ease,
+      border-color 140ms ease;
+  }
+  .peopleops-overview button:not(:disabled):hover,
+  .peopleops-employees button:not(:disabled):hover {
+    transform: none;
+  }
 }
-@media(max-width:1279px) {
-  .overview-dashboard-grid { grid-template-columns: minmax(0,1fr); }
-  .overview-dashboard-grid > div:last-child { grid-template-columns: repeat(2,minmax(0,1fr)); }
+@media (max-width: 1279px) {
+  .overview-dashboard-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .overview-dashboard-grid > div:last-child {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
-@media(max-width:767px) {
-  .overview-dashboard-grid > div:last-child { grid-template-columns: minmax(0,1fr); }
+@media (max-width: 767px) {
+  .overview-dashboard-grid > div:last-child {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
-@media(max-width:639px) {
-  .overview-metric-card { min-height:100px;padding:10px; }
-  .overview-metric-card>div:nth-of-type(2) p { font-size:18px; }
-  .peopleops-employees { padding:14px 12px; }
+@media (max-width: 639px) {
+  .overview-metric-card {
+    min-height: 100px;
+    padding: 10px;
+  }
+  .overview-metric-card > div:nth-of-type(2) p {
+    font-size: 18px;
+  }
+  .peopleops-employees {
+    padding: 14px 12px;
+  }
 }
-
 
 /* Desktop PeopleOps reference layout */
 @layer base {
-  body { font-family: "Manrope", sans-serif; }
+  body {
+    font-family: "Manrope", sans-serif;
+  }
 }
 @layer components {
-  .peopleops-sidebar [data-slot="sidebar-inner"] { background: #fff; }
-  .peopleops-sidebar [data-slot="sidebar-container"] { background: #fff; }
+  .peopleops-sidebar [data-slot="sidebar-inner"] {
+    background: #fff;
+  }
+  .peopleops-sidebar [data-slot="sidebar-container"] {
+    background: #fff;
+  }
 }
-
 
 /* PeopleOps foundations: consistent surfaces, readable dark mode and chart polish */
 .peopleops-sidebar [data-slot="sidebar-inner"],
-.peopleops-sidebar [data-slot="sidebar-container"] { background: var(--sidebar); }
-.peopleops-overview { color: var(--foreground); }
+.peopleops-sidebar [data-slot="sidebar-container"] {
+  background: var(--sidebar);
+}
+.peopleops-overview {
+  color: var(--foreground);
+}
 .peopleops-overview .peopleops-metric,
 .peopleops-overview .peopleops-chart-panel,
 .peopleops-overview .peopleops-data-panel {
   background: var(--card);
   border-color: var(--border);
   color: var(--card-foreground);
-  box-shadow: 0 1px 2px rgb(24 32 56 / 3%), 0 8px 24px rgb(24 32 56 / 2%);
+  box-shadow:
+    0 1px 2px rgb(24 32 56 / 3%),
+    0 8px 24px rgb(24 32 56 / 2%);
 }
-.peopleops-overview .peopleops-chart-panel { display:flex; flex-direction:column; min-height:100%; }
+.peopleops-overview .peopleops-chart-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
 .peopleops-overview .peopleops-chart-panel > header {
   border-bottom: 1px solid var(--border);
   padding: 18px 20px 15px;
 }
 .peopleops-overview .peopleops-chart-panel > header h2,
-.peopleops-overview .peopleops-data-panel h2 { color:var(--foreground); }
+.peopleops-overview .peopleops-data-panel h2 {
+  color: var(--foreground);
+}
 .peopleops-overview .peopleops-chart-panel > header p,
-.peopleops-overview .peopleops-data-panel p { color:var(--muted-foreground); }
-.peopleops-overview .peopleops-chart-body { flex:1; min-width:0; }
+.peopleops-overview .peopleops-data-panel p {
+  color: var(--muted-foreground);
+}
+.peopleops-overview .peopleops-chart-body {
+  flex: 1;
+  min-width: 0;
+}
 .peopleops-overview .peopleops-donut-wrap {
   border-radius: 14px;
-  background: color-mix(in srgb,var(--muted) 72%,var(--card));
+  background: color-mix(in srgb, var(--muted) 72%, var(--card));
   padding: 12px;
 }
-.peopleops-overview .peopleops-role-legend button { border:1px solid transparent; }
+.peopleops-overview .peopleops-role-legend button {
+  border: 1px solid transparent;
+}
 .peopleops-overview .peopleops-role-legend button:hover,
 .peopleops-overview .peopleops-role-legend button[aria-pressed="true"] {
-  background:var(--accent);
-  border-color:color-mix(in srgb,var(--primary) 16%,var(--border));
+  background: var(--accent);
+  border-color: color-mix(in srgb, var(--primary) 16%, var(--border));
 }
 .peopleops-overview .peopleops-country-select,
 .peopleops-overview .peopleops-action-button {
-  background:var(--card);
-  border-color:var(--border);
-  color:var(--foreground);
+  background: none;
+  border-color: var(--border);
+  color: var(--foreground);
 }
-.peopleops-overview .peopleops-country-select select { color:var(--foreground); }
-.peopleops-overview .peopleops-country-select option { background:var(--card); color:var(--foreground); }
-.peopleops-overview .peopleops-table-head { background:var(--muted); color:var(--muted-foreground); }
-.peopleops-overview .peopleops-table-row { border-color:var(--border); color:var(--foreground); }
-.peopleops-overview .peopleops-table-row:hover { background:color-mix(in srgb,var(--accent) 55%,var(--card)); }
+.peopleops-overview .peopleops-country-select select {
+  color: var(--foreground);
+}
+.peopleops-overview .peopleops-country-select option {
+  background: var(--card);
+  color: var(--foreground);
+}
+.peopleops-overview .peopleops-table-head {
+  background: var(--muted);
+  color: var(--muted-foreground);
+}
+.peopleops-overview .peopleops-table-row {
+  border-color: var(--border);
+  color: var(--foreground);
+}
+.peopleops-overview .peopleops-table-row:hover {
+  background: color-mix(in srgb, var(--accent) 55%, var(--card));
+}
 .dark .peopleops-sidebar [data-slot="sidebar-inner"],
-.dark .peopleops-sidebar [data-slot="sidebar-container"] { background:var(--sidebar); }
+.dark .peopleops-sidebar [data-slot="sidebar-container"] {
+  background: var(--sidebar);
+}
 .dark .peopleops-sidebar [data-slot="sidebar-menu-button"],
-.dark .peopleops-sidebar [data-slot="sidebar-menu-button"] span { color:var(--sidebar-foreground); }
-.dark .peopleops-sidebar [data-slot="sidebar-menu-button"][data-active="true"] { color:var(--sidebar-accent-foreground); background:var(--sidebar-accent); }
+.dark .peopleops-sidebar [data-slot="sidebar-menu-button"] span {
+  color: var(--sidebar-foreground);
+}
+.dark .peopleops-sidebar [data-slot="sidebar-menu-button"][data-active="true"] {
+  color: var(--sidebar-accent-foreground);
+  background: var(--sidebar-accent);
+}
 .dark .peopleops-overview [class*="text-[#292D40]"],
 .dark .peopleops-overview [class*="text-[#30354A]"],
-.dark .peopleops-overview [class*="text-[#25283A]"] { color:var(--foreground) !important; }
+.dark .peopleops-overview [class*="text-[#25283A]"] {
+  color: var(--foreground) !important;
+}
 .dark .peopleops-overview [class*="text-[#78839A]"],
 .dark .peopleops-overview [class*="text-[#69758D]"],
 .dark .peopleops-overview [class*="text-[#75819A]"],
-.dark .peopleops-overview [class*="text-[#46516A]"] { color:var(--muted-foreground) !important; }
-.dark .peopleops-overview [class*="bg-white"] { background-color:var(--card) !important; }
+.dark .peopleops-overview [class*="text-[#46516A]"] {
+  color: var(--muted-foreground) !important;
+}
+.dark .peopleops-overview [class*="bg-white"] {
+  background-color: var(--card) !important;
+}
 .dark .peopleops-overview [class*="border-[#E3E7F0]"],
-.dark .peopleops-overview [class*="border-[#E7EAF2]"] { border-color:var(--border) !important; }
+.dark .peopleops-overview [class*="border-[#E7EAF2]"] {
+  border-color: var(--border) !important;
+}
 .dark .peopleops-overview [class*="bg-[#F7F8FC]"],
-.dark .peopleops-overview [class*="bg-[#F8F9FC]"] { background-color:var(--muted) !important; }
-.dark .peopleops-overview [class*="bg-[#EDEBFF]"] { background-color:var(--accent) !important; }
-.dark .peopleops-overview [class*="text-[#5146D8]"] { color:var(--primary) !important; }
-.dark .peopleops-overview .recharts-cartesian-grid line { stroke:var(--border); }
-.dark .peopleops-overview .recharts-cartesian-axis-tick-value { fill:var(--muted-foreground); }
-.dark .peopleops-overview .recharts-tooltip-wrapper > div { background:var(--popover) !important; border-color:var(--border) !important; color:var(--popover-foreground) !important; }
-.dark .peopleops-topbar { background:color-mix(in srgb,var(--card) 94%,transparent); border-color:var(--border); }
-.dark .peopleops-topbar kbd { color:var(--muted-foreground); }
-.dark .cn-toast { background:var(--popover) !important; color:var(--popover-foreground) !important; border-color:var(--border) !important; }
+.dark .peopleops-overview [class*="bg-[#F8F9FC]"] {
+  background-color: var(--muted) !important;
+}
+.dark .peopleops-overview [class*="bg-[#EDEBFF]"] {
+  background-color: var(--accent) !important;
+}
+.dark .peopleops-overview [class*="text-[#5146D8]"] {
+  color: var(--primary) !important;
+}
+.dark .peopleops-overview .recharts-cartesian-grid line {
+  stroke: var(--border);
+}
+.dark .peopleops-overview .recharts-cartesian-axis-tick-value {
+  fill: var(--muted-foreground);
+}
+.dark .peopleops-overview .recharts-tooltip-wrapper > div {
+  background: var(--popover) !important;
+  border-color: var(--border) !important;
+  color: var(--popover-foreground) !important;
+}
+.dark .peopleops-topbar {
+  background: color-mix(in srgb, var(--card) 94%, transparent);
+  border-color: var(--border);
+}
+.dark .peopleops-topbar kbd {
+  color: var(--muted-foreground);
+}
+.dark .cn-toast {
+  background: var(--popover) !important;
+  color: var(--popover-foreground) !important;
+  border-color: var(--border) !important;
+}
 
 /* Brand typography follows the PeopleOps Foundations guide. */
-.peopleops-overview, .peopleops-sidebar, .peopleops-topbar, .peopleops-employees { font-family: 'Manrope', sans-serif; }\n.peopleops-overview h1, .peopleops-overview h2, .peopleops-employees h1, .peopleops-employees h2, .peopleops-topbar [data-slot='breadcrumb-list'], .peopleops-sidebar [data-slot='sidebar-brand'] { font-family: 'Geist', sans-serif; }
+.peopleops-overview,
+.peopleops-sidebar,
+.peopleops-topbar,
+.peopleops-employees {
+  font-family: "Manrope", sans-serif;
+}
+\n.peopleops-overview h1,
+.peopleops-overview h2,
+.peopleops-employees h1,
+.peopleops-employees h2,
+.peopleops-topbar [data-slot="breadcrumb-list"],
+.peopleops-sidebar [data-slot="sidebar-brand"] {
+  font-family: "Geist", sans-serif;
+}
 
 /* Typography system: Geist for hierarchy and all numeric data; Manrope for UI copy. */
 .peopleops-overview h1,
@@ -305,24 +576,29 @@
 .dark .peopleops-sidebar [class*="text-[#30354A]"],
 .dark .peopleops-sidebar [class*="text-[#68758E]"],
 .dark .peopleops-sidebar [class*="text-[#77829A]"],
-.dark .peopleops-sidebar [class*="text-[#78839A]"] { color:var(--sidebar-foreground) !important; }
-.dark .peopleops-sidebar [class*="bg-white"] { background-color:var(--sidebar) !important; }
-.dark .peopleops-sidebar [class*="border-[#E5E8F0]"] { border-color:var(--sidebar-border) !important; }
-
+.dark .peopleops-sidebar [class*="text-[#78839A]"] {
+  color: var(--sidebar-foreground) !important;
+}
+.dark .peopleops-sidebar [class*="bg-white"] {
+  background-color: var(--sidebar) !important;
+}
+.dark .peopleops-sidebar [class*="border-[#E5E8F0]"] {
+  border-color: var(--sidebar-border) !important;
+}
 
 /* Explicit typography ownership: Geist for every heading and every numeric value. */
-.peopleops-overview :is(h1,h2,h3,h4),
-.peopleops-employees :is(h1,h2,h3,h4),
-.peopleops-topbar :is(h1,h2,h3,h4) {
+.peopleops-overview :is(h1, h2, h3, h4),
+.peopleops-employees :is(h1, h2, h3, h4),
+.peopleops-topbar :is(h1, h2, h3, h4) {
   font-family: "Geist", sans-serif !important;
 }
-.peopleops-overview :is(.tabular-nums,[data-numeric]),
-.peopleops-employees :is(.tabular-nums,[data-numeric]),
-.peopleops-topbar :is(.tabular-nums,[data-numeric]),
+.peopleops-overview :is(.tabular-nums, [data-numeric]),
+.peopleops-employees :is(.tabular-nums, [data-numeric]),
+.peopleops-topbar :is(.tabular-nums, [data-numeric]),
 .peopleops-overview .peopleops-metric p:last-of-type,
 .peopleops-overview .peopleops-metric .text-\[28px\],
 .peopleops-overview .recharts-text,
-.peopleops-employees table td:is(:nth-child(4),:last-child),
+.peopleops-employees table td:is(:nth-child(4), :last-child),
 .peopleops-employees [data-slot="dialog-content"] .salary-value,
 .peopleops-employees [data-slot="dialog-content"] .salary-change {
   font-family: "Geist", sans-serif !important;
