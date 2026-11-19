@@ -191,17 +191,17 @@ const OverviewPage = () => {
 
   return (
     <div className="peopleops-overview space-y-7">
-      <div className="overview-hero flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div className="overview-heading flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
             <span className="size-1.5 rounded-full bg-primary" />
-            Workforce intelligence
+            People operations
           </div>
           <h1 className="font-heading text-2xl font-semibold tracking-tight sm:text-3xl">
-            People overview
+            Good morning 👋
           </h1>
           <p className="mt-1.5 text-sm text-muted-foreground">
-            A clear view of your workforce and compensation.
+            Here's what's happening across your people and compensation.
           </p>
         </div>
 
@@ -263,7 +263,7 @@ const OverviewPage = () => {
         </section>
       )}
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3">
         <MetricCard
           title="Employees"
           value={String(salarySummary?.employeeCount.toLocaleString() ?? 0)}
@@ -298,7 +298,7 @@ const OverviewPage = () => {
         />
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-[minmax(0,1.65fr)_minmax(300px,1fr)]">
+      <div className="grid gap-3 xl:grid-cols-[minmax(0,1.35fr)_minmax(280px,0.9fr)]">
         <ChartCard
           title="Average salary by role"
           description={`Annual compensation in ${currency} · ${selectedCountry}`}
