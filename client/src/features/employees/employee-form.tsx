@@ -283,7 +283,7 @@ const EmployeeForm = ({
         <p className="text-xs text-muted-foreground">
           Currency is determined by the employee's country.
         </p>
-        {employee && salaryDelta !== null && Number.isFinite(salaryDelta) && (
+        {employee && values.salary.trim() && salaryDelta !== null && Number.isFinite(salaryDelta) && (
           <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border bg-muted/35 px-3 py-2.5">
             <div>
               <p className="text-xs text-muted-foreground">Change from current salary</p>
