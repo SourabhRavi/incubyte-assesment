@@ -66,7 +66,7 @@ const formatSalary = (salary: number | string, currency?: string) => {
 const getInitials = (fullName: string) =>
   fullName
     .trim()
-    .split(/\\s+/)
+    .split(/\s+/)
     .slice(0, 2)
     .map((part) => part[0]?.toUpperCase() ?? "")
     .join("")
