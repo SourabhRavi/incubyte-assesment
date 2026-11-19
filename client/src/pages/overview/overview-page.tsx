@@ -124,8 +124,8 @@ const OverviewPage = () => {
           <ChartCard title="Average salary by role" description={`Annual compensation in ${currency} · ${selectedCountry}`}>
           {areJobAveragesError ? <ChartEmptyState message={jobAveragesErrorMessage} /> : areJobAveragesPending ? <div className="flex min-h-64 items-center justify-center gap-2 text-xs text-muted-foreground"><LoaderCircle className="size-4 animate-spin" />Loading salary breakdown...</div> : jobSummaries.length === 0 ? <ChartEmptyState message={`No active employee data for ${selectedCountry} yet.`} /> : (
             <div className="px-3 pb-3 pt-4">
-              <div className="w-full" style={{ height: Math.max(250, jobSummaries.length * 25) }}>
-                <ResponsiveContainer width="100%" height="100%"><BarChart data={jobSummaries} layout="vertical" margin={{ top: 4, right: 12, bottom: 2, left: 0 }} barCategoryGap={8}>
+              <div className="w-full min-w-0" style={{ width: "100%", minWidth: 0, height: Math.max(250, jobSummaries.length * 25), minHeight: 250 }}>
+                <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={250}><BarChart data={jobSummaries} layout="vertical" margin={{ top: 4, right: 12, bottom: 2, left: 0 }} barCategoryGap={8}>
                   <CartesianGrid horizontal={false} stroke="var(--border)" strokeDasharray="3 5" />
                   <XAxis type="number" tickFormatter={(value: number) => formatCompactMoney(value, currency)} tick={{ fill: "var(--muted-foreground)", fontSize: 10 }} axisLine={false} tickLine={false} tickMargin={8} />
                   <YAxis type="category" dataKey="jobTitle" width={118} interval={0} tick={{ fill: "var(--muted-foreground)", fontSize: 10 }} axisLine={false} tickLine={false} />
@@ -143,8 +143,8 @@ const OverviewPage = () => {
           <ChartCard title="Workforce mix" description={`Employees by job title · ${selectedCountry}`}>
             {areJobAveragesError ? <ChartEmptyState message={jobAveragesErrorMessage} /> : areJobAveragesPending ? <div className="flex min-h-48 items-center justify-center text-xs text-muted-foreground">Loading workforce mix...</div> : workforceTotal === 0 ? <ChartEmptyState message="No workforce data to display yet." /> : (
               <div className="px-4 pb-4 pt-2">
-                <div className="relative mx-auto h-40 max-w-52">
-                  <ResponsiveContainer width="100%" height="100%"><PieChart><Pie data={jobSummaries} dataKey="employeeCount" nameKey="jobTitle" innerRadius="66%" outerRadius="88%" paddingAngle={2} stroke="var(--card)" strokeWidth={2}>{jobSummaries.map((item,index)=><Cell key={item.jobTitle} fill={CHART_COLORS[index % CHART_COLORS.length]} />)}</Pie><Tooltip contentStyle={{ background:"var(--popover)",border:"1px solid var(--border)",borderRadius:8,color:"var(--popover-foreground)",fontSize:11 }} formatter={(value,_name,item)=>[Number(value).toLocaleString(),item.payload.jobTitle]} /></PieChart></ResponsiveContainer>
+                <div className="relative mx-auto h-40 w-full min-w-0 max-w-52" style={{ minWidth: 0, minHeight: 160 }}>
+                  <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={160}><PieChart><Pie data={jobSummaries} dataKey="employeeCount" nameKey="jobTitle" innerRadius="66%" outerRadius="88%" paddingAngle={2} stroke="var(--card)" strokeWidth={2}>{jobSummaries.map((item,index)=><Cell key={item.jobTitle} fill={CHART_COLORS[index % CHART_COLORS.length]} />)}</Pie><Tooltip contentStyle={{ background:"var(--popover)",border:"1px solid var(--border)",borderRadius:8,color:"var(--popover-foreground)",fontSize:11 }} formatter={(value,_name,item)=>[Number(value).toLocaleString(),item.payload.jobTitle]} /></PieChart></ResponsiveContainer>
                   <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"><span className="font-heading text-2xl font-semibold tracking-tight tabular-nums">{workforceTotal.toLocaleString()}</span><span className="text-[10px] text-muted-foreground">employees</span></div>
                 </div>
                 <div className="mt-2 grid grid-cols-2 gap-x-3 gap-y-2">
