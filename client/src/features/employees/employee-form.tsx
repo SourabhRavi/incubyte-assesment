@@ -273,7 +273,7 @@ const EmployeeForm = ({
                 disabled={isSubmitting}
                 aria-invalid={Boolean(errors.country)}
                 aria-describedby={errors.country ? "employee-country-error" : undefined}
-                className="w-full pl-10"
+                className="w-full" selectClassName="pl-10"
               >
                 <NativeSelectOption value="">Select country</NativeSelectOption>
                 {COUNTRIES.map((country) => <NativeSelectOption key={country} value={country}>{country}</NativeSelectOption>)}
