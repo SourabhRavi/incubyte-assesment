@@ -68,14 +68,14 @@ export default function OverviewPage() {
         </div>
       </div>
       <div className="flex items-center gap-3 pt-[1px]">
-        <div className="peopleops-country-select relative">
+        <div className="peopleops-country-select relative w-[199px]">
           <Globe aria-hidden="true" className="pointer-events-none absolute left-[14px] top-1/2 z-[1] size-[16px] -translate-y-1/2 text-[#5146D8]" />
           <NativeSelect
             id="overview-country"
             aria-label="Reporting country"
             value={selectedCountry}
             onChange={(event) => { setSelectedCountry(event.target.value as Country); setActiveRole(null) }}
-            className="h-[43px] w-[199px] rounded-[8px] border-[#E3E7F0] bg-white pl-[40px] pr-3 text-[12px] font-semibold text-[#30354A] shadow-none focus-visible:border-[#5146D8] focus-visible:ring-2 focus-visible:ring-[#5146D8]/15"
+            selectClassName="h-[43px] w-full rounded-[8px] border-[#E3E7F0] bg-white pl-[40px] pr-9 text-[12px] font-semibold text-[#30354A] shadow-none focus-visible:border-[#5146D8] focus-visible:ring-2 focus-visible:ring-[#5146D8]/15"
           >
             {COUNTRIES.map((country) => (
               <NativeSelectOption key={country} value={country}>
