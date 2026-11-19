@@ -72,20 +72,14 @@ const EmployeeForm = ({
 
     if (!values.email.trim()) {
       nextErrors.email = "Email is required."
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) {
+    } else if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(values.email.trim())) {
       nextErrors.email = "Enter a valid email address."
     }
 
-    if (!values.jobTitle) {
-      nextErrors.jobTitle = "Select a job title."
-    }
-
-    if (!values.country) {
-      nextErrors.country = "Select a country."
-    }
+    if (!values.jobTitle) nextErrors.jobTitle = "Select a job title."
+    if (!values.country) nextErrors.country = "Select a country."
 
     const salary = Number(values.salary)
-
     if (!values.salary.trim()) {
       nextErrors.salary = "Salary is required."
     } else if (!Number.isFinite(salary) || salary <= 0) {
@@ -98,14 +92,8 @@ const EmployeeForm = ({
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-
-    if (isSubmitting || !validate()) {
-      return
-    }
-
-    if (!values.jobTitle || !values.country) {
-      return
-    }
+    if (isSubmitting || !validate()) return
+    if (!values.jobTitle || !values.country) return
 
     const input: CreateEmployeeInput = {
       fullName: values.fullName.trim(),
@@ -119,176 +107,177 @@ const EmployeeForm = ({
   }
 
   const inputClassName =
-    "h-10 w-full rounded-md border border-input bg-background px-3 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+    "h-10 w-full rounded-lg border border-input bg-card px-3 text-[13px] text-foreground outline-none transition-colors placeholder:text-muted-foreground/80 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/15 disabled:cursor-not-allowed disabled:opacity-50"
 
-  const labelClassName = "text-sm font-medium"
+  const labelClassName = "text-[12px] font-medium text-foreground"
+
+  const RequiredMark = () => (
+    <span className="ml-0.5 text-destructive" aria-hidden="true">*</span>
+  )
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="space-y-5">
-      <div className="space-y-1.5">
-        <label htmlFor="employee-full-name" className={labelClassName}>
-          Full name
-        </label>
-        <input
-          id="employee-full-name"
-          autoComplete="name"
-          maxLength={120}
-          value={values.fullName}
-          onChange={(event) => updateField("fullName", event.target.value)}
-          disabled={isSubmitting}
-          aria-invalid={Boolean(errors.fullName)}
-          aria-describedby={
-            errors.fullName ? "employee-full-name-error" : undefined
-          }
-          placeholder="Enter full name"
-          className={inputClassName}
-        />
-        {errors.fullName && (
-          <p id="employee-full-name-error" className="text-sm text-destructive">
-            {errors.fullName}
-          </p>
-        )}
-      </div>
+    <form onSubmit={handleSubmit} noValidate className="flex flex-col">
+      <div className="space-y-5 px-6 py-5">
+        <div className="space-y-2">
+          <label htmlFor="employee-full-name" className={labelClassName}>
+            Full name<RequiredMark />
+          </label>
+          <input
+            id="employee-full-name"
+            autoComplete="name"
+            maxLength={120}
+            required
+            value={values.fullName}
+            onChange={(event) => updateField("fullName", event.target.value)}
+            disabled={isSubmitting}
+            aria-invalid={Boolean(errors.fullName)}
+            aria-describedby={errors.fullName ? "employee-full-name-error" : undefined}
+            placeholder="Enter full name"
+            className={inputClassName}
+          />
+          {errors.fullName && (
+            <p id="employee-full-name-error" className="text-xs text-destructive">
+              {errors.fullName}
+            </p>
+          )}
+        </div>
 
-      <div className="space-y-1.5">
-        <label htmlFor="employee-email" className={labelClassName}>
-          Email address
-        </label>
-        <input
-          id="employee-email"
-          type="email"
-          autoComplete="email"
-          value={values.email}
-          onChange={(event) => updateField("email", event.target.value)}
-          disabled={isSubmitting}
-          aria-invalid={Boolean(errors.email)}
-          aria-describedby={errors.email ? "employee-email-error" : undefined}
-          placeholder="name@company.com"
-          className={inputClassName}
-        />
-        {errors.email && (
-          <p id="employee-email-error" className="text-sm text-destructive">
-            {errors.email}
-          </p>
-        )}
-      </div>
+        <div className="space-y-2">
+          <label htmlFor="employee-email" className={labelClassName}>
+            Email<RequiredMark />
+          </label>
+          <input
+            id="employee-email"
+            type="email"
+            autoComplete="email"
+            required
+            value={values.email}
+            onChange={(event) => updateField("email", event.target.value)}
+            disabled={isSubmitting}
+            aria-invalid={Boolean(errors.email)}
+            aria-describedby={errors.email ? "employee-email-error" : undefined}
+            placeholder="name@company.com"
+            className={inputClassName}
+          />
+          {errors.email && (
+            <p id="employee-email-error" className="text-xs text-destructive">
+              {errors.email}
+            </p>
+          )}
+        </div>
 
-      <div className="space-y-1.5">
-        <label htmlFor="employee-job-title" className={labelClassName}>
-          Job title
-        </label>
-        <select
-          id="employee-job-title"
-          value={values.jobTitle}
-          onChange={(event) =>
-            updateField("jobTitle", event.target.value as JobTitle | "")
-          }
-          disabled={isSubmitting}
-          aria-invalid={Boolean(errors.jobTitle)}
-          aria-describedby={
-            errors.jobTitle ? "employee-job-title-error" : undefined
-          }
-          className={inputClassName}
-        >
-          <option value="">Select a job title</option>
-          {JOB_TITLES.map((jobTitle) => (
-            <option key={jobTitle} value={jobTitle}>
-              {jobTitle}
-            </option>
-          ))}
-        </select>
-        {errors.jobTitle && (
-          <p id="employee-job-title-error" className="text-sm text-destructive">
-            {errors.jobTitle}
-          </p>
-        )}
-      </div>
+        <div className="space-y-2">
+          <label htmlFor="employee-job-title" className={labelClassName}>
+            Job title<RequiredMark />
+          </label>
+          <select
+            id="employee-job-title"
+            required
+            value={values.jobTitle}
+            onChange={(event) =>
+              updateField("jobTitle", event.target.value as JobTitle | "")
+            }
+            disabled={isSubmitting}
+            aria-invalid={Boolean(errors.jobTitle)}
+            aria-describedby={errors.jobTitle ? "employee-job-title-error" : undefined}
+            className={inputClassName}
+          >
+            <option value="">Select a job title</option>
+            {JOB_TITLES.map((jobTitle) => (
+              <option key={jobTitle} value={jobTitle}>
+                {jobTitle}
+              </option>
+            ))}
+          </select>
+          {errors.jobTitle && (
+            <p id="employee-job-title-error" className="text-xs text-destructive">
+              {errors.jobTitle}
+            </p>
+          )}
+        </div>
 
-      <div className="space-y-1.5">
-        <label htmlFor="employee-country" className={labelClassName}>
-          Country
-        </label>
-        <select
-          id="employee-country"
-          value={values.country}
-          onChange={(event) =>
-            updateField("country", event.target.value as Country | "")
-          }
-          disabled={isSubmitting}
-          aria-invalid={Boolean(errors.country)}
-          aria-describedby={
-            errors.country ? "employee-country-error" : undefined
-          }
-          className={inputClassName}
-        >
-          <option value="">Select a country</option>
-          {COUNTRIES.map((country) => (
-            <option key={country} value={country}>
-              {country}
-            </option>
-          ))}
-        </select>
-        {errors.country && (
-          <p id="employee-country-error" className="text-sm text-destructive">
-            {errors.country}
-          </p>
-        )}
-      </div>
+        <div className="space-y-2">
+          <label htmlFor="employee-country" className={labelClassName}>
+            Country<RequiredMark />
+          </label>
+          <select
+            id="employee-country"
+            required
+            value={values.country}
+            onChange={(event) =>
+              updateField("country", event.target.value as Country | "")
+            }
+            disabled={isSubmitting}
+            aria-invalid={Boolean(errors.country)}
+            aria-describedby={errors.country ? "employee-country-error" : undefined}
+            className={inputClassName}
+          >
+            <option value="">Select a country</option>
+            {COUNTRIES.map((country) => (
+              <option key={country} value={country}>
+                {country}
+              </option>
+            ))}
+          </select>
+          {errors.country && (
+            <p id="employee-country-error" className="text-xs text-destructive">
+              {errors.country}
+            </p>
+          )}
+        </div>
 
-      <div className="space-y-1.5">
-        <label htmlFor="employee-salary" className={labelClassName}>
-          Annual salary
-        </label>
-        <div className="flex">
-          <div className="flex h-10 min-w-16 items-center justify-center rounded-l-md border border-r-0 bg-muted px-3 text-sm font-medium text-muted-foreground">
-            {currency ?? "CUR"}
-          </div>
+        <div className="space-y-2">
+          <label htmlFor="employee-salary" className={labelClassName}>
+            Annual salary<RequiredMark />
+          </label>
           <input
             id="employee-salary"
             type="number"
             min="0.01"
             step="any"
             inputMode="decimal"
+            required
             value={values.salary}
             onChange={(event) => updateField("salary", event.target.value)}
             disabled={isSubmitting}
             aria-invalid={Boolean(errors.salary)}
-            aria-describedby={
-              errors.salary ? "employee-salary-error" : undefined
-            }
-            placeholder="Enter salary"
-            className={`${inputClassName} rounded-l-none`}
+            aria-describedby={errors.salary ? "employee-salary-error" : undefined}
+            placeholder="Enter annual salary"
+            className={inputClassName}
           />
+          {errors.salary && (
+            <p id="employee-salary-error" className="text-xs text-destructive">
+              {errors.salary}
+            </p>
+          )}
         </div>
-        {errors.salary && (
-          <p id="employee-salary-error" className="text-sm text-destructive">
-            {errors.salary}
+
+        <div className="space-y-2 pt-1">
+          <p className="text-xs text-muted-foreground">
+            Currency: <span className="font-semibold text-foreground">{currency ?? "Set by country"}</span>
+            {" "}· Set automatically by country.
           </p>
-        )}
-        <p className="text-xs text-muted-foreground">
-          Currency is determined by the employee's country.
-        </p>
+          <p className="text-[11px] text-muted-foreground">
+            All fields are required. Salary is an annual amount.
+          </p>
+        </div>
       </div>
 
-      <div className="flex flex-col-reverse gap-2 border-t pt-4 sm:flex-row sm:justify-end">
+      <div className="flex flex-col-reverse gap-2 border-t border-border bg-background px-6 py-5 sm:flex-row sm:justify-end">
         <button
           type="button"
           onClick={onCancel}
           disabled={isSubmitting}
-          className="h-10 rounded-md border px-4 text-sm font-medium transition-colors hover:bg-muted disabled:opacity-50"
+          className="h-10 min-w-[150px] rounded-lg border border-border bg-card px-4 text-[13px] font-semibold text-foreground transition-colors hover:bg-muted disabled:opacity-50"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={isSubmitting}
-          className="h-10 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+          className="h-10 min-w-[150px] rounded-lg bg-primary px-4 text-[13px] font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isSubmitting
-            ? "Saving..."
-            : employee
-              ? "Save changes"
-              : "Add employee"}
+          {isSubmitting ? "Saving..." : "Save employee"}
         </button>
       </div>
     </form>
