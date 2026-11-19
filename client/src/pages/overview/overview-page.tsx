@@ -1,10 +1,10 @@
 import { useState, type ComponentType, type ReactNode } from "react"
-import { ArrowUpRight, Globe2, LoaderCircle, RefreshCw, Users, Wallet, X } from "lucide-react"
+import { ArrowUpRight, LoaderCircle, RefreshCw, Users, Wallet, X } from "lucide-react"
 import { Bar, BarChart, CartesianGrid, Cell, LabelList, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 import { Link } from "react-router"
 import { useAllSalarySummaries, useJobTitleAverages, useSalarySummary } from "@/features/analytics/analytics-queries"
 import { COUNTRIES, COUNTRY_CURRENCIES, type Country } from "@/features/employees/employee-types"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 
 const COLORS = ["#5146D8", "#3978DF", "#239F96", "#E49A25", "#9675DF", "#5A9EAD", "#BD7D9D", "#829B68"]
 const money = (value: number | string | null | undefined, currency: string) => {
@@ -69,35 +69,19 @@ export default function OverviewPage() {
       </div>
       <div className="flex items-center gap-3 pt-[1px]">
         <div className="peopleops-country-select">
-          <Select value={selectedCountry} onValueChange={(value) => { setSelectedCountry(value as Country); setActiveRole(null) }}>
-            <SelectTrigger
-              id="overview-country"
-              aria-label="Reporting country"
-              className="h-[43px] w-[199px] rounded-[9px] border-[#E3E7F0] bg-white px-3 text-[12px] font-semibold text-[#30354A] shadow-[0_1px_2px_rgb(24_32_56_/_3%)] hover:border-[#C9C5F7] hover:bg-[#FCFCFF] focus-visible:border-[#8C83EF] focus-visible:ring-2 focus-visible:ring-[#5146D8]/15 dark:border-border dark:bg-card dark:text-foreground"
-            >
-              <Globe2 className="size-[15px] text-[#5146D8]" />
-              <SelectValue>{selectedCountry}</SelectValue>
-            </SelectTrigger>
-            <SelectContent
-              align="end"
-              sideOffset={7}
-              className="rounded-[11px] border border-[#E5E8F0] bg-white p-1.5 text-[#30354A] shadow-[0_12px_36px_rgb(24_32_56_/_14%)] ring-1 ring-black/[0.025] dark:border-border dark:bg-popover dark:text-popover-foreground"
-            >
-              <div className="px-2.5 pb-1.5 pt-1 text-[9px] font-semibold uppercase tracking-[0.09em] text-[#8992A6] dark:text-muted-foreground">
-                Reporting market
-              </div>
-              {COUNTRIES.map((country) => (
-                <SelectItem
-                  key={country}
-                  value={country}
-                  className="min-h-[39px] rounded-[7px] py-2 pl-2.5 pr-9 text-[12px] text-[#30354A] data-[highlighted]:bg-[#F4F2FF] data-[highlighted]:text-[#4036C5] dark:text-popover-foreground dark:data-[highlighted]:bg-accent dark:data-[highlighted]:text-accent-foreground"
-                >
-                  <span className="font-medium">{country}</span>
-                  <span className="ml-auto text-[10px] font-medium text-[#8992A6] dark:text-muted-foreground">{COUNTRY_CURRENCIES[country]}</span>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <NativeSelect
+            id="overview-country"
+            aria-label="Reporting country"
+            value={selectedCountry}
+            onChange={(event) => { setSelectedCountry(event.target.value as Country); setActiveRole(null) }}
+            className="w-[199px]"
+          >
+            {COUNTRIES.map((country) => (
+              <NativeSelectOption key={country} value={country}>
+                {country} ({COUNTRY_CURRENCIES[country]})
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
         </div>
         <button type="button" onClick={() => void refresh()} disabled={isRefreshing} className="peopleops-action-button inline-flex h-[43px] items-center gap-2 rounded-[8px] border border-[#E3E7F0] bg-white px-[14px] text-[12px] font-medium text-[#30354A] hover:bg-[#F8F9FC] disabled:opacity-60">
           <RefreshCw className={`size-[14px] ${isRefreshing ? "animate-spin" : ""}`} /> Refresh
