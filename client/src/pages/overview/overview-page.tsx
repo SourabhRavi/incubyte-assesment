@@ -88,7 +88,7 @@ const MetricCard = ({
   isLoading = false,
   accent,
 }: MetricCardProps) => (
-  <section className="group relative overflow-hidden rounded-2xl border bg-card p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+  <section className="overview-metric-card group relative overflow-hidden rounded-2xl border bg-card p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
     <div
       className="absolute inset-x-0 top-0 h-1 opacity-80"
       style={{ background: accent }}
@@ -124,7 +124,7 @@ const ChartCard = ({
   children: React.ReactNode
   className?: string
 }) => (
-  <section className={`min-w-0 overflow-hidden rounded-2xl border bg-card shadow-sm ${className}`}>
+  <section className={`overview-chart-card min-w-0 overflow-hidden rounded-2xl border bg-card shadow-sm ${className}`}>
     <div className="border-b px-5 py-4">
       <h2 className="font-heading text-base font-semibold">{title}</h2>
       <p className="mt-1 text-sm text-muted-foreground">{description}</p>
@@ -191,7 +191,7 @@ const OverviewPage = () => {
 
   return (
     <div className="peopleops-overview space-y-7">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div className="overview-hero flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
             <span className="size-1.5 rounded-full bg-primary" />
@@ -466,7 +466,7 @@ const OverviewPage = () => {
         </ChartCard>
       </div>
 
-      <section className="overflow-hidden rounded-2xl border bg-card shadow-sm">
+      <section className="overview-data-table overflow-hidden rounded-2xl border bg-card shadow-sm">
         <div className="flex flex-col gap-2 border-b px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="font-heading text-base font-semibold">
