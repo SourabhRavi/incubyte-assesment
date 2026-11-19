@@ -81,23 +81,23 @@ function MetricCard({
   highlighted,
 }: MetricProps) {
   return (
-    <section className="peopleops-metric min-w-0 rounded-[8px] border border-[#E3E7F0] bg-white px-[18px] py-[18px]">
+    <section className="peopleops-metric min-w-0 rounded-[8px] border border-[var(--border)] bg-white px-[18px] py-[18px]">
       <div className="flex items-center justify-between gap-2">
-        <p className="text-[13px] font-medium text-[#69758D]">{title}</p>
+        <p className="text-[13px] font-medium text-[var(--muted-foreground)]">{title}</p>
         <Icon
-          className={`size-[17px] ${highlighted ? "text-[#5146D8]" : "text-[#75819A]"}`}
+          className={`size-[17px] ${highlighted ? "text-[var(--primary)]" : "text-[var(--muted-foreground)]"}`}
         />
       </div>
       <div className="mt-[17px] flex min-h-[37px] items-center">
         {loading ? (
-          <LoaderCircle className="size-5 animate-spin text-[#8993A8]" />
+          <LoaderCircle className="size-5 animate-spin text-[var(--muted-foreground)]" />
         ) : (
-          <p className="truncate text-[28px] leading-none font-semibold tracking-[-0.8px] text-[#292D40] tabular-nums">
+          <p className="truncate text-[28px] leading-none font-semibold tracking-[-0.8px] text-[var(--foreground)] tabular-nums">
             {value}
           </p>
         )}
       </div>
-      <p className="mt-[11px] text-[11px] text-[#78839A]">{detail}</p>
+      <p className="mt-[11px] text-[11px] text-[var(--muted-foreground)]">{detail}</p>
     </section>
   )
 }
@@ -114,13 +114,13 @@ function Panel({
 }) {
   return (
     <section
-      className={`peopleops-chart-panel min-w-0 overflow-hidden rounded-[12px] border border-[#E3E7F0] bg-white ${className}`}
+      className={`peopleops-chart-panel min-w-0 overflow-hidden rounded-[12px] border border-[var(--border)] bg-white ${className}`}
     >
       <header className="px-[22px] pt-[20px]">
-        <h2 className="text-[16px] font-semibold tracking-[-0.25px] text-[#292D40]">
+        <h2 className="text-[16px] font-semibold tracking-[-0.25px] text-[var(--foreground)]">
           {title}
         </h2>
-        <p className="mt-[5px] text-[12px] text-[#78839A]">{subtitle}</p>
+        <p className="mt-[5px] text-[12px] text-[var(--muted-foreground)]">{subtitle}</p>
       </header>
       {children}
     </section>
@@ -128,7 +128,7 @@ function Panel({
 }
 function EmptyState({ children }: { children: ReactNode }) {
   return (
-    <div className="flex min-h-[210px] items-center justify-center px-6 text-center text-[12px] text-[#78839A]">
+    <div className="flex min-h-[210px] items-center justify-center px-6 text-center text-[12px] text-[var(--muted-foreground)]">
       {children}
     </div>
   )
@@ -168,17 +168,17 @@ export default function OverviewPage() {
     <main className="peopleops-overview w-full space-y-[23px] px-[26px] pt-[31px] pb-12 max-sm:px-4">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-[28px] leading-[1.2] font-semibold tracking-[-0.8px] text-[#292D40]">
+          <h1 className="text-[28px] leading-[1.2] font-semibold tracking-[-0.8px] text-[var(--foreground)]">
             People overview
           </h1>
-          <p className="mt-[10px] text-[14px] text-[#78839A]">
+          <p className="mt-[10px] text-[14px] text-[var(--muted-foreground)]">
             A clear view of your workforce and compensation.
           </p>
           <div className="mt-[15px] flex flex-wrap items-center gap-3">
-            <span className="rounded-[5px] bg-[#EDEBFF] px-[10px] py-[6px] text-[9px] font-semibold tracking-[0.02em] text-[#5146D8]">
+            <span className="rounded-[5px] bg-[var(--secondary)] px-[10px] py-[6px] text-[9px] font-semibold tracking-[0.02em] text-[var(--primary)]">
               {selectedCountry.toUpperCase()} / {currency} · ANNUAL
             </span>
-            <span className="text-[10px] text-[#78839A]">
+            <span className="text-[10px] text-[var(--muted-foreground)]">
               Salary figures reflect {selectedCountry} only. Sample data.
             </span>
           </div>
@@ -187,7 +187,7 @@ export default function OverviewPage() {
           <div className="peopleops-country-select relative">
             <Globe
               aria-hidden="true"
-              className="pointer-events-none absolute top-1/2 left-[14px] z-[1] size-[16px] -translate-y-1/2 text-[#5146D8]"
+              className="pointer-events-none absolute top-1/2 left-[14px] z-[1] size-[16px] -translate-y-1/2 text-[var(--primary)]"
             />
             <NativeSelect
               id="overview-country"
@@ -197,7 +197,7 @@ export default function OverviewPage() {
                 setSelectedCountry(event.target.value as Country)
                 setActiveRole(null)
               }}
-              selectClassName="h-[43px] w-full rounded-[8px] border-[#E3E7F0] bg-white pl-[40px] pr-9 text-[12px] font-semibold text-[#30354A] shadow-none focus-visible:border-[#5146D8] focus-visible:ring-2 focus-visible:ring-[#5146D8]/15"
+              selectClassName="h-[43px] w-full rounded-[8px] border-[var(--border)] bg-white pl-[40px] pr-9 text-[12px] font-semibold text-[var(--foreground)] shadow-none focus-visible:border-[var(--primary)] focus-visible:ring-2 focus-visible:ring-[var(--primary)]/15"
             >
               {COUNTRIES.map((country) => (
                 <NativeSelectOption key={country} value={country}>
@@ -210,7 +210,7 @@ export default function OverviewPage() {
             type="button"
             onClick={() => void refresh()}
             disabled={isRefreshing}
-            className="peopleops-action-button inline-flex h-[43px] items-center gap-2 rounded-[8px] border border-[#E3E7F0] bg-white px-[14px] text-[12px] font-medium text-[#30354A] hover:bg-[#F8F9FC] disabled:opacity-60"
+            className="peopleops-action-button inline-flex h-[43px] items-center gap-2 rounded-[8px] border border-[var(--border)] bg-white px-[14px] text-[12px] font-medium text-[var(--foreground)] hover:bg-[var(--surface-subtle)] disabled:opacity-60"
           >
             <RefreshCw
               className={`size-[14px] ${isRefreshing ? "animate-spin" : ""}`}
@@ -281,14 +281,14 @@ export default function OverviewPage() {
           ) : (
             <div className="peopleops-chart-body flex flex-1 flex-col px-5 pt-4 pb-4">
               <div className="mb-4 flex items-center justify-between gap-2">
-                <span className="text-[10px] text-[#78839A]">
+                <span className="text-[10px] text-[var(--muted-foreground)]">
                   Average annual salary by job title
                 </span>
                 {activeRole && (
                   <button
                     type="button"
                     onClick={() => setActiveRole(null)}
-                    className="inline-flex items-center gap-1 text-[10px] font-medium text-[#5146D8] hover:underline"
+                    className="inline-flex items-center gap-1 text-[10px] font-medium text-[var(--primary)] hover:underline"
                   >
                     Clear focus <X className="size-3" />
                   </button>
@@ -320,27 +320,27 @@ export default function OverviewPage() {
                               money(role.averageSalary, currency)
                             }
                             aria-pressed={isFocused}
-                            className={`group grid w-full grid-cols-[minmax(112px,150px)_minmax(0,1fr)_minmax(92px,112px)] items-center gap-3 rounded-md py-1.5 text-left transition-colors hover:bg-[#F7F8FC] focus-visible:ring-2 focus-visible:ring-[#5146D8]/40 focus-visible:outline-none ${isFocused ? "bg-[#F4F2FF]" : ""}`}
+                            className={`group grid w-full grid-cols-[minmax(112px,150px)_minmax(0,1fr)_minmax(92px,112px)] items-center gap-3 rounded-md py-1.5 text-left transition-colors hover:bg-[var(--surface-subtle)] focus-visible:ring-2 focus-visible:ring-[var(--primary)]/40 focus-visible:outline-none ${isFocused ? "bg-[var(--accent)]" : ""}`}
                           >
                             <span
-                              className={`truncate text-[11px] font-medium ${isDimmed ? "text-[#A5AABC]" : "text-[#394258]"}`}
+                              className={`truncate text-[11px] font-medium ${isDimmed ? "text-[var(--muted-foreground)]" : "text-[var(--foreground)]"}`}
                             >
                               {role.jobTitle}
                             </span>
-                            <span className="relative block h-5 min-w-0 overflow-hidden rounded-[5px] bg-[#F1F2F8]">
+                            <span className="relative block h-5 min-w-0 overflow-hidden rounded-[5px] bg-[var(--muted)]">
                               <span
                                 className="absolute inset-y-0 left-0 rounded-[5px] transition-[width,opacity] duration-300"
                                 style={{
                                   width: `${Math.max(2, (role.averageSalary / axisMax) * 100)}%`,
                                   backgroundColor: isDimmed
-                                    ? "#E4E5EF"
+                                    ? "var(--border)"
                                     : COLORS[index % COLORS.length],
                                   opacity: isDimmed ? 0.55 : 1,
                                 }}
                               />
                             </span>
                             <span
-                              className={`text-right text-[10px] font-semibold whitespace-nowrap tabular-nums ${isDimmed ? "text-[#A5AABC]" : "text-[#394258]"}`}
+                              className={`text-right text-[10px] font-semibold whitespace-nowrap tabular-nums ${isDimmed ? "text-[var(--muted-foreground)]" : "text-[var(--foreground)]"}`}
                             >
                               {money(role.averageSalary, currency)}
                             </span>
@@ -348,9 +348,9 @@ export default function OverviewPage() {
                         )
                       })}
                     </div>
-                    <div className="mt-3 grid grid-cols-[minmax(112px,150px)_minmax(0,1fr)_minmax(92px,112px)] items-start gap-3 border-t border-[#EEF0F6] pt-2">
+                    <div className="mt-3 grid grid-cols-[minmax(112px,150px)_minmax(0,1fr)_minmax(92px,112px)] items-start gap-3 border-t border-[var(--border)] pt-2">
                       <span />
-                      <div className="flex justify-between text-[9px] text-[#8992A6] tabular-nums">
+                      <div className="flex justify-between text-[9px] text-[var(--muted-foreground)] tabular-nums">
                         {ticks.map((tick) => (
                           <span key={tick}>
                             {compactMoney(axisMax * tick, currency)}
@@ -538,13 +538,13 @@ export default function OverviewPage() {
           )}
         </Panel>
       </div>
-      <section className="peopleops-data-panel overflow-hidden rounded-[12px] border border-[#E3E7F0] bg-white">
+      <section className="peopleops-data-panel overflow-hidden rounded-[12px] border border-[var(--border)] bg-white">
         <header className="flex items-center justify-between gap-3 px-[22px] py-[19px]">
           <div>
-            <h2 className="text-[16px] font-semibold tracking-[-0.25px] text-[#292D40]">
+            <h2 className="text-[16px] font-semibold tracking-[-0.25px] text-[var(--foreground)]">
               Compensation by role
             </h2>
-            <p className="mt-[4px] text-[11px] text-[#78839A]">
+            <p className="mt-[4px] text-[11px] text-[var(--muted-foreground)]">
               {selectedCountry} ·{" "}
               {activeRole
                 ? "Filtered: " + activeRole
@@ -553,7 +553,7 @@ export default function OverviewPage() {
           </div>
           <Link
             to="/employees"
-            className="inline-flex items-center gap-2 text-[12px] font-semibold text-[#5146D8] hover:text-[#3F35B8]"
+            className="inline-flex items-center gap-2 text-[12px] font-semibold text-[var(--primary)] hover:text-[var(--primary)]"
           >
             View employees <ArrowUpRight className="size-[14px]" />
           </Link>
@@ -567,7 +567,7 @@ export default function OverviewPage() {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[560px] border-collapse text-left">
-              <thead className="bg-[#F7F8FC] text-[9px] font-semibold text-[#78839A] uppercase">
+              <thead className="bg-[var(--surface-subtle)] text-[9px] font-semibold text-[var(--muted-foreground)] uppercase">
                 <tr>
                   <th className="px-[22px] py-[10px]">Job title</th>
                   <th className="px-[22px] py-[10px] text-right">Employees</th>
@@ -582,10 +582,10 @@ export default function OverviewPage() {
                   .map((role, index) => (
                     <tr
                       key={role.jobTitle}
-                      className="peopleops-table-row border-t border-[#E3E7F0] hover:bg-[#FAFBFD]"
+                      className="peopleops-table-row border-t border-[var(--border)] hover:bg-[var(--surface-subtle)]"
                     >
                       <td className="px-[22px] py-[7px]">
-                        <span className="inline-flex items-center gap-[13px] text-[12px] text-[#30354A]">
+                        <span className="inline-flex items-center gap-[13px] text-[12px] text-[var(--foreground)]">
                           <span
                             className="size-[7px] rounded-[2px]"
                             style={{
@@ -595,10 +595,10 @@ export default function OverviewPage() {
                           {role.jobTitle}
                         </span>
                       </td>
-                      <td className="px-[22px] py-[7px] text-right text-[12px] text-[#30354A] tabular-nums">
+                      <td className="px-[22px] py-[7px] text-right text-[12px] text-[var(--foreground)] tabular-nums">
                         {role.employeeCount.toLocaleString("en-IN")}
                       </td>
-                      <td className="px-[22px] py-[7px] text-right text-[12px] font-medium text-[#30354A] tabular-nums">
+                      <td className="px-[22px] py-[7px] text-right text-[12px] font-medium text-[var(--foreground)] tabular-nums">
                         {money(role.averageSalary, currency)} {currency}
                       </td>
                     </tr>
