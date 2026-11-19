@@ -84,13 +84,13 @@ const EmployeeDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="flex max-h-[calc(100dvh-2rem)] flex-col gap-3 overflow-hidden p-5 sm:max-w-2xl sm:p-6">
+      <DialogContent className="flex max-h-[calc(100dvh-2rem)] flex-col gap-4 overflow-hidden rounded-xl p-5 sm:max-w-xl sm:p-6">
         <DialogHeader className="shrink-0 space-y-1">
-          <DialogTitle>
+          <DialogTitle className="text-base font-semibold tracking-tight">
             {isEditing ? "Edit employee" : "Add employee"}
           </DialogTitle>
 
-          <DialogDescription>
+          <DialogDescription className="text-sm text-muted-foreground">
             {isEditing
               ? "Update the employee's information below."
               : "Enter the employee's details to add them to your directory."}
