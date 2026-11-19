@@ -31,6 +31,16 @@ type FormValues = {
 
 type FormErrors = Partial<Record<keyof FormValues, string>>
 
+const SALARY_PATTERN = /^\d+(?:\.\d{1,2})?$/
+
+const isValidSalary = (value: string): boolean => {
+  const normalized = value.trim()
+  if (!normalized || !SALARY_PATTERN.test(normalized)) return false
+
+  const amount = Number(normalized)
+  return Number.isFinite(amount) && amount > 0
+}
+
 const getInitialValues = (employee?: Employee): FormValues => ({
   fullName: employee?.fullName ?? "",
   email: employee?.email ?? "",
@@ -54,21 +64,27 @@ const EmployeeForm = ({
     ? COUNTRY_CURRENCIES[values.country]
     : undefined
   const originalSalary = employee ? Number(employee.salary) : null
-  const revisedSalary = Number(values.salary)
+  const revisedSalary = Number(values.salary.trim())
+  const salaryInputValid = isValidSalary(values.salary)
   const salaryDelta =
     originalSalary !== null &&
+    Number.isFinite(originalSalary) &&
     originalSalary > 0 &&
-    values.salary.trim() !== "" &&
-    Number.isFinite(revisedSalary)
+    salaryInputValid
       ? ((revisedSalary - originalSalary) / originalSalary) * 100
       : null
-  const formatMoney = (amount: number, currencyCode = currency ?? (employee ? COUNTRY_CURRENCIES[employee.country] : "USD")) =>
+
+  const formatMoney = (
+    amount: number,
+    currencyCode = currency ?? (employee ? COUNTRY_CURRENCIES[employee.country] : "USD")
+  ) =>
     new Intl.NumberFormat("en-IN", {
       style: "currency",
       currency: currencyCode,
       minimumFractionDigits: 0,
       maximumFractionDigits: 2,
     }).format(amount)
+
   const formatDate = (value: string) => {
     const date = new Date(value)
     return Number.isNaN(date.getTime())
@@ -111,14 +127,10 @@ const EmployeeForm = ({
       nextErrors.country = "Select a country."
     }
 
-    const salary = Number(values.salary)
-
     if (!values.salary.trim()) {
       nextErrors.salary = "Salary is required."
-    } else if (!Number.isFinite(salary) || salary <= 0) {
-      nextErrors.salary = "Enter a salary greater than zero."
-    } else if (!/^\\d+(?:\\.\\d{1,2})?$/.test(values.salary.trim())) {
-      nextErrors.salary = "Enter a valid amount with no more than 2 decimal places."
+    } else if (!salaryInputValid) {
+      nextErrors.salary = "Enter a valid amount greater than zero with no more than 2 decimal places."
     }
 
     setErrors(nextErrors)
@@ -141,18 +153,16 @@ const EmployeeForm = ({
       email: values.email.trim(),
       jobTitle: values.jobTitle,
       country: values.country,
-      salary: Number(values.salary),
+      salary: Number(values.salary.trim()),
     }
 
     await onSubmit(input)
   }
 
-
   const inputClassName =
-    "h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground shadow-none outline-none transition-colors placeholder:text-muted-foreground hover:border-muted-foreground/50 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/15 disabled:cursor-not-allowed disabled:opacity-60 aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-visible:ring-destructive/15"
+    "h-9 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground shadow-none outline-none transition-colors placeholder:text-muted-foreground hover:border-muted-foreground/50 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/15 disabled:cursor-not-allowed disabled:opacity-60 aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-visible:ring-destructive/15"
 
   const labelClassName = "text-xs font-medium text-muted-foreground"
-
   const fieldShell = "space-y-1.5"
   const selectClassName = `${inputClassName} appearance-none pr-10`
 
@@ -292,15 +302,14 @@ const EmployeeForm = ({
         <div className={fieldShell}>
           <label htmlFor="employee-salary" className={labelClassName}>Annual salary <span className="text-destructive">*</span></label>
           <div className="flex">
-            <div className="flex h-10 min-w-[60px] items-center justify-center rounded-l-md border border-r-0 bg-muted/40 px-3 text-xs font-medium text-muted-foreground">
+            <div className="flex h-9 min-w-[52px] items-center justify-center rounded-l-md border border-r-0 bg-muted/40 px-3 text-xs font-medium text-muted-foreground">
               {currency ?? "CUR"}
             </div>
             <input
               id="employee-salary"
-              type="number"
-              min="0.01"
-              step="0.01"
+              type="text"
               inputMode="decimal"
+              autoComplete="off"
               value={values.salary}
               onChange={(event) => updateField("salary", event.target.value)}
               disabled={isSubmitting}
@@ -315,7 +324,7 @@ const EmployeeForm = ({
             Currency is automatically set to {currency ?? "the selected country's currency"} based on the employee's country.
           </p>
 
-          {employee && values.salary.trim() && salaryDelta !== null && Number.isFinite(salaryDelta) && (
+          {employee && salaryInputValid && salaryDelta !== null && Number.isFinite(salaryDelta) && (
             <div className="rounded-md border border-border/70 bg-muted/20 px-3 py-2">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="min-w-0 space-y-1">
