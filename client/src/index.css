@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap");
 
 
 @custom-variant dark (&:is(.dark *));
@@ -68,8 +68,8 @@
   --sidebar-border: #303C4E;
 }
 @theme inline {
-    --font-sans: 'Inter', sans-serif;
-    --font-heading: 'Inter', sans-serif;
+    --font-sans: 'Manrope', sans-serif;
+    --font-heading: 'Geist', sans-serif;
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -142,7 +142,7 @@
   .overview-heading { margin-bottom: 1px; }
   .overview-chart-card { min-width: 0; }
   .overview-chart-card .recharts-wrapper { max-width: 100%; }
-  .overview-chart-card .recharts-cartesian-axis-tick-value { font-family: 'Manrope Variable', sans-serif; }
+  .overview-chart-card .recharts-cartesian-axis-tick-value { font-family: 'Manrope', sans-serif; }
   .overview-metric-card { min-width: 0; }
   .overview-metric-card > div:first-of-type p { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .overview-data-table { margin-top: 0; }
@@ -157,7 +157,7 @@
   .overview-metric-card>div:first-of-type span { width:23px;height:23px;border-radius:6px;background:color-mix(in srgb,var(--primary) 10%,white);color:var(--primary);box-shadow:none; }
   .overview-metric-card>div:first-of-type span svg { width:12px;height:12px; }
   .overview-metric-card>div:nth-of-type(2) { margin-top:10px; }
-  .overview-metric-card>div:nth-of-type(2) p { color:var(--foreground);font-family:'Geist Variable',sans-serif;font-size:21px;font-weight:650;letter-spacing:-.045em; }
+  .overview-metric-card>div:nth-of-type(2) p { color:var(--foreground);font-family:'Geist',sans-serif;font-size:21px;font-weight:650;letter-spacing:-.045em; }
   .overview-metric-card>p:last-child { margin-top:2px;color:var(--muted-foreground);font-size:9px; }
   .overview-chart-card,.overview-data-table { border:1px solid var(--border);border-radius:11px;background:var(--card);box-shadow:0 1px 3px rgb(34 48 70 / 3%); }
   .overview-chart-card>div:first-child { padding:12px 14px;border-color:var(--border); }
@@ -197,7 +197,7 @@
 
 /* Desktop PeopleOps reference layout */
 @layer base {
-  body { font-family: "Inter", sans-serif; }
+  body { font-family: "Manrope", sans-serif; }
 }
 @layer components {
   .peopleops-sidebar [data-slot="sidebar-inner"] { background: #fff; }
@@ -276,7 +276,7 @@
 .dark .cn-toast { background:var(--popover) !important; color:var(--popover-foreground) !important; border-color:var(--border) !important; }
 
 /* Brand typography follows the PeopleOps Foundations guide. */
-.peopleops-overview, .peopleops-sidebar, .peopleops-topbar, .peopleops-employees { font-family: Inter, sans-serif; }
+.peopleops-overview, .peopleops-sidebar, .peopleops-topbar, .peopleops-employees { font-family: 'Manrope', sans-serif; }\n.peopleops-overview h1, .peopleops-overview h2, .peopleops-employees h1, .peopleops-employees h2, .peopleops-topbar [data-slot='breadcrumb-list'], .peopleops-sidebar [data-slot='sidebar-brand'] { font-family: 'Geist', sans-serif; }
 .dark .peopleops-sidebar [class*="text-[#292D40]"],
 .dark .peopleops-sidebar [class*="text-[#30354A]"],
 .dark .peopleops-sidebar [class*="text-[#68758E]"],
