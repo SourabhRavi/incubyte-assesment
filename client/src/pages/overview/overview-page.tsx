@@ -88,14 +88,14 @@ const MetricCard = ({
   isLoading = false,
   accent,
 }: MetricCardProps) => (
-  <section className="group relative overflow-hidden rounded-2xl border bg-card p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+  <section className="relative overflow-hidden rounded-lg border border-[#E7EAF2] bg-white p-5 shadow-none transition-colors hover:border-[#d5d8e7]">
     <div
-      className="absolute inset-x-0 top-0 h-1 opacity-80"
+      className="absolute inset-x-0 top-0 h-0 opacity-0"
       style={{ background: accent }}
     />
     <div className="flex items-start justify-between gap-3">
       <p className="text-sm font-medium text-muted-foreground">{title}</p>
-      <span className="flex size-10 items-center justify-center rounded-xl bg-primary/8 text-primary ring-1 ring-primary/10">
+      <span className="flex size-8 items-center justify-center rounded-md bg-[#EDEBFF] text-[#5146D8]">
         <Icon className="size-4.5" />
       </span>
     </div>
@@ -104,7 +104,7 @@ const MetricCard = ({
       {isLoading ? (
         <LoaderCircle className="size-5 animate-spin text-muted-foreground" />
       ) : (
-        <p className="font-heading text-[1.7rem] font-semibold tracking-tight tabular-nums">
+        <p className="font-sans text-[28px] font-semibold leading-[1.35] tracking-normal text-[#25283A] tabular-nums">
           {value}
         </p>
       )}
@@ -124,10 +124,10 @@ const ChartCard = ({
   children: React.ReactNode
   className?: string
 }) => (
-  <section className={`min-w-0 overflow-hidden rounded-2xl border bg-card shadow-sm ${className}`}>
-    <div className="border-b px-5 py-4">
-      <h2 className="font-heading text-base font-semibold">{title}</h2>
-      <p className="mt-1 text-sm text-muted-foreground">{description}</p>
+  <section className={`min-w-0 overflow-hidden rounded-lg border border-[#E7EAF2] bg-white shadow-none ${className}`}>
+    <div className="border-b border-[#E7EAF2] px-6 py-4">
+      <h2 className="font-sans text-[16px] font-semibold text-[#25283A]">{title}</h2>
+      <p className="mt-1 text-[12px] text-[#777F92]">{description}</p>
     </div>
     {children}
   </section>
@@ -190,8 +190,8 @@ const OverviewPage = () => {
       : "An unexpected error occurred."
 
   return (
-    <div className="space-y-7">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <div className="space-y-6 pb-8">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
             <span className="size-1.5 rounded-full bg-primary" />
@@ -200,16 +200,16 @@ const OverviewPage = () => {
           <h1 className="font-heading text-2xl font-semibold tracking-tight sm:text-3xl">
             People overview
           </h1>
-          <p className="mt-1.5 text-sm text-muted-foreground">
+          <p className="mt-1.5 text-[14px] text-[#777F92]">
             A clear view of your workforce and compensation.
           </p>
         </div>
 
-        <div className="flex items-end gap-2">
+        <div className="flex items-end gap-3">
           <div className="flex flex-col justify-end gap-1.5">
             <label
               htmlFor="overview-country"
-              className="text-xs font-medium text-muted-foreground"
+              className="sr-only"
             >
               Reporting country
             </label>
@@ -219,7 +219,7 @@ const OverviewPage = () => {
               onChange={(event) => {
                 setSelectedCountry(event.target.value as Country)
               }}
-              className="w-full min-w-48 sm:w-48"
+              className="h-11 w-full min-w-[204px] border-[#E7EAF2] bg-white text-[13px] sm:w-[204px]"
               size="lg"
             >
               {COUNTRIES.map((country) => (
@@ -234,7 +234,7 @@ const OverviewPage = () => {
             type="button"
             onClick={() => void handleRefresh()}
             disabled={isRefreshing}
-            className="inline-flex h-9 items-center justify-center gap-2 rounded-lg border bg-card px-3 text-sm font-medium shadow-sm transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-[#E7EAF2] bg-white px-3 text-[12px] font-medium text-[#25283A] shadow-none transition-colors hover:bg-[#F7F8FC] disabled:cursor-not-allowed disabled:opacity-50"
           >
             <RefreshCw
               className={`size-4 ${isRefreshing ? "animate-spin" : ""}`}
@@ -298,7 +298,7 @@ const OverviewPage = () => {
         />
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-[minmax(0,1.65fr)_minmax(300px,1fr)]">
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,648fr)_minmax(360px,456fr)]">
         <ChartCard
           title="Average salary by role"
           description={`Annual compensation in ${currency} · ${selectedCountry}`}
@@ -313,7 +313,7 @@ const OverviewPage = () => {
           ) : jobSummaries.length === 0 ? (
             <ChartEmptyState message={`No active employee data for ${selectedCountry} yet.`} />
           ) : (
-            <div className="px-3 pb-4 pt-5 sm:px-5">
+            <div className="px-4 pb-3 pt-4 sm:px-5">
               <div
                 className="w-full"
                 style={{ height: Math.max(280, jobSummaries.length * 38) }}
@@ -428,7 +428,7 @@ const OverviewPage = () => {
                   </PieChart>
                 </ResponsiveContainer>
                 <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="font-heading text-3xl font-semibold tracking-tight tabular-nums">
+                  <span className="font-sans text-[28px] font-semibold tracking-normal text-[#25283A] tabular-nums">
                     {workforceTotal.toLocaleString()}
                   </span>
                   <span className="mt-0.5 text-xs text-muted-foreground">
@@ -466,17 +466,17 @@ const OverviewPage = () => {
         </ChartCard>
       </div>
 
-      <section className="overflow-hidden rounded-2xl border bg-card shadow-sm">
-        <div className="flex flex-col gap-2 border-b px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+      <section className="overflow-hidden rounded-lg border border-[#E7EAF2] bg-white shadow-none">
+        <div className="flex flex-col gap-2 border-b border-[#E7EAF2] px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="font-heading text-base font-semibold">
               Role-level compensation details
             </h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Employee counts and average annual salary by job title.
+              India · job-title compensation summary.
             </p>
           </div>
-          <span className="w-fit rounded-full bg-primary/8 px-2.5 py-1 text-xs font-medium text-primary">
+          <span className="w-fit rounded-md bg-[#EDEBFF] px-2.5 py-1 text-[10px] font-semibold tracking-wide text-[#5146D8]">
             {selectedCountry} · {currency}
           </span>
         </div>
@@ -503,10 +503,10 @@ const OverviewPage = () => {
         ) : jobSummaries.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full min-w-120 text-left text-sm">
-              <thead className="bg-muted/35 text-xs text-muted-foreground">
+              <thead className="bg-[#F7F8FC] text-[10px] tracking-wide text-[#777F92]">
                 <tr>
-                  <th className="px-5 py-3 font-medium">Job title</th>
-                  <th className="px-5 py-3 text-right font-medium">
+                  <th className="px-6 py-3 font-semibold">Job title</th>
+                  <th className="px-6 py-3 text-right font-semibold">
                     Employees
                   </th>
                   <th className="px-5 py-3 text-right font-medium">
@@ -520,13 +520,13 @@ const OverviewPage = () => {
                     key={summary.jobTitle}
                     className="transition-colors hover:bg-muted/30"
                   >
-                    <td className="px-5 py-3.5 font-medium">
+                    <td className="px-6 py-3.5 font-medium text-[#25283A]">
                       {summary.jobTitle}
                     </td>
-                    <td className="px-5 py-3.5 text-right text-muted-foreground tabular-nums">
+                    <td className="px-6 py-3.5 text-right text-[#777F92] tabular-nums">
                       {summary.employeeCount.toLocaleString()}
                     </td>
-                    <td className="px-5 py-3.5 text-right font-medium tabular-nums">
+                    <td className="px-6 py-3.5 text-right font-semibold text-[#25283A] tabular-nums">
                       {money(summary.averageSalary)}
                     </td>
                   </tr>
@@ -543,7 +543,7 @@ const OverviewPage = () => {
           </div>
         )}
 
-        <div className="flex items-center gap-2 border-t bg-muted/50 px-5 py-3 text-xs text-muted-foreground">
+        <div className="flex items-center gap-2 border-t border-[#E7EAF2] bg-[#F7F8FC] px-6 py-3 text-[11px] text-[#777F92]">
           Salary values are annual and shown only in {currency}. Deleted
           employees are excluded.
         </div>
