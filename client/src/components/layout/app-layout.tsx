@@ -22,6 +22,22 @@ export default function AppLayout() {
   }, [search, pathname])
 
   useEffect(() => {
+    const value = searchValue.trim()
+    const timeout = window.setTimeout(() => {
+      const params = new URLSearchParams(pathname === "/employees" ? search : "")
+      if (value) params.set("search", value)
+      else params.delete("search")
+      params.delete("page")
+      const nextSearch = params.toString()
+      const currentSearch = new URLSearchParams(search).toString()
+      if (pathname === "/employees" && nextSearch === currentSearch) return
+      if (pathname !== "/employees" && !value) return
+      navigate({ pathname: "/employees", search: nextSearch ? `?${nextSearch}` : "" }, { replace: true })
+    }, 250)
+    return () => window.clearTimeout(timeout)
+  }, [searchValue, pathname, search, navigate])
+
+  useEffect(() => {
     const handleShortcut = (event: KeyboardEvent) => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
         event.preventDefault()
