@@ -91,14 +91,14 @@ export default function OverviewPage() {
     </div>
 
     <div className="grid items-stretch gap-6 xl:grid-cols-[1.18fr_0.88fr]">
-      <Panel title="Average salary by role" subtitle={"Annual compensation · " + currency}>
+      <Panel title="Average salary by role" subtitle={"Annual compensation · " + currency} className="h-full flex flex-col">
         {rolesQuery.isPending ? <EmptyState>Loading salary breakdown…</EmptyState> : rolesQuery.isError ? <EmptyState>Unable to load role salary data.</EmptyState> : roles.length === 0 ? <EmptyState>No active employee data for {selectedCountry} yet.</EmptyState> :
-          <div className="peopleops-chart-body px-4 pb-4 pt-5">
+          <div className="peopleops-chart-body flex flex-1 flex-col px-4 pb-4 pt-5">
             <div className="mb-3 flex items-center justify-between gap-2 px-2">
               <span className="text-[10px] text-[#78839A]">Select a bar or legend item to focus a role in the table</span>
               {activeRole && <button type="button" onClick={() => setActiveRole(null)} className="inline-flex items-center gap-1 text-[10px] font-medium text-[#5146D8] hover:underline">Clear focus <X className="size-3" /></button>}
             </div>
-            <div style={{ height: Math.max(270, roles.length * 43) }} className="w-full">
+            <div style={{ minHeight: Math.max(320, roles.length * 43) }} className="w-full flex-1">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={roles} layout="vertical" margin={{ top: 4, right: 92, bottom: 4, left: 8 }} barCategoryGap={12}>
                   <CartesianGrid horizontal={false} stroke="#E9ECF3" strokeDasharray="3 4" />
@@ -115,14 +115,14 @@ export default function OverviewPage() {
           </div>}
       </Panel>
 
-      <Panel title="Workforce mix" subtitle={"Active employees by job title · " + selectedCountry}>
+      <Panel title="Workforce mix" subtitle={"Active employees by job title · " + selectedCountry} className="h-full flex flex-col">
         {rolesQuery.isPending ? <EmptyState>Loading workforce mix…</EmptyState> : rolesQuery.isError || roles.length === 0 ? <EmptyState>No workforce data to display yet.</EmptyState> :
-          <div className="peopleops-chart-body px-4 pb-4 pt-4">
+          <div className="peopleops-chart-body flex flex-1 flex-col px-4 pb-4 pt-4">
             <div className="mb-2 flex items-center justify-between gap-3 px-1">
               <span className="text-[10px] text-muted-foreground">Employee distribution</span>
               <span className="text-[10px] font-semibold tabular-nums text-foreground">{totalRoleEmployees.toLocaleString("en-IN")} employees</span>
             </div>
-            <div className="h-[218px] w-full">
+            <div className="min-h-[270px] w-full flex-1">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={roles} margin={{ top: 12, right: 4, bottom: 12, left: 0 }} barCategoryGap="28%">
                   <CartesianGrid vertical={false} stroke="var(--border)" strokeDasharray="3 4" />
