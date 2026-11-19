@@ -93,17 +93,17 @@ export default function OverviewPage() {
     <div className="grid items-stretch gap-6 xl:grid-cols-[1.18fr_0.88fr]">
       <Panel title="Average salary by role" subtitle={"Annual compensation · " + currency} className="h-full flex flex-col">
         {rolesQuery.isPending ? <EmptyState>Loading salary breakdown…</EmptyState> : rolesQuery.isError ? <EmptyState>Unable to load role salary data.</EmptyState> : roles.length === 0 ? <EmptyState>No active employee data for {selectedCountry} yet.</EmptyState> :
-          <div className="peopleops-chart-body flex flex-1 flex-col px-4 pb-4 pt-5">
+          <div className="peopleops-chart-body flex flex-1 flex-col px-3 pb-4 pt-5">
             <div className="mb-3 flex items-center justify-between gap-2 px-2">
               <span className="text-[10px] text-[#78839A]">Select a bar or legend item to focus a role in the table</span>
               {activeRole && <button type="button" onClick={() => setActiveRole(null)} className="inline-flex items-center gap-1 text-[10px] font-medium text-[#5146D8] hover:underline">Clear focus <X className="size-3" /></button>}
             </div>
             <div style={{ minHeight: Math.max(320, roles.length * 43) }} className="w-full flex-1">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={roles} layout="vertical" margin={{ top: 4, right: 82, bottom: 4, left: 0 }} barCategoryGap={12}>
+                <BarChart data={roles} layout="vertical" margin={{ top: 4, right: 68, bottom: 4, left: 0 }} barCategoryGap={12}>
                   <CartesianGrid horizontal={false} stroke="#E9ECF3" strokeDasharray="3 4" />
-                  <XAxis type="number" tickFormatter={(value: number) => compactMoney(value, currency)} tick={{ fill: "#78839A", fontSize: 10 }} axisLine={false} tickLine={false} tickMargin={9} />
-                  <YAxis type="category" dataKey="jobTitle" width={150} interval={0} tick={(props: { y?: number; payload?: { value?: string } }) => <text x={8} y={props.y} dy="0.35em" textAnchor="start" fill="#46516A" fontSize={10} fontWeight={500}>{props.payload?.value}</text>} axisLine={false} tickLine={false} />
+                  <XAxis type="number" domain={[0, (dataMax: number) => dataMax * 1.1]} tickFormatter={(value: number) => compactMoney(value, currency)} tick={{ fill: "#78839A", fontSize: 10 }} axisLine={false} tickLine={false} tickMargin={9} />
+                  <YAxis type="category" dataKey="jobTitle" width={132} interval={0} tick={(props: { y?: number; payload?: { value?: string } }) => <text x={0} y={props.y} dy="0.35em" textAnchor="start" fill="#46516A" fontSize={10} fontWeight={500}>{props.payload?.value}</text>} axisLine={false} tickLine={false} />
                   <Tooltip cursor={{ fill: "#F6F5FF" }} contentStyle={{ border: "1px solid #E3E7F0", borderRadius: 10, boxShadow: "0 8px 24px rgb(35 45 75 / 10%)", fontSize: 12 }} formatter={(value) => [money(Number(value), currency), "Average annual salary"]} />
                   <Bar dataKey="averageSalary" name="Average salary" radius={[0, 5, 5, 0]} maxBarSize={18} onClick={(entry) => setActiveRole(String(entry.jobTitle ?? ""))}>
                     <LabelList dataKey="averageSalary" position="right" offset={10} formatter={(value: number) => money(value, currency)} style={{ fill: "#46516A", fontSize: 10, fontWeight: 600 }} />
