@@ -190,7 +190,7 @@ const OverviewPage = () => {
       : "An unexpected error occurred."
 
   return (
-    <div className="space-y-7">
+    <div className="peopleops-overview space-y-7">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
