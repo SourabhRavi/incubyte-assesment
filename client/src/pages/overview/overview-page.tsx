@@ -8,19 +8,6 @@ import {
   Wallet,
 } from "lucide-react"
 import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Cell,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts"
-
-import {
   useJobTitleAverages,
   useSalarySummary,
 } from "@/features/analytics/analytics-queries"
@@ -34,7 +21,7 @@ import {
   NativeSelectOption,
 } from "@/components/ui/native-select.tsx"
 
-const CHART_COLORS = ["var(--chart-1)", "var(--chart-2)", "var(--chart-3)", "var(--chart-4)", "var(--chart-5)"]
+const CHART_COLORS = ["#5687F3", "#73BC91", "#9B7CE7", "#E69A55", "#B2D8DE", "#4F83E8", "#C17BE0", "#67B6A0", "#E48B54", "#83A7D8", "#8E9BE8", "#70B9C7"]
 
 const formatMoney = (value: number | string | null | undefined, currency: string) => {
   if (value === null || value === undefined || value === "") return "—"
@@ -122,33 +109,50 @@ const OverviewPage = () => {
             <MetricCard title="Maximum salary" value={money(salarySummary?.maxSalary)} detail="Annual compensation" icon={Wallet} isLoading={isSummaryPending} accent="var(--chart-4)" />
           </div>
           <ChartCard title="Average salary by role" description={`Annual compensation in ${currency} · ${selectedCountry}`}>
-          {areJobAveragesError ? <ChartEmptyState message={jobAveragesErrorMessage} /> : areJobAveragesPending ? <div className="flex min-h-64 items-center justify-center gap-2 text-xs text-muted-foreground"><LoaderCircle className="size-4 animate-spin" />Loading salary breakdown...</div> : jobSummaries.length === 0 ? <ChartEmptyState message={`No active employee data for ${selectedCountry} yet.`} /> : (
-            <div className="px-3 pb-3 pt-4">
-              <div className="w-full min-w-0" style={{ width: "100%", minWidth: 0, height: Math.max(250, jobSummaries.length * 25), minHeight: 250 }}>
-                <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={250}><BarChart data={jobSummaries} layout="vertical" margin={{ top: 4, right: 12, bottom: 2, left: 0 }} barCategoryGap={8}>
-                  <CartesianGrid horizontal={false} stroke="var(--border)" strokeDasharray="3 5" />
-                  <XAxis type="number" tickFormatter={(value: number) => formatCompactMoney(value, currency)} tick={{ fill: "var(--muted-foreground)", fontSize: 10 }} axisLine={false} tickLine={false} tickMargin={8} />
-                  <YAxis type="category" dataKey="jobTitle" width={118} interval={0} tick={{ fill: "var(--muted-foreground)", fontSize: 10 }} axisLine={false} tickLine={false} />
-                  <Tooltip cursor={{ fill: "var(--muted)", opacity: .55 }} contentStyle={{ background: "var(--popover)", border: "1px solid var(--border)", borderRadius: 8, color: "var(--popover-foreground)", fontSize: 11 }} formatter={(value) => [money(Number(value)), "Average salary"]} />
-                  <Bar dataKey="averageSalary" name="Average salary" fill="var(--chart-1)" radius={[3, 3, 3, 3]} maxBarSize={17} />
-                </BarChart></ResponsiveContainer>
+            {areJobAveragesError ? <ChartEmptyState message={jobAveragesErrorMessage} /> : areJobAveragesPending ? <div className="flex min-h-64 items-center justify-center gap-2 text-xs text-muted-foreground"><LoaderCircle className="size-4 animate-spin" />Loading salary breakdown...</div> : jobSummaries.length === 0 ? <ChartEmptyState message={`No active employee data for ${selectedCountry} yet.`} /> : (
+              <div className="space-y-3 px-4 pb-4 pt-5">
+                {jobSummaries.map((item, index) => {
+                  const value = Number(item.averageSalary)
+                  const ratio = maximumSalary > 0 ? Math.max(0, Math.min(100, value / maximumSalary * 100)) : 0
+                  return <div key={item.jobTitle} className="grid grid-cols-[minmax(92px,112px)_minmax(0,1fr)] items-center gap-3">
+                    <span className="truncate text-right text-[10px] text-muted-foreground" title={item.jobTitle}>{item.jobTitle}</span>
+                    <div className="min-w-0">
+                      <div className="h-[13px] w-full overflow-hidden rounded-[3px] bg-[#F0F3F7]">
+                        <div className="h-full rounded-[3px] transition-[width] duration-500" style={{ width: `${ratio}%`, background: CHART_COLORS[index % CHART_COLORS.length] }} />
+                      </div>
+                      <div className="mt-1 text-[9px] tabular-nums text-muted-foreground">{money(value)}</div>
+                    </div>
+                  </div>
+                })}
+                <div className="ml-[124px] flex justify-between border-t pt-2 text-[9px] text-muted-foreground"><span>{formatCompactMoney(0,currency)}</span><span>{formatCompactMoney(maximumSalary/2,currency)}</span><span>{formatCompactMoney(maximumSalary,currency)}</span></div>
               </div>
-            </div>
-          )}
-        </ChartCard>
+            )}
+          </ChartCard>
 
         </div>
 
         <div className="grid min-w-0 content-start gap-3 sm:grid-cols-2 xl:grid-cols-1">
           <ChartCard title="Workforce mix" description={`Employees by job title · ${selectedCountry}`}>
             {areJobAveragesError ? <ChartEmptyState message={jobAveragesErrorMessage} /> : areJobAveragesPending ? <div className="flex min-h-48 items-center justify-center text-xs text-muted-foreground">Loading workforce mix...</div> : workforceTotal === 0 ? <ChartEmptyState message="No workforce data to display yet." /> : (
-              <div className="px-4 pb-4 pt-2">
-                <div className="relative mx-auto h-40 w-full min-w-0 max-w-52" style={{ minWidth: 0, minHeight: 160 }}>
-                  <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={160}><PieChart><Pie data={jobSummaries} dataKey="employeeCount" nameKey="jobTitle" innerRadius="66%" outerRadius="88%" paddingAngle={2} stroke="var(--card)" strokeWidth={2}>{jobSummaries.map((item,index)=><Cell key={item.jobTitle} fill={CHART_COLORS[index % CHART_COLORS.length]} />)}</Pie><Tooltip contentStyle={{ background:"var(--popover)",border:"1px solid var(--border)",borderRadius:8,color:"var(--popover-foreground)",fontSize:11 }} formatter={(value,_name,item)=>[Number(value).toLocaleString(),item.payload.jobTitle]} /></PieChart></ResponsiveContainer>
+              <div className="px-4 pb-4 pt-3">
+                <div className="relative mx-auto flex h-40 w-full max-w-52 items-center justify-center">
+                  <svg viewBox="0 0 160 160" className="h-40 w-40 -rotate-90" role="img" aria-label={`Workforce distribution across ${jobSummaries.length} job titles`}>
+                    <circle cx="80" cy="80" r="57" fill="none" stroke="#EEF1F5" strokeWidth="17" />
+                    {(() => {
+                      const circumference = 2 * Math.PI * 57
+                      let offset = 0
+                      return jobSummaries.map((item,index) => {
+                        const segment = workforceTotal > 0 ? item.employeeCount / workforceTotal * circumference : 0
+                        const element = <circle key={item.jobTitle} cx="80" cy="80" r="57" fill="none" stroke={CHART_COLORS[index % CHART_COLORS.length]} strokeWidth="17" strokeDasharray={`${Math.max(0,segment-2)} ${circumference}`} strokeDashoffset={-offset} />
+                        offset += segment
+                        return element
+                      })
+                    })()}
+                  </svg>
                   <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"><span className="font-heading text-2xl font-semibold tracking-tight tabular-nums">{workforceTotal.toLocaleString()}</span><span className="text-[10px] text-muted-foreground">employees</span></div>
                 </div>
                 <div className="mt-2 grid grid-cols-2 gap-x-3 gap-y-2">
-                  {jobSummaries.map((item,index)=><div key={item.jobTitle} className="flex min-w-0 items-center justify-between gap-2 text-[10px]"><span className="flex min-w-0 items-center gap-1.5"><span className="size-2 shrink-0 rounded-sm" style={{background:CHART_COLORS[index % CHART_COLORS.length]}}/><span className="truncate text-muted-foreground">{item.jobTitle}</span></span><span className="shrink-0 font-semibold tabular-nums">{item.employeeCount.toLocaleString()}</span></div>)}
+                  {jobSummaries.map((item,index)=><div key={item.jobTitle} className="flex min-w-0 items-center justify-between gap-2 text-[10px]"><span className="flex min-w-0 items-center gap-1.5"><span className="size-2 shrink-0 rounded-full" style={{background:CHART_COLORS[index % CHART_COLORS.length]}}/><span className="truncate text-muted-foreground">{item.jobTitle}</span></span><span className="shrink-0 font-semibold tabular-nums">{item.employeeCount.toLocaleString()}</span></div>)}
                 </div>
               </div>
             )}
