@@ -75,29 +75,24 @@ const MetricCard = ({
   isLoading = false,
   accent,
 }: MetricCardProps) => (
-  <section className="overview-metric-card relative min-w-0 overflow-hidden">
-    <div className="flex items-center justify-between gap-3">
-      <div className="flex min-w-0 items-center gap-2">
-        <span
-          className="flex shrink-0 items-center justify-center"
-          style={{
-            color: accent,
-            background: `color-mix(in srgb,${accent} 11%,white)`,
-          }}
-        >
-          <Icon />
-        </span>
-        <p>{title}</p>
-      </div>
-      <span className="text-muted-foreground" aria-hidden="true">
-        ···
+  <section className="relative overflow-hidden rounded-lg border border-[#E7EAF2] bg-white p-5 shadow-none transition-colors hover:border-[#d5d8e7]">
+    <div
+      className="absolute inset-x-0 top-0 h-0 opacity-0"
+      style={{ background: accent }}
+    />
+    <div className="flex items-start justify-between gap-3">
+      <p className="text-sm font-medium text-muted-foreground">{title}</p>
+      <span className="flex size-8 items-center justify-center rounded-md bg-[#EDEBFF] text-[#5146D8]">
+        <Icon className="size-4.5" />
       </span>
     </div>
     <div className="flex min-h-7 items-center">
       {isLoading ? (
         <LoaderCircle className="size-4 animate-spin text-muted-foreground" />
       ) : (
-        <p className="tabular-nums">{value}</p>
+        <p className="font-sans text-[28px] font-semibold leading-[1.35] tracking-normal text-[#25283A] tabular-nums">
+          {value}
+        </p>
       )}
     </div>
     <p>{detail}</p>
@@ -117,15 +112,10 @@ const ChartCard = ({
   children: React.ReactNode
   className?: string
 }) => (
-  <section
-    className={`overview-chart-card min-w-0 overflow-hidden ${className}`}
-  >
-    <div className="flex items-start justify-between gap-3 border-b">
-      <div className="min-w-0">
-        <h2>{title}</h2>
-        {description && <p>{description}</p>}
-      </div>
-      {action}
+  <section className={`min-w-0 overflow-hidden rounded-lg border border-[#E7EAF2] bg-white shadow-none ${className}`}>
+    <div className="border-b border-[#E7EAF2] px-6 py-4">
+      <h2 className="font-sans text-[16px] font-semibold text-[#25283A]">{title}</h2>
+      <p className="mt-1 text-[12px] text-[#777F92]">{description}</p>
     </div>
     {children}
   </section>
@@ -236,28 +226,36 @@ const OverviewPage = () => {
   }
 
   return (
-    <div className="peopleops-overview space-y-4">
-      <div className="overview-heading flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div className="min-w-0">
-          <div className="mb-1 text-[10px] font-semibold uppercase tracking-[.15em] text-primary">
-            ACME / People operations
+    <div className="space-y-6 pb-8">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+            <span className="size-1.5 rounded-full bg-primary" />
+            Workforce intelligence
           </div>
-          <h1 className="font-heading font-semibold">Compensation overview</h1>
-          <p>
-            A clear view of workforce size and salary patterns across your
-            markets.
+          <h1 className="font-heading text-2xl font-semibold tracking-tight sm:text-3xl">
+            People overview
+          </h1>
+          <p className="mt-1.5 text-[14px] text-[#777F92]">
+            A clear view of your workforce and compensation.
           </p>
         </div>
-        <div className="flex items-end gap-2">
-          <div className="flex min-w-0 flex-col justify-end gap-1">
-            <label htmlFor="overview-country">Market detail</label>
+
+        <div className="flex items-end gap-3">
+          <div className="flex flex-col justify-end gap-1.5">
+            <label
+              htmlFor="overview-country"
+              className="sr-only"
+            >
+              Reporting country
+            </label>
             <NativeSelect
               id="overview-country"
               value={selectedCountry}
               onChange={(event) =>
                 setSelectedCountry(event.target.value as Country)
-              }
-              className="w-full min-w-40 sm:w-44"
+              }}
+              className="h-11 w-full min-w-[204px] border-[#E7EAF2] bg-white text-[13px] sm:w-[204px]"
               size="lg"
             >
               {COUNTRIES.map((country) => (
@@ -271,7 +269,7 @@ const OverviewPage = () => {
             type="button"
             onClick={() => void handleRefresh()}
             disabled={isRefreshing}
-            className="inline-flex h-8 shrink-0 items-center gap-2 rounded-md border bg-card px-3 text-[11px] font-medium hover:bg-muted disabled:opacity-50"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-[#E7EAF2] bg-white px-3 text-[12px] font-medium text-[#25283A] shadow-none transition-colors hover:bg-[#F7F8FC] disabled:cursor-not-allowed disabled:opacity-50"
           >
             <RefreshCw
               className={`size-3.5 ${isRefreshing ? "animate-spin" : ""}`}
@@ -342,164 +340,7 @@ const OverviewPage = () => {
         />
       </div>
 
-      <div className="overview-dashboard-grid grid min-w-0 gap-3 xl:grid-cols-[minmax(0,1.12fr)_minmax(320px,.88fr)]">
-        <ChartCard
-          title="Workforce by market"
-          description="Active employee distribution. Salary averages remain in each local currency."
-          action={
-            <span className="shrink-0 rounded-md bg-primary/8 px-2 py-1 text-[9px] font-semibold text-primary">
-              {allMarketsLoaded ? totalEmployees.toLocaleString() : "—"} people
-            </span>
-          }
-        >
-          {marketSummaries.length === 0 ? (
-            <ChartEmptyState
-              message={
-                hasMarketError
-                  ? "Country data is temporarily unavailable."
-                  : "Loading workforce distribution..."
-              }
-            />
-          ) : (
-            <div className="space-y-4 px-4 py-4">
-              {COUNTRIES.map((country, index) => {
-                const summary = allSalarySummaries[index]?.data
-                if (!summary) {
-                  return (
-                    <div
-                      key={country}
-                      className="grid grid-cols-[minmax(90px,1fr)_minmax(0,2fr)_auto] items-center gap-3"
-                    >
-                      <span className="truncate text-[10px] text-muted-foreground">
-                        {country}
-                      </span>
-                      <div className="h-2 overflow-hidden rounded-full bg-muted" />
-                      <span className="text-[10px] text-muted-foreground">
-                        —
-                      </span>
-                    </div>
-                  )
-                }
-                const share =
-                  allMarketsLoaded && totalEmployees > 0
-                    ? (summary.employeeCount / totalEmployees) * 100
-                    : undefined
-                const barWidth =
-                  (summary.employeeCount / maxMarketEmployees) * 100
-
-                return (
-                  <div
-                    key={country}
-                    className="grid grid-cols-[minmax(90px,1fr)_minmax(0,2fr)_auto] items-center gap-3"
-                  >
-                    <div className="min-w-0">
-                      <p className="truncate text-[11px] font-semibold">
-                        {country}
-                      </p>
-                      <p className="text-[9px] text-muted-foreground">
-                        {share === undefined ? "Share unavailable" : `${share.toFixed(1)}% of workforce`}
-                      </p>
-                    </div>
-                    <div className="h-2 overflow-hidden rounded-full bg-[#EEF1F5]">
-                      <div
-                        className="h-full rounded-full transition-[width] duration-500"
-                        style={{
-                          width: `${barWidth}%`,
-                          background: CHART_COLORS[index],
-                        }}
-                      />
-                    </div>
-                    <div className="min-w-[78px] text-right">
-                      <p className="text-[11px] font-semibold tabular-nums">
-                        {summary.employeeCount.toLocaleString()}
-                      </p>
-                      <p className="text-[9px] text-muted-foreground">
-                        {formatMoney(summary.averageSalary, summary.currency)}{" "}
-                        avg.
-                      </p>
-                    </div>
-                  </div>
-                )
-              })}
-              <p className="border-t pt-3 text-[9px] leading-relaxed text-muted-foreground">
-                Average salary is shown in the local currency for each market.
-                Cross-currency totals are intentionally not combined.
-              </p>
-            </div>
-          )}
-        </ChartCard>
-
-        <ChartCard
-          title={`Salary profile · ${selectedCountry}`}
-          description={`Annual compensation range in ${currency}`}
-        >
-          {isSummaryPending ? (
-            <div className="flex min-h-48 items-center justify-center gap-2 text-xs text-muted-foreground">
-              <LoaderCircle className="size-4 animate-spin" />
-              Loading salary profile...
-            </div>
-          ) : isSummaryError ? (
-            <ChartEmptyState message="Salary profile is unavailable." />
-          ) : (
-            <div className="space-y-5 px-4 py-5">
-              <div>
-                <div className="flex items-center justify-between gap-3">
-                  <span className="text-[10px] text-muted-foreground">
-                    Minimum annual salary
-                  </span>
-                  <strong className="text-[12px] font-semibold tabular-nums">
-                    {money(salarySummary?.minSalary)}
-                  </strong>
-                </div>
-                <div className="mt-2 h-2 overflow-hidden rounded-full bg-[#EEF1F5]">
-                  <div
-                    className="h-full rounded-full bg-[#73A98A]"
-                    style={{ width: `${minimumRatio}%` }}
-                  />
-                </div>
-              </div>
-              <div>
-                <div className="flex items-center justify-between gap-3">
-                  <span className="text-[10px] text-muted-foreground">
-                    Average annual salary
-                  </span>
-                  <strong className="text-[12px] font-semibold tabular-nums">
-                    {money(salarySummary?.averageSalary)}
-                  </strong>
-                </div>
-                <div className="mt-2 h-2 overflow-hidden rounded-full bg-[#EEF1F5]">
-                  <div
-                    className="h-full rounded-full bg-[#315DEB]"
-                    style={{ width: `${averageRatio}%` }}
-                  />
-                </div>
-              </div>
-              <div>
-                <div className="flex items-center justify-between gap-3">
-                  <span className="text-[10px] text-muted-foreground">
-                    Maximum annual salary
-                  </span>
-                  <strong className="text-[12px] font-semibold tabular-nums">
-                    {money(salarySummary?.maxSalary)}
-                  </strong>
-                </div>
-                <div className="mt-2 h-2 overflow-hidden rounded-full bg-[#EEF1F5]">
-                  <div className="h-full w-full rounded-full bg-[#D69A5B]" />
-                </div>
-              </div>
-              <div className="flex items-center justify-between border-t pt-3 text-[9px] text-muted-foreground">
-                <span>
-                  {salarySummary?.employeeCount.toLocaleString() ?? 0} active
-                  employees
-                </span>
-                <span>{currency} · annual</span>
-              </div>
-            </div>
-          )}
-        </ChartCard>
-      </div>
-
-      <div className="overview-dashboard-grid grid min-w-0 gap-3 xl:grid-cols-[minmax(0,1.12fr)_minmax(320px,.88fr)]">
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,648fr)_minmax(360px,456fr)]">
         <ChartCard
           title="Average salary by role"
           description={`Annual compensation in ${currency} · ${selectedCountry}`}
@@ -516,48 +357,65 @@ const OverviewPage = () => {
               message={`No active employee data for ${selectedCountry} yet.`}
             />
           ) : (
-            <div className="space-y-3 px-4 pb-4 pt-5">
-              {jobSummaries.map((item, index) => {
-                const value = Number(item.averageSalary)
-                const ratio = Math.max(
-                  0,
-                  Math.min(100, (value / maxRoleSalary) * 100),
-                )
-                return (
-                  <div
-                    key={item.jobTitle}
-                    className="grid grid-cols-[minmax(100px,126px)_minmax(0,1fr)] items-center gap-3"
+            <div className="px-4 pb-3 pt-4 sm:px-5">
+              <div
+                className="w-full"
+                style={{ height: Math.max(280, jobSummaries.length * 38) }}
+              >
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={jobSummaries}
+                    layout="vertical"
+                    margin={{ top: 4, right: 16, bottom: 4, left: 4 }}
+                    barCategoryGap={10}
                   >
-                    <span
-                      className="truncate text-right text-[10px] text-muted-foreground"
-                      title={item.jobTitle}
-                    >
-                      {item.jobTitle}
-                    </span>
-                    <div className="min-w-0">
-                      <div className="h-3 w-full overflow-hidden rounded-[3px] bg-[#F0F3F7]">
-                        <div
-                          className="h-full rounded-[3px] transition-[width] duration-500"
-                          style={{
-                            width: `${ratio}%`,
-                            background: CHART_COLORS[index % CHART_COLORS.length],
-                          }}
-                        />
-                      </div>
-                      <div className="mt-1 flex items-center justify-between gap-2 text-[9px] text-muted-foreground">
-                        <span>{item.employeeCount.toLocaleString()} people</span>
-                        <span className="font-semibold tabular-nums">
-                          {money(value)}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                )
-              })}
-              <div className="ml-[138px] flex justify-between border-t pt-2 text-[9px] text-muted-foreground">
-                <span>{formatCompactMoney(0, currency)}</span>
-                <span>{formatCompactMoney(maxRoleSalary / 2, currency)}</span>
-                <span>{formatCompactMoney(maxRoleSalary, currency)}</span>
+                    <CartesianGrid
+                      horizontal={false}
+                      stroke="var(--border)"
+                      strokeDasharray="3 5"
+                    />
+                    <XAxis
+                      type="number"
+                      tickFormatter={(value: number) =>
+                        formatCompactMoney(value, currency)
+                      }
+                      tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
+                      axisLine={false}
+                      tickLine={false}
+                      tickMargin={10}
+                    />
+                    <YAxis
+                      type="category"
+                      dataKey="jobTitle"
+                      width={138}
+                      interval={0}
+                      tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+                    <Tooltip
+                      cursor={{ fill: "var(--muted)", opacity: 0.55 }}
+                      contentStyle={{
+                        background: "var(--popover)",
+                        border: "1px solid var(--border)",
+                        borderRadius: 12,
+                        color: "var(--popover-foreground)",
+                        boxShadow: "0 8px 30px rgb(0 0 0 / 0.08)",
+                      }}
+                      formatter={(value) => [
+                        money(Number(value)),
+                        "Average salary",
+                      ]}
+                    />
+                    <Bar
+                      dataKey="averageSalary"
+                      name="Average salary"
+                      fill="var(--chart-3)"
+                      radius={[0, 7, 7, 0]}
+                      maxBarSize={19}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
             </div>
           )}
@@ -620,7 +478,7 @@ const OverviewPage = () => {
                   })()}
                 </svg>
                 <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="font-heading text-2xl font-semibold tracking-tight tabular-nums">
+                  <span className="font-sans text-[28px] font-semibold tracking-normal text-[#25283A] tabular-nums">
                     {workforceTotal.toLocaleString()}
                   </span>
                   <span className="text-[10px] text-muted-foreground">
@@ -656,15 +514,15 @@ const OverviewPage = () => {
         </ChartCard>
       </div>
 
-      <section className="overview-data-table overflow-hidden">
-        <div className="flex flex-col gap-2 border-b sm:flex-row sm:items-center sm:justify-between">
+      <section className="overflow-hidden rounded-lg border border-[#E7EAF2] bg-white shadow-none">
+        <div className="flex flex-col gap-2 border-b border-[#E7EAF2] px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="font-heading">Role-level compensation details</h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Employee counts and average annual salary by job title.
+              India · job-title compensation summary.
             </p>
           </div>
-          <span className="w-fit rounded-md bg-primary/8 px-2.5 py-1 text-[10px] font-medium text-primary">
+          <span className="w-fit rounded-md bg-[#EDEBFF] px-2.5 py-1 text-[10px] font-semibold tracking-wide text-[#5146D8]">
             {selectedCountry} · {currency}
           </span>
         </div>
@@ -692,11 +550,11 @@ const OverviewPage = () => {
           </div>
         ) : jobSummaries.length > 0 ? (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-100 text-left text-xs">
-              <thead>
+            <table className="w-full min-w-120 text-left text-sm">
+              <thead className="bg-[#F7F8FC] text-[10px] tracking-wide text-[#777F92]">
                 <tr>
-                  <th className="px-4 py-2.5 font-medium">Job title</th>
-                  <th className="px-4 py-2.5 text-right font-medium">
+                  <th className="px-6 py-3 font-semibold">Job title</th>
+                  <th className="px-6 py-3 text-right font-semibold">
                     Employees
                   </th>
                   <th className="px-4 py-2.5 text-right font-medium">
@@ -710,13 +568,13 @@ const OverviewPage = () => {
                     key={summary.jobTitle}
                     className="transition-colors hover:bg-muted/30"
                   >
-                    <td className="px-4 py-3 font-medium">
+                    <td className="px-6 py-3.5 font-medium text-[#25283A]">
                       {summary.jobTitle}
                     </td>
-                    <td className="px-4 py-3 text-right tabular-nums text-muted-foreground">
+                    <td className="px-6 py-3.5 text-right text-[#777F92] tabular-nums">
                       {summary.employeeCount.toLocaleString()}
                     </td>
-                    <td className="px-4 py-3 text-right font-medium tabular-nums">
+                    <td className="px-6 py-3.5 text-right font-semibold text-[#25283A] tabular-nums">
                       {money(summary.averageSalary)}
                     </td>
                   </tr>
@@ -732,7 +590,8 @@ const OverviewPage = () => {
             </p>
           </div>
         )}
-        <div className="flex items-center gap-2 border-t bg-muted/40 px-4 py-2.5 text-[10px] text-muted-foreground">
+
+        <div className="flex items-center gap-2 border-t border-[#E7EAF2] bg-[#F7F8FC] px-6 py-3 text-[11px] text-[#777F92]">
           Salary values are annual and shown only in {currency}. Deleted
           employees are excluded.
         </div>

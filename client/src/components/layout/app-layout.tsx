@@ -16,10 +16,40 @@ const AppLayout = () => {
   return (
     <SidebarProvider defaultOpen={true}>
       <AppSidebar />
-      <SidebarInset className="peopleops-inset h-svh min-h-0 min-w-0 overflow-x-hidden overflow-y-auto bg-background">
-        <header className="peopleops-topbar sticky top-0 z-30 flex h-[44px] shrink-0 items-center justify-between gap-3 border-b border-border px-4 sm:px-6">
-          <div className="flex min-w-0 items-center gap-3"><SidebarTrigger className="size-8 shrink-0 rounded-lg text-[#657184] hover:bg-[#F1F4F8]" aria-label="Toggle navigation sidebar" title="Toggle navigation sidebar"/><div className="h-4 w-px bg-[#E7EBF0]"/><p className="truncate text-[12px] font-medium text-[#465164]">{title}</p></div>
-          <Button type="button" variant="ghost" size="icon" className="size-8 rounded-lg text-[#788397] hover:bg-[#F1F4F8]" aria-label={"Switch to "+(isDark?"light":"dark")+" mode"} title={"Switch to "+(isDark?"light":"dark")+" mode"} onClick={()=>setTheme(isDark?"light":"dark")}>{isDark?<Sun className="size-4"/>:<Moon className="size-4"/>}</Button>
+
+      <SidebarInset className="h-svh min-h-0 min-w-0 overflow-x-hidden overflow-y-auto bg-[#F7F8FC]">
+        <header className="sticky top-0 z-30 flex h-20 shrink-0 items-center justify-between gap-3 border-b border-[#E7EAF2] bg-white px-6 shadow-none sm:px-10">
+          <div className="flex min-w-0 items-center gap-2">
+            <SidebarTrigger
+              className="shrink-0"
+              aria-label="Toggle navigation sidebar"
+              title="Toggle navigation sidebar"
+            />
+
+            <div className="min-w-0">
+              <p className="truncate text-[13px] font-medium text-[#777F92]">{title === "Overview" ? "Workspace   /   Overview" : `Workspace   /   ${title}`}</p>
+              <p className="hidden text-xs text-muted-foreground sm:block">
+                PeopleOps / {title}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex shrink-0 items-center gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
+              title={`Switch to ${isDark ? "light" : "dark"} mode`}
+              onClick={() => setTheme(isDark ? "light" : "dark")}
+            >
+              {isDark ? (
+                <Sun className="size-4" />
+              ) : (
+                <Moon className="size-4" />
+              )}
+            </Button>
+          </div>
         </header>
         <div className={isEmployeesPage?"peopleops-page-shell mx-auto w-full max-w-[1440px] md:flex md:min-h-0 md:flex-1 md:flex-col md:overflow-hidden":"peopleops-page-shell w-full flex-1 p-4 sm:p-5 lg:p-6"}><Outlet/></div>
       </SidebarInset>
