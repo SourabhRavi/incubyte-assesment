@@ -630,3 +630,230 @@
     line-height: 1.25;
   }
 }
+
+
+/* --------------------------------------------------------------------------
+   PeopleOps design tokens v2
+   Brand: Slate & Cobalt | Charts: vibrant categorical palette
+   Keep component styling semantic: consume these tokens, not raw hex values.
+   -------------------------------------------------------------------------- */
+
+:root {
+  color-scheme: light;
+
+  /* Brand */
+  --brand-50: #eff6ff;
+  --brand-100: #dbeafe;
+  --brand-200: #bfdbfe;
+  --brand-300: #93c5fd;
+  --brand-400: #60a5fa;
+  --brand-500: #3b82f6;
+  --brand-600: #2563eb;
+  --brand-700: #1d4ed8;
+  --brand-800: #1e40af;
+  --brand-900: #1e3a8a;
+
+  /* Core surfaces and typography */
+  --background: #f8fafc;
+  --foreground: #1e293b;
+  --card: #ffffff;
+  --card-foreground: #1e293b;
+  --popover: #ffffff;
+  --popover-foreground: #1e293b;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --surface-subtle: #f1f5f9;
+  --surface-sunken: #f8fafc;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+
+  /* Actions and interaction */
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --secondary: #eff6ff;
+  --secondary-foreground: #1d4ed8;
+  --accent: #dbeafe;
+  --accent-foreground: #1e40af;
+  --ring: #60a5fa;
+  --link: #1d4ed8;
+
+  /* Feedback */
+  --success: #15803d;
+  --success-soft: #dcfce7;
+  --warning: #b45309;
+  --warning-soft: #fef3c7;
+  --destructive: #dc2626;
+  --destructive-soft: #fee2e2;
+  --info: #0369a1;
+  --info-soft: #e0f2fe;
+
+  /* Borders and controls */
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --input: #cbd5e1;
+  --control: #ffffff;
+
+  /* Vibrant categorical chart palette */
+  --chart-1: #2563eb; /* blue */
+  --chart-2: #0d9488; /* teal */
+  --chart-3: #f59e0b; /* amber */
+  --chart-4: #8b5cf6; /* violet */
+  --chart-5: #ec4899; /* pink */
+  --chart-6: #16a34a; /* green */
+  --chart-7: #f97316; /* orange */
+  --chart-8: #06b6d4; /* cyan */
+  --chart-9: #6366f1; /* indigo */
+  --chart-10: #e11d48; /* rose */
+
+  /* Navigation */
+  --sidebar: #ffffff;
+  --sidebar-foreground: #334155;
+  --sidebar-primary: #2563eb;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #eff6ff;
+  --sidebar-accent-foreground: #1d4ed8;
+  --sidebar-border: #e2e8f0;
+  --sidebar-ring: #60a5fa;
+
+  /* Shape, elevation and motion */
+  --radius: 0.625rem;
+  --shadow-xs: 0 1px 2px rgb(15 23 42 / 4%);
+  --shadow-sm: 0 1px 3px rgb(15 23 42 / 6%), 0 1px 2px rgb(15 23 42 / 4%);
+  --shadow-md: 0 4px 12px rgb(15 23 42 / 6%);
+  --shadow-lg: 0 12px 32px rgb(15 23 42 / 10%);
+  --focus-ring: 0 0 0 3px rgb(96 165 250 / 28%);
+  --motion-fast: 120ms;
+  --motion-normal: 180ms;
+  --motion-slow: 240ms;
+}
+
+.dark {
+  color-scheme: dark;
+
+  /* Brand remains recognizable, with a brighter accessible action color. */
+  --brand-50: #eff6ff;
+  --brand-100: #dbeafe;
+  --brand-200: #bfdbfe;
+  --brand-300: #93c5fd;
+  --brand-400: #60a5fa;
+  --brand-500: #3b82f6;
+  --brand-600: #2563eb;
+  --brand-700: #1d4ed8;
+  --brand-800: #1e40af;
+  --brand-900: #1e3a8a;
+
+  /* Layered dark surfaces */
+  --background: #0b1220;
+  --foreground: #e2e8f0;
+  --card: #111c2e;
+  --card-foreground: #e2e8f0;
+  --popover: #172338;
+  --popover-foreground: #e2e8f0;
+  --surface: #111c2e;
+  --surface-raised: #172338;
+  --surface-subtle: #1b2a40;
+  --surface-sunken: #0b1220;
+  --muted: #1b2a40;
+  --muted-foreground: #94a3b8;
+
+  /* Actions and interaction */
+  --primary: #60a5fa;
+  --primary-foreground: #0b1b33;
+  --secondary: #172b49;
+  --secondary-foreground: #bfdbfe;
+  --accent: #1d3558;
+  --accent-foreground: #dbeafe;
+  --ring: #60a5fa;
+  --link: #93c5fd;
+
+  /* Feedback */
+  --success: #4ade80;
+  --success-soft: #123524;
+  --warning: #fbbf24;
+  --warning-soft: #3b2b12;
+  --destructive: #f87171;
+  --destructive-soft: #3b1e27;
+  --info: #38bdf8;
+  --info-soft: #102f45;
+
+  /* Borders and controls */
+  --border: #26364d;
+  --border-strong: #3b4d66;
+  --input: #34465f;
+  --control: #172338;
+
+  /* Charts stay vivid against dark surfaces */
+  --chart-1: #60a5fa;
+  --chart-2: #2dd4bf;
+  --chart-3: #fbbf24;
+  --chart-4: #a78bfa;
+  --chart-5: #f472b6;
+  --chart-6: #4ade80;
+  --chart-7: #fb923c;
+  --chart-8: #22d3ee;
+  --chart-9: #818cf8;
+  --chart-10: #fb7185;
+
+  /* Navigation */
+  --sidebar: #0f1a2b;
+  --sidebar-foreground: #cbd5e1;
+  --sidebar-primary: #60a5fa;
+  --sidebar-primary-foreground: #0b1b33;
+  --sidebar-accent: #172b49;
+  --sidebar-accent-foreground: #dbeafe;
+  --sidebar-border: #26364d;
+  --sidebar-ring: #60a5fa;
+
+  /* Dark elevation is restrained and border-led */
+  --shadow-xs: 0 1px 2px rgb(0 0 0 / 16%);
+  --shadow-sm: 0 1px 3px rgb(0 0 0 / 20%);
+  --shadow-md: 0 6px 18px rgb(0 0 0 / 24%);
+  --shadow-lg: 0 14px 36px rgb(0 0 0 / 32%);
+  --focus-ring: 0 0 0 3px rgb(96 165 250 / 32%);
+}
+
+/* Semantic utility hooks for charts, status labels and consistent controls. */
+@layer components {
+  .peopleops-chart-color-1 { color: var(--chart-1); }
+  .peopleops-chart-color-2 { color: var(--chart-2); }
+  .peopleops-chart-color-3 { color: var(--chart-3); }
+  .peopleops-chart-color-4 { color: var(--chart-4); }
+  .peopleops-chart-color-5 { color: var(--chart-5); }
+  .peopleops-chart-color-6 { color: var(--chart-6); }
+  .peopleops-chart-color-7 { color: var(--chart-7); }
+  .peopleops-chart-color-8 { color: var(--chart-8); }
+  .peopleops-chart-color-9 { color: var(--chart-9); }
+  .peopleops-chart-color-10 { color: var(--chart-10); }
+
+  .peopleops-status-success { color: var(--success); background: var(--success-soft); }
+  .peopleops-status-warning { color: var(--warning); background: var(--warning-soft); }
+  .peopleops-status-danger { color: var(--destructive); background: var(--destructive-soft); }
+  .peopleops-status-info { color: var(--info); background: var(--info-soft); }
+
+  .peopleops-overview :is(button, a, input, select, textarea):focus-visible,
+  .peopleops-employees :is(button, a, input, select, textarea):focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    box-shadow: var(--focus-ring);
+  }
+}
+
+/* Expose extended semantic tokens to Tailwind's theme namespace. */
+@theme inline {
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-subtle: var(--surface-subtle);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-link: var(--link);
+  --color-chart-6: var(--chart-6);
+  --color-chart-7: var(--chart-7);
+  --color-chart-8: var(--chart-8);
+  --color-chart-9: var(--chart-9);
+  --color-chart-10: var(--chart-10);
+}
