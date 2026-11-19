@@ -27,8 +27,8 @@ const AppLayout = () => {
     <SidebarProvider defaultOpen={true}>
       <AppSidebar />
 
-      <SidebarInset className="h-svh min-h-0 min-w-0 overflow-x-hidden overflow-y-auto bg-background">
-        <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between gap-3 border-b border-white/20 bg-background/30 px-3 shadow-sm shadow-muted backdrop-blur-2xl sm:h-16 sm:px-6 dark:border-white/10 dark:bg-slate-950/65">
+      <SidebarInset className="h-svh min-h-0 min-w-0 overflow-x-hidden overflow-y-auto bg-[#F7F8FC]">
+        <header className="sticky top-0 z-30 flex h-20 shrink-0 items-center justify-between gap-3 border-b border-[#E7EAF2] bg-white px-6 shadow-none sm:px-10">
           <div className="flex min-w-0 items-center gap-2">
             <SidebarTrigger
               className="shrink-0"
@@ -37,7 +37,7 @@ const AppLayout = () => {
             />
 
             <div className="min-w-0">
-              <p className="truncate text-sm font-medium">{title}</p>
+              <p className="truncate text-[13px] font-medium text-[#777F92]">{title === "Overview" ? "Workspace   /   Overview" : `Workspace   /   ${title}`}</p>
               <p className="hidden text-xs text-muted-foreground sm:block">
                 PeopleOps / {title}
               </p>
