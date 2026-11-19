@@ -33,14 +33,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { isMobile, setOpenMobile } = useSidebar()
 
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
-      <SidebarHeader className="border-b p-3">
+    <Sidebar collapsible="offcanvas" className="border-r border-[#E7EAF2] bg-white" {...props}>
+      <SidebarHeader className="border-b border-[#E7EAF2] px-5 py-6">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
               size="lg"
               tooltip="PeopleOps"
-              className="data-[slot=sidebar-menu-button]:p-1.5!"
+              className="h-11 data-[slot=sidebar-menu-button]:p-1.5!"
               render={
                 <NavLink
                   to="/overview"
@@ -52,12 +52,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 />
               }
             >
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                <Command className="size-6!" />
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-[9px] bg-[#5146D8] text-white">
+                <span className="text-[21px] font-semibold leading-none">p</span>
               </span>
 
               <span className="flex min-w-0 flex-col items-start gap-0.5">
-                <span className="text-base leading-none font-semibold">
+                <span className="text-[22px] leading-none font-semibold tracking-[-0.5px] text-[#25283A]">
                   PeopleOps
                 </span>
                 <span className="text-xs font-normal text-muted-foreground">
@@ -71,7 +71,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Workspace</SidebarGroupLabel>
+          <SidebarGroupLabel className="px-2 pb-3 pt-7 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#777F92]">Workspace</SidebarGroupLabel>
 
           <SidebarMenu className="gap-1.5">
             {navigation.map(({ title, url, icon: Icon }) => (
@@ -87,7 +87,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       }}
                     />
                   }
-                  isActive={pathname === url}
+                  isActive={pathname === url}\n                  className="h-11 rounded-lg px-4 text-[13px] data-[active=true]:bg-[#EDEBFF] data-[active=true]:font-semibold data-[active=true]:text-[#5146D8] data-[active=true]:shadow-none"
                   tooltip={title}
                 >
                   <Icon />
@@ -99,7 +99,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t p-3">
+      <SidebarFooter className="border-t border-[#E7EAF2] px-5 py-5">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
@@ -107,12 +107,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               tooltip="HR Manager"
               className="cursor-default"
             >
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-sidebar-accent text-xs font-semibold">
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#EDEBFF] text-xs font-semibold text-[#5146D8]">
                 HR
               </span>
 
               <span className="flex min-w-0 flex-col items-start gap-1">
-                <span className="truncate text-sm font-medium">HR Manager</span>
+                <span className="truncate text-[13px] font-semibold text-[#25283A]">Alex Morgan</span>
                 <span className="truncate text-xs text-muted-foreground">
                   People team
                 </span>
