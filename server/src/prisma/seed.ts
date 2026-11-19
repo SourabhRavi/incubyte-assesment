@@ -10,6 +10,7 @@ import { db } from "./db.js";
 
 const TOTAL_EMPLOYEES = 10_000;
 const BATCH_SIZE = 500;
+const SEED = 20261120;
 
 const countrySalaryConfig = {
   India: { minSalary: 600_000, maxSalary: 3_000_000 },
@@ -18,6 +19,8 @@ const countrySalaryConfig = {
   Germany: { minSalary: 40_000, maxSalary: 130_000 },
   Canada: { minSalary: 55_000, maxSalary: 170_000 },
 } as const satisfies Record<Country, { minSalary: number; maxSalary: number }>;
+
+faker.seed(SEED);
 
 const usedEmails = new Set<string>();
 
@@ -32,11 +35,11 @@ function normalizeName(value: string): string {
 function generateEmail(firstName: string, lastName: string): string {
   const base = `${normalizeName(firstName)}.${normalizeName(lastName)}`;
 
-  let email = `${base}@citadel.dev`;
+  let email = `${base}@example.com`;
   let suffix = 2;
 
   while (usedEmails.has(email)) {
-    email = `${base}${suffix}@citadel.dev`;
+    email = `${base}${suffix}@example.com`;
     suffix++;
   }
 
