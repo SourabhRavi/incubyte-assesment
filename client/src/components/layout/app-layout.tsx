@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from "react"
-import { Link, Outlet, useLocation, useNavigate } from "react-router"
+import { Outlet, useLocation, useNavigate } from "react-router"
 import { Moon, Search, Sun, X } from "lucide-react"
 import { useTheme } from "@/components/theme-provider"
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
