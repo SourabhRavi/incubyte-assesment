@@ -84,7 +84,7 @@ const EmployeeDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
+      <DialogContent className="max-h-[min(90vh,820px)] overflow-y-auto p-6 sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>
             {isEditing ? "Edit employee" : "Add employee"}
@@ -97,7 +97,7 @@ const EmployeeDialog = ({
           </DialogDescription>
         </DialogHeader>
 
-        <Separator />
+        <Separator className="my-1" />
 
         {submitError && (
           <div
