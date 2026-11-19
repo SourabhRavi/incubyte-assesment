@@ -54,9 +54,20 @@ const EmployeeForm = ({
     : undefined
   const originalSalary = employee ? Number(employee.salary) : null
   const revisedSalary = Number(values.salary)
-  const salaryDelta = originalSalary && Number.isFinite(revisedSalary)
-    ? ((revisedSalary - originalSalary) / originalSalary) * 100
-    : null
+  const salaryDelta =
+    originalSalary !== null &&
+    originalSalary > 0 &&
+    values.salary.trim() !== "" &&
+    Number.isFinite(revisedSalary)
+      ? ((revisedSalary - originalSalary) / originalSalary) * 100
+      : null
+  const formatMoney = (amount: number, currencyCode = currency ?? (employee ? COUNTRY_CURRENCIES[employee.country] : "USD")) =>
+    new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: currencyCode,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    }).format(amount)
   const formatDate = (value: string) => {
     const date = new Date(value)
     return Number.isNaN(date.getTime())
@@ -105,6 +116,8 @@ const EmployeeForm = ({
       nextErrors.salary = "Salary is required."
     } else if (!Number.isFinite(salary) || salary <= 0) {
       nextErrors.salary = "Enter a salary greater than zero."
+    } else if (!/^\\d+(?:\\.\\d{1,2})?$/.test(values.salary.trim())) {
+      nextErrors.salary = "Enter a valid amount with no more than 2 decimal places."
     }
 
     setErrors(nextErrors)
@@ -262,7 +275,7 @@ const EmployeeForm = ({
             id="employee-salary"
             type="number"
             min="0.01"
-            step="any"
+            step="0.01"
             inputMode="decimal"
             value={values.salary}
             onChange={(event) => updateField("salary", event.target.value)}
@@ -285,18 +298,18 @@ const EmployeeForm = ({
         </p>
         {employee && values.salary.trim() && salaryDelta !== null && Number.isFinite(salaryDelta) && (
           <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border bg-muted/35 px-3 py-2.5">
-            <div>
-              <p className="text-xs text-muted-foreground">Change from current salary</p>
+            <div className="min-w-0">
+              <p className="text-xs text-muted-foreground">Salary revision</p>
               <p className="mt-0.5 text-sm font-medium tabular-nums">
-                {new Intl.NumberFormat("en-IN", {
-                  style: "currency", currency: currency ?? COUNTRY_CURRENCIES[employee.country],
-                  maximumFractionDigits: 0,
-                }).format(revisedSalary - originalSalary!)}
+                {formatMoney(originalSalary!)} <span className="px-1 text-muted-foreground">→</span> {formatMoney(revisedSalary)}
+              </p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Difference: {formatMoney(revisedSalary - originalSalary!)}
               </p>
             </div>
             <span className={`rounded-full px-2.5 py-1 text-xs font-semibold tabular-nums ${salaryDelta > 0 ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400" : salaryDelta < 0 ? "bg-rose-500/10 text-rose-700 dark:text-rose-400" : "bg-muted text-muted-foreground"}`}>
               {salaryDelta > 0 ? "↑ " : salaryDelta < 0 ? "↓ " : ""}
-              {salaryDelta > 0 ? "+" : ""}{salaryDelta.toFixed(2)}%
+              {salaryDelta > 0 ? "+" : ""}{new Intl.NumberFormat("en-IN", { maximumFractionDigits: 1 }).format(salaryDelta)}%
               {salaryDelta > 0 ? " increase" : salaryDelta < 0 ? " decrease" : " no change"}
             </span>
           </div>
