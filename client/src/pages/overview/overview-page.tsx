@@ -70,7 +70,7 @@ export default function OverviewPage() {
     })
   }, [roles])
 
-  return <main className="mx-auto w-full max-w-[1440px] space-y-[23px] px-[26px] pb-12 pt-[31px] max-sm:px-4">
+  return <main className="w-full space-y-[23px] px-[26px] pb-12 pt-[31px] max-sm:px-4">
     <div className="flex flex-wrap items-start justify-between gap-4">
       <div>
         <h1 className="text-[28px] font-semibold leading-[1.2] tracking-[-0.8px] text-[#292D40]">People overview</h1>
