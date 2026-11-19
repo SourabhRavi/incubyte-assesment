@@ -375,18 +375,15 @@ const EmployeesPage = () => {
           </div>
 
           <div className="flex items-center justify-between gap-3 xl:ml-auto xl:justify-end">
-            {hasFilters ? (
-              <button
-                type="button"
-                onClick={clearFilters}
-                className="inline-flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground hover:text-primary"
-              >
-                <FilterX className="size-3.5" />
-                Clear filters
-              </button>
-            ) : (
-              <span />
-            )}
+            <button
+              type="button"
+              onClick={clearFilters}
+              disabled={!hasFilters}
+              className="inline-flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <FilterX className="size-3.5" />
+              Clear filters
+            </button>
             <span className="shrink-0 text-[11px] text-muted-foreground tabular-nums">
               {pagination ? `${pagination.total.toLocaleString()} employees` : " "}
             </span>
