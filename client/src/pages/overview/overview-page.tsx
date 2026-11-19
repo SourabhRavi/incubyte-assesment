@@ -1,5 +1,5 @@
 import { useState, type ComponentType, type ReactNode } from "react"
-import { ArrowUpRight, LoaderCircle, RefreshCw, Users, Wallet, X } from "lucide-react"
+import { ArrowUpRight, Globe, LoaderCircle, RefreshCw, Users, Wallet, X } from "lucide-react"
 import { Bar, BarChart, CartesianGrid, Cell, LabelList, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 import { Link } from "react-router"
 import { useAllSalarySummaries, useJobTitleAverages, useSalarySummary } from "@/features/analytics/analytics-queries"
@@ -68,17 +68,18 @@ export default function OverviewPage() {
         </div>
       </div>
       <div className="flex items-center gap-3 pt-[1px]">
-        <div className="peopleops-country-select">
+        <div className="peopleops-country-select relative">
+          <Globe aria-hidden="true" className="pointer-events-none absolute left-[14px] top-1/2 z-[1] size-[16px] -translate-y-1/2 text-[#5146D8]" />
           <NativeSelect
             id="overview-country"
             aria-label="Reporting country"
             value={selectedCountry}
             onChange={(event) => { setSelectedCountry(event.target.value as Country); setActiveRole(null) }}
-            className="w-[199px]"
+            className="h-[43px] w-[199px] rounded-[8px] border-[#E3E7F0] bg-white pl-[40px] pr-3 text-[12px] font-semibold text-[#30354A] shadow-none focus-visible:border-[#5146D8] focus-visible:ring-2 focus-visible:ring-[#5146D8]/15"
           >
             {COUNTRIES.map((country) => (
               <NativeSelectOption key={country} value={country}>
-                {country} ({COUNTRY_CURRENCIES[country]})
+                {country}
               </NativeSelectOption>
             ))}
           </NativeSelect>
