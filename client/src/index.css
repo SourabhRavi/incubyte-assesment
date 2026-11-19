@@ -277,6 +277,30 @@
 
 /* Brand typography follows the PeopleOps Foundations guide. */
 .peopleops-overview, .peopleops-sidebar, .peopleops-topbar, .peopleops-employees { font-family: 'Manrope', sans-serif; }\n.peopleops-overview h1, .peopleops-overview h2, .peopleops-employees h1, .peopleops-employees h2, .peopleops-topbar [data-slot='breadcrumb-list'], .peopleops-sidebar [data-slot='sidebar-brand'] { font-family: 'Geist', sans-serif; }
+
+/* Typography system: Geist for hierarchy and all numeric data; Manrope for UI copy. */
+.peopleops-overview h1,
+.peopleops-overview h2,
+.peopleops-overview h3,
+.peopleops-employees h1,
+.peopleops-employees h2,
+.peopleops-employees h3,
+.peopleops-topbar [data-slot="breadcrumb-list"],
+.peopleops-sidebar [data-slot="sidebar-brand"] {
+  font-family: "Geist", sans-serif;
+}
+.peopleops-overview .overview-metric-card > div:nth-of-type(2) p,
+.peopleops-overview .recharts-cartesian-axis-tick-value,
+.peopleops-overview .recharts-label,
+.peopleops-overview .recharts-tooltip-wrapper,
+.peopleops-overview .overview-data-table td:last-child,
+.peopleops-employees tbody td:nth-child(4),
+.peopleops-employees [data-numeric],
+.peopleops-overview [data-numeric] {
+  font-family: "Geist", sans-serif;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
 .dark .peopleops-sidebar [class*="text-[#292D40]"],
 .dark .peopleops-sidebar [class*="text-[#30354A]"],
 .dark .peopleops-sidebar [class*="text-[#68758E]"],
