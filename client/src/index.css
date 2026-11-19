@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 
 @custom-variant dark (&:is(.dark *));
@@ -68,8 +68,8 @@
   --sidebar-border: #303C4E;
 }
 @theme inline {
-    --font-sans: 'Geist Variable', sans-serif;
-    --font-heading: 'Geist Variable', sans-serif;
+    --font-sans: 'Inter', sans-serif;
+    --font-heading: 'Inter', sans-serif;
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -182,7 +182,7 @@
 
 /* Desktop PeopleOps reference layout */
 @layer base {
-  body { font-family: "Geist Variable", sans-serif; }
+  body { font-family: "Inter", sans-serif; }
 }
 @layer components {
   .peopleops-sidebar [data-slot="sidebar-inner"] { background: #fff; }
@@ -259,3 +259,13 @@
 .dark .peopleops-topbar { background:color-mix(in srgb,var(--card) 94%,transparent); border-color:var(--border); }
 .dark .peopleops-topbar kbd { color:var(--muted-foreground); }
 .dark .cn-toast { background:var(--popover) !important; color:var(--popover-foreground) !important; border-color:var(--border) !important; }
+
+/* Brand typography follows the PeopleOps Foundations guide. */
+.peopleops-overview, .peopleops-sidebar, .peopleops-topbar, .peopleops-employees { font-family: Inter, sans-serif; }
+.dark .peopleops-sidebar [class*="text-[#292D40]"],
+.dark .peopleops-sidebar [class*="text-[#30354A]"],
+.dark .peopleops-sidebar [class*="text-[#68758E]"],
+.dark .peopleops-sidebar [class*="text-[#77829A]"],
+.dark .peopleops-sidebar [class*="text-[#78839A]"] { color:var(--sidebar-foreground) !important; }
+.dark .peopleops-sidebar [class*="bg-white"] { background-color:var(--sidebar) !important; }
+.dark .peopleops-sidebar [class*="border-[#E5E8F0]"] { border-color:var(--sidebar-border) !important; }
