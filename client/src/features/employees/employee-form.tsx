@@ -52,6 +52,21 @@ const EmployeeForm = ({
   const currency = values.country
     ? COUNTRY_CURRENCIES[values.country]
     : undefined
+  const originalSalary = employee ? Number(employee.salary) : null
+  const revisedSalary = Number(values.salary)
+  const salaryDelta = originalSalary && Number.isFinite(revisedSalary)
+    ? ((revisedSalary - originalSalary) / originalSalary) * 100
+    : null
+  const formatDate = (value: string) => {
+    const date = new Date(value)
+    return Number.isNaN(date.getTime())
+      ? "Not available"
+      : new Intl.DateTimeFormat("en-IN", {
+          day: "2-digit", month: "short", year: "numeric",
+          hour: "2-digit", minute: "2-digit", hour12: true,
+          timeZone: "Asia/Kolkata",
+        }).format(date)
+  }
 
   const updateField = <K extends keyof FormValues>(
     field: K,
@@ -268,6 +283,29 @@ const EmployeeForm = ({
         <p className="text-xs text-muted-foreground">
           Currency is determined by the employee's country.
         </p>
+        {employee && salaryDelta !== null && Number.isFinite(salaryDelta) && (
+          <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border bg-muted/35 px-3 py-2.5">
+            <div>
+              <p className="text-xs text-muted-foreground">Change from current salary</p>
+              <p className="mt-0.5 text-sm font-medium tabular-nums">
+                {new Intl.NumberFormat("en-IN", {
+                  style: "currency", currency: currency ?? COUNTRY_CURRENCIES[employee.country],
+                  maximumFractionDigits: 0,
+                }).format(revisedSalary - originalSalary!)}
+              </p>
+            </div>
+            <span className={`rounded-full px-2.5 py-1 text-xs font-semibold tabular-nums ${salaryDelta > 0 ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400" : salaryDelta < 0 ? "bg-rose-500/10 text-rose-700 dark:text-rose-400" : "bg-muted text-muted-foreground"}`}>
+              {salaryDelta > 0 ? "↑ " : salaryDelta < 0 ? "↓ " : ""}
+              {salaryDelta > 0 ? "+" : ""}{salaryDelta.toFixed(2)}%
+              {salaryDelta > 0 ? " increase" : salaryDelta < 0 ? " decrease" : " no change"}
+            </span>
+          </div>
+        )}
+        {employee && (
+          <p className="text-xs text-muted-foreground">
+            Last employee record update: {formatDate(employee.updatedAt)}
+          </p>
+        )}
       </div>
 
       <div className="flex flex-col-reverse gap-2 border-t pt-4 sm:flex-row sm:justify-end">
