@@ -40,8 +40,8 @@ export default function AppLayout() {
 
   return <SidebarProvider defaultOpen style={{ "--sidebar-width": "227px", "--sidebar-width-icon": "64px" } as CSSProperties}>
     <AppSidebar />
-    <SidebarInset className="min-h-svh min-w-0 overflow-x-hidden bg-background">
-      <header className="peopleops-topbar sticky top-0 z-30 flex h-[78px] shrink-0 items-center justify-between gap-4 border-b border-border px-[27px] backdrop-blur-xl max-md:px-4">
+    <SidebarInset className="min-h-svh min-w-0 bg-background">
+      <header className="peopleops-topbar sticky top-0 z-50 flex h-[78px] shrink-0 items-center justify-between gap-4 border-b border-border px-[27px] backdrop-blur-xl max-md:px-4">
         <div className="flex min-w-0 items-center gap-[15px] text-[13px]">
           <SidebarTrigger className="size-8 shrink-0 rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground" />
           <span className="hidden text-muted-foreground sm:inline">Workspace</span><span className="hidden text-muted-foreground/60 sm:inline">/</span><span className="font-medium text-foreground">{title}</span>
