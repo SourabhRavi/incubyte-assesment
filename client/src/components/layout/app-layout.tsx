@@ -1,4 +1,5 @@
 import { Link, Outlet, useLocation } from "react-router"
+import type { CSSProperties } from "react"
 import { Moon, Search } from "lucide-react"
 import { useTheme } from "@/components/theme-provider"
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
@@ -12,7 +13,7 @@ export default function AppLayout() {
   const { theme, setTheme } = useTheme()
   const isDark = theme === "dark"
 
-  return <SidebarProvider defaultOpen style={{ "--sidebar-width": "227px", "--sidebar-width-icon": "64px" } as React.CSSProperties}>
+  return <SidebarProvider defaultOpen style={{ "--sidebar-width": "227px", "--sidebar-width-icon": "64px" } as CSSProperties}>
     <AppSidebar />
     <SidebarInset className="min-h-svh min-w-0 overflow-x-hidden bg-[#F7F8FC]">
       <header className="sticky top-0 z-30 flex h-[78px] shrink-0 items-center justify-between gap-4 border-b border-[#E5E8F0] bg-white px-[27px] max-md:px-4">
