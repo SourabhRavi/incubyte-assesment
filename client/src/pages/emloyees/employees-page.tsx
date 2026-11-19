@@ -147,6 +147,10 @@ const EmployeesPage = () => {
   const [searchInput, setSearchInput] = useState(search)
 
   useEffect(() => {
+    setSearchInput(search)
+  }, [search])
+
+  useEffect(() => {
     const timeout = window.setTimeout(() => {
       const value = searchInput.trim()
 
