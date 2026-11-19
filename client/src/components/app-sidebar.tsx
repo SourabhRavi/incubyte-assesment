@@ -40,7 +40,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenuButton
               size="lg"
               tooltip="PeopleOps"
-              className="h-14 rounded-xl px-2 data-[slot=sidebar-menu-button]:p-1.5!"
+              className="h-14 rounded-2xl px-2 data-[slot=sidebar-menu-button]:p-1.5!"
               render={
                 <NavLink
                   to="/overview"
