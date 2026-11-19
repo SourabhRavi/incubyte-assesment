@@ -98,15 +98,17 @@ export default function OverviewPage() {
               <span className="text-[10px] text-[#78839A]">Select a bar or legend item to focus a role in the table</span>
               {activeRole && <button type="button" onClick={() => setActiveRole(null)} className="inline-flex items-center gap-1 text-[10px] font-medium text-[#5146D8] hover:underline">Clear focus <X className="size-3" /></button>}
             </div>
-            <div style={{ minHeight: Math.max(320, roles.length * 43) }} className="w-full flex-1">
+            <div style={{ minHeight: Math.max(320, roles.length * 43) }} className="relative w-full flex-1">
+              <div className="absolute inset-y-1 right-0 z-[1] flex w-[104px] flex-col justify-around border-l border-[#EEF0F6] bg-white/95 pl-3">
+                {roles.map((role) => <div key={role.jobTitle} className="truncate text-right text-[10px] font-semibold tabular-nums text-[#46516A]">{money(role.averageSalary, currency)}</div>)}
+              </div>
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={roles} layout="vertical" margin={{ top: 4, right: 68, bottom: 4, left: 0 }} barCategoryGap={12}>
+                <BarChart data={roles} layout="vertical" margin={{ top: 4, right: 112, bottom: 4, left: 0 }} barCategoryGap={12}>
                   <CartesianGrid horizontal={false} stroke="#E9ECF3" strokeDasharray="3 4" />
-                  <XAxis type="number" domain={[0, (dataMax: number) => dataMax * 1.1]} tickFormatter={(value: number) => compactMoney(value, currency)} tick={{ fill: "#78839A", fontSize: 10 }} axisLine={false} tickLine={false} tickMargin={9} />
+                  <XAxis type="number" domain={[0, (dataMax: number) => dataMax * 1.05]} tickFormatter={(value: number) => compactMoney(value, currency)} tick={{ fill: "#78839A", fontSize: 10 }} axisLine={false} tickLine={false} tickMargin={9} />
                   <YAxis type="category" dataKey="jobTitle" width={132} interval={0} tick={(props: { y?: number; payload?: { value?: string } }) => <text x={0} y={props.y} dy="0.35em" textAnchor="start" fill="#46516A" fontSize={10} fontWeight={500}>{props.payload?.value}</text>} axisLine={false} tickLine={false} />
                   <Tooltip cursor={{ fill: "#F6F5FF" }} contentStyle={{ border: "1px solid #E3E7F0", borderRadius: 10, boxShadow: "0 8px 24px rgb(35 45 75 / 10%)", fontSize: 12 }} formatter={(value) => [money(Number(value), currency), "Average annual salary"]} />
                   <Bar dataKey="averageSalary" name="Average salary" radius={[0, 5, 5, 0]} maxBarSize={18} onClick={(entry) => setActiveRole(String(entry.jobTitle ?? ""))}>
-                    <LabelList dataKey="averageSalary" position="right" offset={10} formatter={(value: number) => money(value, currency)} style={{ fill: "#46516A", fontSize: 10, fontWeight: 600 }} />
                     {roles.map((role, index) => <Cell key={role.jobTitle} fill={activeRole && activeRole !== role.jobTitle ? "#E9E7F8" : COLORS[index % COLORS.length]} />)}
                   </Bar>
                 </BarChart>
