@@ -11,6 +11,7 @@ export default function AppLayout() {
   const { pathname, search } = useLocation()
   const navigate = useNavigate()
   const title = pageTitles[pathname] ?? "Overview"
+  const isEmployeesPage = pathname === "/employees"
   const { theme, setTheme } = useTheme()
   const isDark = theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
   const [searchValue, setSearchValue] = useState(() => new URLSearchParams(search).get("search") ?? "")
@@ -40,7 +41,7 @@ export default function AppLayout() {
 
   return <SidebarProvider defaultOpen style={{ "--sidebar-width": "227px", "--sidebar-width-icon": "64px" } as CSSProperties}>
     <AppSidebar />
-    <SidebarInset className="min-h-svh min-w-0 bg-background">
+    <SidebarInset className={`min-w-0 bg-background ${isEmployeesPage ? "h-svh overflow-hidden" : "min-h-svh"}`}>
       <header className="peopleops-topbar sticky top-0 z-50 flex h-[78px] shrink-0 items-center justify-between gap-4 border-b border-border px-[27px] backdrop-blur-xl max-md:px-4">
         <div className="flex min-w-0 items-center gap-[15px] text-[13px]">
           <SidebarTrigger className="size-8 shrink-0 rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground" />
@@ -57,7 +58,7 @@ export default function AppLayout() {
           <span className="flex size-[32px] shrink-0 items-center justify-center rounded-full bg-secondary text-[10px] font-semibold text-secondary-foreground">AM</span>
         </div>
       </header>
-      <div className="min-w-0 flex-1"><Outlet /></div>
+      <div className={`min-w-0 flex-1 ${isEmployeesPage ? "min-h-0 overflow-hidden" : ""}`}><Outlet /></div>
     </SidebarInset>
   </SidebarProvider>
 }
