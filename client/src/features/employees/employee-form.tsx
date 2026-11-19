@@ -1,5 +1,6 @@
 import { useState } from "react"
-import { BriefcaseBusiness, CalendarClock, ChevronDown, Mail, MapPin, UserRound, Wallet } from "lucide-react"
+import { BriefcaseBusiness, CalendarClock, Mail, MapPin, UserRound, Wallet } from "lucide-react"
+import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 
 import {
   COUNTRIES,
@@ -164,7 +165,6 @@ const EmployeeForm = ({
 
   const labelClassName = "text-xs font-medium text-muted-foreground"
   const fieldShell = "space-y-1.5"
-  const selectClassName = `${inputClassName} appearance-none pr-10`
 
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-4">
@@ -247,21 +247,18 @@ const EmployeeForm = ({
         <div className="grid gap-3 sm:grid-cols-2">
           <div className={fieldShell}>
             <label htmlFor="employee-job-title" className={labelClassName}>Job title <span className="text-destructive">*</span></label>
-            <div className="relative">
-              <select
-                id="employee-job-title"
-                value={values.jobTitle}
-                onChange={(event) => updateField("jobTitle", event.target.value as JobTitle | "")}
-                disabled={isSubmitting}
-                aria-invalid={Boolean(errors.jobTitle)}
-                aria-describedby={errors.jobTitle ? "employee-job-title-error" : undefined}
-                className={selectClassName}
-              >
-                <option value="">Select job title</option>
-                {JOB_TITLES.map((jobTitle) => <option key={jobTitle} value={jobTitle}>{jobTitle}</option>)}
-              </select>
-              <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-            </div>
+            <NativeSelect
+              id="employee-job-title"
+              value={values.jobTitle}
+              onChange={(event) => updateField("jobTitle", event.target.value as JobTitle | "")}
+              disabled={isSubmitting}
+              aria-invalid={Boolean(errors.jobTitle)}
+              aria-describedby={errors.jobTitle ? "employee-job-title-error" : undefined}
+              className="w-full"
+            >
+              <NativeSelectOption value="">Select job title</NativeSelectOption>
+              {JOB_TITLES.map((jobTitle) => <NativeSelectOption key={jobTitle} value={jobTitle}>{jobTitle}</NativeSelectOption>)}
+            </NativeSelect>
             {errors.jobTitle && <p id="employee-job-title-error" className="text-xs text-destructive">{errors.jobTitle}</p>}
           </div>
 
@@ -269,19 +266,18 @@ const EmployeeForm = ({
             <label htmlFor="employee-country" className={labelClassName}>Country <span className="text-destructive">*</span></label>
             <div className="relative">
               <MapPin className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-              <select
+              <NativeSelect
                 id="employee-country"
                 value={values.country}
                 onChange={(event) => updateField("country", event.target.value as Country | "")}
                 disabled={isSubmitting}
                 aria-invalid={Boolean(errors.country)}
                 aria-describedby={errors.country ? "employee-country-error" : undefined}
-                className={`${selectClassName} pl-10`}
+                className="w-full pl-10"
               >
-                <option value="">Select country</option>
-                {COUNTRIES.map((country) => <option key={country} value={country}>{country}</option>)}
-              </select>
-              <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+                <NativeSelectOption value="">Select country</NativeSelectOption>
+                {COUNTRIES.map((country) => <NativeSelectOption key={country} value={country}>{country}</NativeSelectOption>)}
+              </NativeSelect>
             </div>
             {errors.country && <p id="employee-country-error" className="text-xs text-destructive">{errors.country}</p>}
           </div>
