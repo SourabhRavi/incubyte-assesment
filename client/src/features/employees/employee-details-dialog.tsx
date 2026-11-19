@@ -39,9 +39,10 @@ const formatDate = (value: string) => {
     return "Not available"
   }
 
-  return new Intl.DateTimeFormat(undefined, {
-    dateStyle: "medium",
-    timeStyle: "short",
+  return new Intl.DateTimeFormat("en-IN", {
+    day: "2-digit", month: "short", year: "numeric",
+    hour: "2-digit", minute: "2-digit", hour12: true,
+    timeZone: "Asia/Kolkata",
   }).format(date)
 }
 
@@ -89,7 +90,7 @@ const EmployeeDetailsDialog = ({
             value={formatDate(employee.createdAt)}
           />
           <DetailItem
-            label="Last updated"
+            label="Last salary / record update"
             value={formatDate(employee.updatedAt)}
           />
         </div>
