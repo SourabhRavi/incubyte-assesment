@@ -322,9 +322,9 @@ const OverviewPage = () => {
         />
         <MetricCard
           title="Largest market"
-          value={largestMarket?.country ?? "—"}
+          value={allMarketsLoaded ? (largestMarket?.country ?? "—") : "—"}
           detail={
-            largestMarket
+            allMarketsLoaded && largestMarket
               ? `${largestMarket.summary!.employeeCount.toLocaleString()} active employees`
               : "Market distribution"
           }
@@ -381,9 +381,9 @@ const OverviewPage = () => {
                   )
                 }
                 const share =
-                  totalEmployees > 0
+                  allMarketsLoaded && totalEmployees > 0
                     ? (summary.employeeCount / totalEmployees) * 100
-                    : 0
+                    : undefined
                 const barWidth =
                   (summary.employeeCount / maxMarketEmployees) * 100
 
@@ -397,7 +397,7 @@ const OverviewPage = () => {
                         {country}
                       </p>
                       <p className="text-[9px] text-muted-foreground">
-                        {share.toFixed(1)}% of workforce
+                        {share === undefined ? "Share unavailable" : `${share.toFixed(1)}% of workforce`}
                       </p>
                     </div>
                     <div className="h-2 overflow-hidden rounded-full bg-[#EEF1F5]">
