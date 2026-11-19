@@ -33,14 +33,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { isMobile, setOpenMobile } = useSidebar()
 
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
-      <SidebarHeader className="border-b p-3">
+    <Sidebar collapsible="offcanvas" className="border-r-0 bg-sidebar" {...props}>
+      <SidebarHeader className="border-b border-sidebar-border/80 p-4">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
               size="lg"
               tooltip="PeopleOps"
-              className="data-[slot=sidebar-menu-button]:p-1.5!"
+              className="h-14 rounded-xl px-2 data-[slot=sidebar-menu-button]:p-1.5!"
               render={
                 <NavLink
                   to="/overview"
@@ -52,8 +52,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 />
               }
             >
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                <Command className="size-6!" />
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#0A0A0B] text-white shadow-sm">
+                <Command className="size-5!" />
               </span>
 
               <span className="flex min-w-0 flex-col items-start gap-0.5">
@@ -71,7 +71,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Workspace</SidebarGroupLabel>
+          <SidebarGroupLabel className="px-3 text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground/80">Workspace</SidebarGroupLabel>
 
           <SidebarMenu className="gap-1.5">
             {navigation.map(({ title, url, icon: Icon }) => (
@@ -99,7 +99,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t p-3">
+      <SidebarFooter className="border-t border-sidebar-border/80 p-3">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
