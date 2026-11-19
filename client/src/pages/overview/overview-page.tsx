@@ -5,6 +5,7 @@ import {
   ChartNoAxesCombined,
   LoaderCircle,
   RefreshCw,
+  Globe2,
   Users,
   Wallet,
 } from "lucide-react"
@@ -209,6 +210,7 @@ const OverviewPage = () => {
 
         <div className="flex shrink-0 flex-wrap items-center gap-2">
           <div className="relative">
+            <Globe2 className="pointer-events-none absolute top-1/2 left-3 z-10 size-4 -translate-y-1/2 text-primary" />
             <label htmlFor="overview-country" className="sr-only">
               Reporting country
             </label>
