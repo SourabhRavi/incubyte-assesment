@@ -1,0 +1,220 @@
+[
+  {
+    "id": "alterType.employees.createdAt",
+    "label": "Alter type of \"employees\".\"createdAt\" to timestamptz(3)",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "createdAt",
+        "table": "employees"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"createdAt\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "employees",
+          "createdAt"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"createdAt\" on \"employees\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "alter type of \"createdAt\" to timestamptz(3)",
+        "sql": "ALTER TABLE \"public\".\"employees\" ALTER COLUMN \"createdAt\" TYPE timestamptz(3) USING \"createdAt\"::timestamptz(3)",
+        "meta": {
+          "convertedColumn": {
+            "table": "employees",
+            "column": "createdAt",
+            "by": "cast"
+          }
+        }
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"createdAt\" has type \"timestamp(3) with time zone\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_attribute\" AS \"a\" INNER JOIN \"pg_class\" AS \"c\" ON \"c\".\"oid\" = \"a\".\"attrelid\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"a\".\"attname\" = $3 AND (format_type(\"a\".\"atttypid\", \"a\".\"atttypmod\")) = $4 AND NOT (\"a\".\"attisdropped\"))) AS \"result\"",
+        "params": [
+          "public",
+          "employees",
+          "createdAt",
+          "timestamp(3) with time zone"
+        ]
+      }
+    ],
+    "meta": {
+      "warning": "TABLE_REWRITE"
+    }
+  },
+  {
+    "id": "alterType.employees.deletedAt",
+    "label": "Alter type of \"employees\".\"deletedAt\" to timestamptz(3)",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "deletedAt",
+        "table": "employees"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"deletedAt\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "employees",
+          "deletedAt"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"deletedAt\" on \"employees\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "alter type of \"deletedAt\" to timestamptz(3)",
+        "sql": "ALTER TABLE \"public\".\"employees\" ALTER COLUMN \"deletedAt\" TYPE timestamptz(3) USING \"deletedAt\"::timestamptz(3)",
+        "meta": {
+          "convertedColumn": {
+            "table": "employees",
+            "column": "deletedAt",
+            "by": "cast"
+          }
+        }
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"deletedAt\" has type \"timestamp(3) with time zone\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_attribute\" AS \"a\" INNER JOIN \"pg_class\" AS \"c\" ON \"c\".\"oid\" = \"a\".\"attrelid\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"a\".\"attname\" = $3 AND (format_type(\"a\".\"atttypid\", \"a\".\"atttypmod\")) = $4 AND NOT (\"a\".\"attisdropped\"))) AS \"result\"",
+        "params": [
+          "public",
+          "employees",
+          "deletedAt",
+          "timestamp(3) with time zone"
+        ]
+      }
+    ],
+    "meta": {
+      "warning": "TABLE_REWRITE"
+    }
+  },
+  {
+    "id": "alterType.employees.updatedAt",
+    "label": "Alter type of \"employees\".\"updatedAt\" to timestamptz(3)",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "updatedAt",
+        "table": "employees"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"updatedAt\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "employees",
+          "updatedAt"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"updatedAt\" on \"employees\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "alter type of \"updatedAt\" to timestamptz(3)",
+        "sql": "ALTER TABLE \"public\".\"employees\" ALTER COLUMN \"updatedAt\" TYPE timestamptz(3) USING \"updatedAt\"::timestamptz(3)",
+        "meta": {
+          "convertedColumn": {
+            "table": "employees",
+            "column": "updatedAt",
+            "by": "cast"
+          }
+        }
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"updatedAt\" has type \"timestamp(3) with time zone\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_attribute\" AS \"a\" INNER JOIN \"pg_class\" AS \"c\" ON \"c\".\"oid\" = \"a\".\"attrelid\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"a\".\"attname\" = $3 AND (format_type(\"a\".\"atttypid\", \"a\".\"atttypmod\")) = $4 AND NOT (\"a\".\"attisdropped\"))) AS \"result\"",
+        "params": [
+          "public",
+          "employees",
+          "updatedAt",
+          "timestamp(3) with time zone"
+        ]
+      }
+    ],
+    "meta": {
+      "warning": "TABLE_REWRITE"
+    }
+  },
+  {
+    "id": "checkConstraint.employees.employees_jobTitle_check_a7ee29aa",
+    "label": "Add check constraint \"employees_jobTitle_check_a7ee29aa\" on \"employees\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "checkConstraint",
+        "name": "employees_jobTitle_check_a7ee29aa",
+        "table": "employees"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"employees_jobTitle_check_a7ee29aa\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "employees_jobTitle_check_a7ee29aa",
+          "public",
+          "\"public\".\"employees\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "constraint \"employees_jobTitle_check_a7ee29aa\" on \"employees\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add check constraint \"employees_jobTitle_check_a7ee29aa\"",
+        "sql": "ALTER TABLE \"public\".\"employees\" ADD CONSTRAINT \"employees_jobTitle_check_a7ee29aa\" CHECK (\"jobTitle\" IN ('Frontend Developer', 'Backend Developer', 'Full Stack Developer', 'Software Engineer', 'QA Engineer', 'DevOps Engineer', 'Data Analyst', 'Product Manager', 'Engineering Manager', 'UI/UX Designer'))"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify check constraint \"employees_jobTitle_check_a7ee29aa\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4)) AS \"result\"",
+        "params": [
+          "employees_jobTitle_check_a7ee29aa",
+          "public",
+          "\"public\".\"employees\"",
+          "c"
+        ]
+      }
+    ]
+  }
+]

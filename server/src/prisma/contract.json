@@ -21,11 +21,11 @@
                 "value": "India"
               },
               {
-                "name": "United States",
+                "name": "UnitedStates",
                 "value": "United States"
               },
               {
-                "name": "United Kingdom",
+                "name": "UnitedKingdom",
                 "value": "United Kingdom"
               },
               {
@@ -62,6 +62,51 @@
                 "value": "CAD"
               }
             ]
+          },
+          "JobTitle": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "FrontendDeveloper",
+                "value": "Frontend Developer"
+              },
+              {
+                "name": "BackendDeveloper",
+                "value": "Backend Developer"
+              },
+              {
+                "name": "FullStackDeveloper",
+                "value": "Full Stack Developer"
+              },
+              {
+                "name": "SoftwareEngineer",
+                "value": "Software Engineer"
+              },
+              {
+                "name": "QAEngineer",
+                "value": "QA Engineer"
+              },
+              {
+                "name": "DevOpsEngineer",
+                "value": "DevOps Engineer"
+              },
+              {
+                "name": "DataAnalyst",
+                "value": "Data Analyst"
+              },
+              {
+                "name": "ProductManager",
+                "value": "Product Manager"
+              },
+              {
+                "name": "EngineeringManager",
+                "value": "Engineering Manager"
+              },
+              {
+                "name": "UIUXDesigner",
+                "value": "UI/UX Designer"
+              }
+            ]
           }
         },
         "models": {
@@ -84,7 +129,10 @@
                 "nullable": false,
                 "type": {
                   "codecId": "pg/timestamptz-date@1",
-                  "kind": "scalar"
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
                 }
               },
               "currency": {
@@ -104,7 +152,10 @@
                 "nullable": true,
                 "type": {
                   "codecId": "pg/timestamptz-date@1",
-                  "kind": "scalar"
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
                 }
               },
               "email": {
@@ -133,6 +184,12 @@
                 "type": {
                   "codecId": "pg/text@1",
                   "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "JobTitle",
+                  "namespaceId": "public",
+                  "plane": "domain"
                 }
               },
               "salary": {
@@ -146,7 +203,10 @@
                 "nullable": false,
                 "type": {
                   "codecId": "pg/timestamptz-date@1",
-                  "kind": "scalar"
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
                 }
               }
             },
@@ -205,7 +265,7 @@
                   "prefix": "employees_country_check"
                 },
                 {
-                  "expression": "(\n              (\"country\" = 'India' AND \"currency\" = 'INR')\n              OR (\"country\" = 'United States' AND \"currency\" = 'USD')\n              OR (\"country\" = 'United Kingdom' AND \"currency\" = 'GBP')\n              OR (\"country\" = 'Germany' AND \"currency\" = 'EUR')\n              OR (\"country\" = 'Canada' AND \"currency\" = 'CAD')\n            )",
+                  "expression": "(\n                (\"country\" = 'India' AND \"currency\" = 'INR')\n                OR (\"country\" = 'United States' AND \"currency\" = 'USD')\n                OR (\"country\" = 'United Kingdom' AND \"currency\" = 'GBP')\n                OR (\"country\" = 'Germany' AND \"currency\" = 'EUR')\n                OR (\"country\" = 'Canada' AND \"currency\" = 'CAD')\n              )",
                   "name": "employees_country_currency_match_33692e8b",
                   "prefix": "employees_country_currency_match"
                 },
@@ -213,6 +273,11 @@
                   "expression": "\"currency\" IN ('INR', 'USD', 'GBP', 'EUR', 'CAD')",
                   "name": "employees_currency_check_80a2ebdd",
                   "prefix": "employees_currency_check"
+                },
+                {
+                  "expression": "\"jobTitle\" IN ('Frontend Developer', 'Backend Developer', 'Full Stack Developer', 'Software Engineer', 'QA Engineer', 'DevOps Engineer', 'Data Analyst', 'Product Manager', 'Engineering Manager', 'UI/UX Designer')",
+                  "name": "employees_jobTitle_check_a7ee29aa",
+                  "prefix": "employees_jobTitle_check"
                 },
                 {
                   "expression": "salary >= 0",
@@ -235,7 +300,10 @@
                 "createdAt": {
                   "codecId": "pg/timestamptz-date@1",
                   "dataType": "pg/timestamptz",
-                  "nullable": false
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
                 },
                 "currency": {
                   "codecId": "pg/text@1",
@@ -251,7 +319,10 @@
                 "deletedAt": {
                   "codecId": "pg/timestamptz-date@1",
                   "dataType": "pg/timestamptz",
-                  "nullable": true
+                  "nullable": true,
+                  "typeParams": {
+                    "precision": 3
+                  }
                 },
                 "email": {
                   "codecId": "pg/text@1",
@@ -271,7 +342,13 @@
                 "jobTitle": {
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
-                  "nullable": false
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "JobTitle",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
                 },
                 "salary": {
                   "codecId": "pg/numeric@1",
@@ -281,7 +358,10 @@
                 "updatedAt": {
                   "codecId": "pg/timestamptz-date@1",
                   "dataType": "pg/timestamptz",
-                  "nullable": false
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
                 }
               },
               "foreignKeys": [],
@@ -338,6 +418,21 @@
                 "EUR",
                 "CAD"
               ]
+            },
+            "JobTitle": {
+              "kind": "valueSet",
+              "values": [
+                "Frontend Developer",
+                "Backend Developer",
+                "Full Stack Developer",
+                "Software Engineer",
+                "QA Engineer",
+                "DevOps Engineer",
+                "Data Analyst",
+                "Product Manager",
+                "Engineering Manager",
+                "UI/UX Designer"
+              ]
             }
           }
         },
@@ -345,16 +440,19 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "810f342f4e6d9196e4e9f7ac8575456e486f6049647226954560d0f6af927426"
+    "storageHash": "5bf9a1554cebb39ebf0b5c47d6685af9b72cf928377c1062d7545dac1c4f4dbb"
   },
   "execution": {
-    "executionHash": "6767ed5a82c40a3e49fee6d089b874a91c48e4dc30b0ab9172472c6d905d601f",
+    "executionHash": "9303258bf3142109ae438e681041f6a657bce25176961c8c9230d39cd7d921f7",
     "mutations": {
       "defaults": [
         {
           "onCreate": {
             "id": "timestampNow",
-            "kind": "generator"
+            "kind": "generator",
+            "params": {
+              "precision": 3
+            }
           },
           "ref": {
             "entry": "employees",
@@ -376,11 +474,17 @@
         {
           "onCreate": {
             "id": "timestampNow",
-            "kind": "generator"
+            "kind": "generator",
+            "params": {
+              "precision": 3
+            }
           },
           "onUpdate": {
             "id": "timestampNow",
-            "kind": "generator"
+            "kind": "generator",
+            "params": {
+              "precision": 3
+            }
           },
           "ref": {
             "entry": "employees",
@@ -409,6 +513,7 @@
       "forShare": true,
       "forUpdate": true,
       "insertOnConflictSkip": true,
+      "insertOnConflictTarget": true,
       "insertOnConflictWithoutTarget": true,
       "lateral": true,
       "lockNowait": true,
