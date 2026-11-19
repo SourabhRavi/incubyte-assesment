@@ -1,4 +1,4 @@
-import { useMemo, useState, type ComponentType, type ReactNode } from "react"
+import { useState, type ComponentType, type ReactNode } from "react"
 import { ArrowUpRight, Globe2, LoaderCircle, RefreshCw, Users, Wallet, X } from "lucide-react"
 import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 import { Link } from "react-router"
@@ -18,7 +18,7 @@ const compactMoney = (value: number, currency: string) =>
 
 type MetricProps = { title: string; value: string; detail: string; icon: ComponentType<{ className?: string }>; loading?: boolean; highlighted?: boolean }
 function MetricCard({ title, value, detail, icon: Icon, loading, highlighted }: MetricProps) {
-  return <section className="min-w-0 rounded-[8px] border border-[#E3E7F0] bg-white px-[18px] py-[18px]">
+  return <section className="peopleops-metric min-w-0 rounded-[8px] border border-[#E3E7F0] bg-white px-[18px] py-[18px]">
     <div className="flex items-center justify-between gap-2">
       <p className="text-[13px] font-medium text-[#69758D]">{title}</p>
       <Icon className={`size-[17px] ${highlighted ? "text-[#5146D8]" : "text-[#75819A]"}`} />
@@ -30,7 +30,7 @@ function MetricCard({ title, value, detail, icon: Icon, loading, highlighted }: 
   </section>
 }
 function Panel({ title, subtitle, children, className = "" }: { title: string; subtitle: string; children: ReactNode; className?: string }) {
-  return <section className={`min-w-0 overflow-hidden rounded-[12px] border border-[#E3E7F0] bg-white ${className}`}>
+  return <section className={`peopleops-chart-panel min-w-0 overflow-hidden rounded-[12px] border border-[#E3E7F0] bg-white ${className}`}>
     <header className="px-[22px] pt-[20px]">
       <h2 className="text-[16px] font-semibold tracking-[-0.25px] text-[#292D40]">{title}</h2>
       <p className="mt-[5px] text-[12px] text-[#78839A]">{subtitle}</p>
@@ -52,25 +52,12 @@ export default function OverviewPage() {
   const roles = rolesQuery.data?.data ?? []
   const currency = summary?.currency ?? rolesQuery.data?.currency ?? COUNTRY_CURRENCIES[selectedCountry]
   const count = summary?.employeeCount ?? roles.reduce((total, role) => total + role.employeeCount, 0)
-  const maxRole = Math.max(1, ...roles.map((role) => Number(role.averageSalary)))
   const totalRoleEmployees = roles.reduce((total, role) => total + role.employeeCount, 0)
   const isRefreshing = summaryQuery.isFetching || rolesQuery.isFetching || allMarkets.some((query) => query.isFetching)
   const refresh = async () => {
     await Promise.all([summaryQuery.refetch(), rolesQuery.refetch(), ...allMarkets.map((query) => query.refetch())])
   }
-  const donut = useMemo(() => {
-    const total = roles.reduce((sum, role) => sum + role.employeeCount, 0)
-    const circumference = 2 * Math.PI * 57
-    let offset = 0
-    return roles.map((role, index) => {
-      const length = total ? (role.employeeCount / total) * circumference : 0
-      const segment = { ...role, color: COLORS[index % COLORS.length], dash: `${Math.max(0, length - 1.5)} ${circumference}`, offset: -offset, percent: total ? Math.round((role.employeeCount / total) * 100) : 0 }
-      offset += length
-      return segment
-    })
-  }, [roles])
-
-  return <main className="w-full space-y-[23px] px-[26px] pb-12 pt-[31px] max-sm:px-4">
+  return <main className="peopleops-overview w-full space-y-[23px] px-[26px] pb-12 pt-[31px] max-sm:px-4">
     <div className="flex flex-wrap items-start justify-between gap-4">
       <div>
         <h1 className="text-[28px] font-semibold leading-[1.2] tracking-[-0.8px] text-[#292D40]">People overview</h1>
@@ -81,14 +68,14 @@ export default function OverviewPage() {
         </div>
       </div>
       <div className="flex items-center gap-3 pt-[1px]">
-        <label className="relative">
+        <label className="peopleops-country-select relative">
           <span className="sr-only">Reporting country</span>
           <Globe2 className="pointer-events-none absolute left-[15px] top-1/2 size-[16px] -translate-y-1/2 text-[#5146D8]" />
           <NativeSelect id="overview-country" value={selectedCountry} onChange={(event) => { setSelectedCountry(event.target.value as Country); setActiveRole(null) }} size="lg" className="w-[199px] rounded-[8px] border-[#E3E7F0] bg-white [&>select]:h-[43px] [&>select]:rounded-[8px] [&>select]:border-[#E3E7F0] [&>select]:bg-white [&>select]:pl-[39px] [&>select]:pr-8 [&>select]:text-[12px] [&>select]:font-semibold [&>select]:text-[#30354A]">
             {COUNTRIES.map((country) => <NativeSelectOption key={country} value={country}>{country}</NativeSelectOption>)}
           </NativeSelect>
         </label>
-        <button type="button" onClick={() => void refresh()} disabled={isRefreshing} className="inline-flex h-[43px] items-center gap-2 rounded-[8px] border border-[#E3E7F0] bg-white px-[14px] text-[12px] font-medium text-[#30354A] hover:bg-[#F8F9FC] disabled:opacity-60">
+        <button type="button" onClick={() => void refresh()} disabled={isRefreshing} className="peopleops-action-button inline-flex h-[43px] items-center gap-2 rounded-[8px] border border-[#E3E7F0] bg-white px-[14px] text-[12px] font-medium text-[#30354A] hover:bg-[#F8F9FC] disabled:opacity-60">
           <RefreshCw className={`size-[14px] ${isRefreshing ? "animate-spin" : ""}`} /> Refresh
         </button>
       </div>
@@ -106,7 +93,7 @@ export default function OverviewPage() {
     <div className="grid items-stretch gap-6 xl:grid-cols-[1.18fr_0.88fr]">
       <Panel title="Average salary by role" subtitle={"Annual compensation · " + currency}>
         {rolesQuery.isPending ? <EmptyState>Loading salary breakdown…</EmptyState> : rolesQuery.isError ? <EmptyState>Unable to load role salary data.</EmptyState> : roles.length === 0 ? <EmptyState>No active employee data for {selectedCountry} yet.</EmptyState> :
-          <div className="px-4 pb-4 pt-5">
+          <div className="peopleops-chart-body px-4 pb-4 pt-5">
             <div className="mb-3 flex items-center justify-between gap-2 px-2">
               <span className="text-[10px] text-[#78839A]">Select a bar or legend item to focus a role in the table</span>
               {activeRole && <button type="button" onClick={() => setActiveRole(null)} className="inline-flex items-center gap-1 text-[10px] font-medium text-[#5146D8] hover:underline">Clear focus <X className="size-3" /></button>}
@@ -129,8 +116,8 @@ export default function OverviewPage() {
 
       <Panel title="Workforce mix" subtitle={"Employees by job title · " + selectedCountry}>
         {rolesQuery.isPending ? <EmptyState>Loading workforce mix…</EmptyState> : rolesQuery.isError || roles.length === 0 ? <EmptyState>No workforce data to display yet.</EmptyState> :
-          <div className="flex min-h-[300px] items-center justify-center gap-3 px-4 pb-5 pt-5 max-sm:flex-col">
-            <div className="relative h-[205px] w-[205px] shrink-0">
+          <div className="peopleops-chart-body flex min-h-[300px] items-center justify-center gap-4 px-5 pb-5 pt-5 max-sm:flex-col">
+            <div className="peopleops-donut-wrap relative h-[225px] w-[225px] shrink-0">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie data={roles} dataKey="employeeCount" nameKey="jobTitle" cx="50%" cy="50%" innerRadius={59} outerRadius={83} paddingAngle={2} stroke="#fff" strokeWidth={2} onClick={(entry) => setActiveRole(String(entry.jobTitle ?? ""))}>
@@ -144,8 +131,8 @@ export default function OverviewPage() {
                 <span className="mt-1 text-[10px] text-[#78839A]">employees</span>
               </div>
             </div>
-            <div className="max-h-[260px] min-w-[145px] flex-1 space-y-[8px] overflow-y-auto pr-1">
-              {roles.map((item, index) => <button type="button" key={item.jobTitle} onClick={() => setActiveRole(activeRole === item.jobTitle ? null : item.jobTitle)} className={"flex w-full items-start gap-[10px] rounded-md px-1.5 py-1 text-left transition-colors hover:bg-[#F7F8FC] " + (activeRole === item.jobTitle ? "bg-[#F1EFFF]" : "")}>
+            <div className="peopleops-role-legend max-h-[260px] min-w-[145px] flex-1 space-y-[6px] overflow-y-auto pr-1">
+              {roles.map((item, index) => <button type="button" aria-pressed={activeRole === item.jobTitle} key={item.jobTitle} onClick={() => setActiveRole(activeRole === item.jobTitle ? null : item.jobTitle)} className={"flex w-full items-start gap-[10px] rounded-md px-1.5 py-1 text-left transition-colors hover:bg-[#F7F8FC] " + (activeRole === item.jobTitle ? "bg-[#F1EFFF]" : "")}>
                 <span className="mt-[4px] size-[8px] shrink-0 rounded-[2px]" style={{ background: COLORS[index % COLORS.length] }} />
                 <span className="min-w-0 flex-1"><span className="block truncate text-[11px] font-medium leading-[1.2] text-[#30354A]">{item.jobTitle}</span><span className="mt-[3px] block text-[10px] text-[#78839A]">{item.employeeCount.toLocaleString("en-IN")} · {totalRoleEmployees ? Math.round(item.employeeCount / totalRoleEmployees * 100) : 0}%</span></span>
               </button>)}
@@ -153,7 +140,7 @@ export default function OverviewPage() {
           </div>}
       </Panel>
     </div>
-    <section className="overflow-hidden rounded-[12px] border border-[#E3E7F0] bg-white">
+    <section className="peopleops-data-panel overflow-hidden rounded-[12px] border border-[#E3E7F0] bg-white">
       <header className="flex items-center justify-between gap-3 px-[22px] py-[19px]">
         <div><h2 className="text-[16px] font-semibold tracking-[-0.25px] text-[#292D40]">Compensation by role</h2><p className="mt-[4px] text-[11px] text-[#78839A]">{selectedCountry} · {activeRole ? "Filtered: " + activeRole : roles.length + " job titles"}</p></div>
         <Link to="/employees" className="inline-flex items-center gap-2 text-[12px] font-semibold text-[#5146D8] hover:text-[#3F35B8]">View employees <ArrowUpRight className="size-[14px]" /></Link>
@@ -162,7 +149,7 @@ export default function OverviewPage() {
         <div className="overflow-x-auto">
           <table className="w-full min-w-[560px] border-collapse text-left">
             <thead className="bg-[#F7F8FC] text-[9px] font-semibold uppercase text-[#78839A]"><tr><th className="px-[22px] py-[10px]">Job title</th><th className="px-[22px] py-[10px] text-right">Employees</th><th className="px-[22px] py-[10px] text-right">Average annual salary</th></tr></thead>
-            <tbody>{roles.filter((role) => !activeRole || role.jobTitle === activeRole).map((role, index) => <tr key={role.jobTitle} className="border-t border-[#E3E7F0] hover:bg-[#FAFBFD]"><td className="px-[22px] py-[7px]"><span className="inline-flex items-center gap-[13px] text-[12px] text-[#30354A]"><span className="size-[7px] rounded-[2px]" style={{ background: COLORS[index % COLORS.length] }} />{role.jobTitle}</span></td><td className="px-[22px] py-[7px] text-right text-[12px] text-[#30354A] tabular-nums">{role.employeeCount.toLocaleString("en-IN")}</td><td className="px-[22px] py-[7px] text-right text-[12px] font-medium text-[#30354A] tabular-nums">{money(role.averageSalary, currency)} {currency}</td></tr>)}</tbody>
+            <tbody>{roles.filter((role) => !activeRole || role.jobTitle === activeRole).map((role, index) => <tr key={role.jobTitle} className="peopleops-table-row border-t border-[#E3E7F0] hover:bg-[#FAFBFD]"><td className="px-[22px] py-[7px]"><span className="inline-flex items-center gap-[13px] text-[12px] text-[#30354A]"><span className="size-[7px] rounded-[2px]" style={{ background: COLORS[index % COLORS.length] }} />{role.jobTitle}</span></td><td className="px-[22px] py-[7px] text-right text-[12px] text-[#30354A] tabular-nums">{role.employeeCount.toLocaleString("en-IN")}</td><td className="px-[22px] py-[7px] text-right text-[12px] font-medium text-[#30354A] tabular-nums">{money(role.averageSalary, currency)} {currency}</td></tr>)}</tbody>
           </table>
         </div>}
     </section>
