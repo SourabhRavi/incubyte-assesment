@@ -100,10 +100,10 @@ export default function OverviewPage() {
             </div>
             <div style={{ minHeight: Math.max(320, roles.length * 43) }} className="w-full flex-1">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={roles} layout="vertical" margin={{ top: 4, right: 92, bottom: 4, left: 8 }} barCategoryGap={12}>
+                <BarChart data={roles} layout="vertical" margin={{ top: 4, right: 82, bottom: 4, left: 0 }} barCategoryGap={12}>
                   <CartesianGrid horizontal={false} stroke="#E9ECF3" strokeDasharray="3 4" />
                   <XAxis type="number" tickFormatter={(value: number) => compactMoney(value, currency)} tick={{ fill: "#78839A", fontSize: 10 }} axisLine={false} tickLine={false} tickMargin={9} />
-                  <YAxis type="category" dataKey="jobTitle" width={112} interval={0} tick={{ fill: "#46516A", fontSize: 10 }} axisLine={false} tickLine={false} />
+                  <YAxis type="category" dataKey="jobTitle" width={150} interval={0} tick={(props: { y?: number; payload?: { value?: string } }) => <text x={8} y={props.y} dy="0.35em" textAnchor="start" fill="#46516A" fontSize={10} fontWeight={500}>{props.payload?.value}</text>} axisLine={false} tickLine={false} />
                   <Tooltip cursor={{ fill: "#F6F5FF" }} contentStyle={{ border: "1px solid #E3E7F0", borderRadius: 10, boxShadow: "0 8px 24px rgb(35 45 75 / 10%)", fontSize: 12 }} formatter={(value) => [money(Number(value), currency), "Average annual salary"]} />
                   <Bar dataKey="averageSalary" name="Average salary" radius={[0, 5, 5, 0]} maxBarSize={18} onClick={(entry) => setActiveRole(String(entry.jobTitle ?? ""))}>
                     <LabelList dataKey="averageSalary" position="right" offset={10} formatter={(value: number) => money(value, currency)} style={{ fill: "#46516A", fontSize: 10, fontWeight: 600 }} />
