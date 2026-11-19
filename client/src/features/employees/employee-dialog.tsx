@@ -19,7 +19,6 @@ import type {
   Employee,
   UpdateEmployeeInput,
 } from "@/features/employees/employee-types"
-import { Separator } from "@/components/ui/separator.tsx"
 import { toast } from "sonner"
 
 type EmployeeDialogProps = {
@@ -42,14 +41,8 @@ const EmployeeDialog = ({
   const isSubmitting = createMutation.isPending || updateMutation.isPending
 
   const handleOpenChange = (nextOpen: boolean) => {
-    if (isSubmitting) {
-      return
-    }
-
-    if (nextOpen) {
-      setSubmitError(null)
-    }
-
+    if (isSubmitting) return
+    if (nextOpen) setSubmitError(null)
     onOpenChange(nextOpen)
   }
 
@@ -64,14 +57,11 @@ const EmployeeDialog = ({
           id: employee.id,
           input: input as UpdateEmployeeInput,
         })
-
         toast.success("Employee updated successfully")
       } else {
         await createMutation.mutateAsync(input as CreateEmployeeInput)
-
         toast.success("Employee added successfully")
       }
-
       onOpenChange(false)
     } catch (error) {
       setSubmitError(
@@ -84,25 +74,20 @@ const EmployeeDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
-        <DialogHeader>
-          <DialogTitle>
+      <DialogContent className="max-h-[92vh] gap-0 overflow-y-auto rounded-2xl p-0 sm:max-w-[520px]">
+        <DialogHeader className="px-6 pt-6 pb-4 text-left">
+          <DialogTitle className="font-heading text-[22px] font-semibold">
             {isEditing ? "Edit employee" : "Add employee"}
           </DialogTitle>
-
-          <DialogDescription>
-            {isEditing
-              ? "Update the employee's information below."
-              : "Enter the employee's details to add them to your directory."}
+          <DialogDescription className="text-[13px]">
+            Keep employee records clear and up to date.
           </DialogDescription>
         </DialogHeader>
-
-        <Separator />
 
         {submitError && (
           <div
             role="alert"
-            className="rounded-md border border-destructive/30 bg-destructive/5 p-3 text-sm text-destructive"
+            className="mx-6 mb-3 rounded-lg border border-destructive/30 bg-destructive/5 p-3 text-sm text-destructive"
           >
             {submitError}
           </div>
