@@ -81,6 +81,12 @@ const OverviewPage = () => {
   const handleRefresh = async () => { await Promise.all([refetchSummary(), refetchJobAverages()]) }
   const jobSummaries = jobAverages?.data ?? []
   const workforceTotal = jobSummaries.reduce((total, item) => total + item.employeeCount, 0)
+  const minimumSalary = Number(salarySummary?.minSalary ?? 0)
+  const averageSalary = Number(salarySummary?.averageSalary ?? 0)
+  const maximumSalary = Number(salarySummary?.maxSalary ?? 0)
+  const salaryScale = maximumSalary > 0 ? maximumSalary : 1
+  const minimumRatio = Math.min(100, Math.max(0, (minimumSalary / salaryScale) * 100))
+  const averageRatio = Math.min(100, Math.max(0, (averageSalary / salaryScale) * 100))
   const summaryErrorMessage = summaryError instanceof Error ? summaryError.message : "An unexpected error occurred."
   const jobAveragesErrorMessage = jobAveragesError instanceof Error ? jobAveragesError.message : "An unexpected error occurred."
 
@@ -107,18 +113,18 @@ const OverviewPage = () => {
 
       {isSummaryError && <section role="alert" className="rounded-lg border border-destructive/30 bg-destructive/5 p-3 text-xs"><p className="font-semibold">Couldn't load salary statistics</p><p className="mt-1 text-muted-foreground">{summaryErrorMessage}</p><button type="button" onClick={() => void refetchSummary()} className="mt-2 rounded-md border px-3 py-1.5">Retry</button></section>}
 
-      <div className="grid grid-cols-2 gap-3 xl:grid-cols-2">
-        <MetricCard title="Employees" value={String(salarySummary?.employeeCount.toLocaleString() ?? 0)} detail={`Active employees in ${selectedCountry}`} icon={Users} isLoading={isSummaryPending} accent="var(--chart-1)" />
-        <MetricCard title="Minimum salary" value={money(salarySummary?.minSalary)} detail="Annual compensation" icon={ArrowDown} isLoading={isSummaryPending} accent="var(--chart-2)" />
-        <MetricCard title="Average salary" value={money(salarySummary?.averageSalary)} detail="Annual compensation" icon={ChartNoAxesCombined} isLoading={isSummaryPending} accent="var(--chart-3)" />
-        <MetricCard title="Maximum salary" value={money(salarySummary?.maxSalary)} detail="Annual compensation" icon={Wallet} isLoading={isSummaryPending} accent="var(--chart-4)" />
-      </div>
-
-      <div className="grid min-w-0 gap-3 xl:grid-cols-[minmax(0,1.45fr)_minmax(270px,1fr)]">
-        <ChartCard title="Average salary by role" description={`Annual compensation in ${currency} · ${selectedCountry}`}>
+      <div className="overview-dashboard-grid grid min-w-0 gap-3 xl:grid-cols-[minmax(0,1.04fr)_minmax(340px,.96fr)]">
+        <div className="grid min-w-0 content-start gap-3">
+          <div className="grid grid-cols-2 gap-3">
+            <MetricCard title="Employees" value={String(salarySummary?.employeeCount.toLocaleString() ?? 0)} detail={`Active employees in ${selectedCountry}`} icon={Users} isLoading={isSummaryPending} accent="var(--chart-1)" />
+            <MetricCard title="Minimum salary" value={money(salarySummary?.minSalary)} detail="Annual compensation" icon={ArrowDown} isLoading={isSummaryPending} accent="var(--chart-2)" />
+            <MetricCard title="Average salary" value={money(salarySummary?.averageSalary)} detail="Annual compensation" icon={ChartNoAxesCombined} isLoading={isSummaryPending} accent="var(--chart-3)" />
+            <MetricCard title="Maximum salary" value={money(salarySummary?.maxSalary)} detail="Annual compensation" icon={Wallet} isLoading={isSummaryPending} accent="var(--chart-4)" />
+          </div>
+          <ChartCard title="Average salary by role" description={`Annual compensation in ${currency} · ${selectedCountry}`}>
           {areJobAveragesError ? <ChartEmptyState message={jobAveragesErrorMessage} /> : areJobAveragesPending ? <div className="flex min-h-64 items-center justify-center gap-2 text-xs text-muted-foreground"><LoaderCircle className="size-4 animate-spin" />Loading salary breakdown...</div> : jobSummaries.length === 0 ? <ChartEmptyState message={`No active employee data for ${selectedCountry} yet.`} /> : (
             <div className="px-3 pb-3 pt-4">
-              <div className="w-full" style={{ height: Math.max(240, jobSummaries.length * 34) }}>
+              <div className="w-full" style={{ height: Math.max(250, jobSummaries.length * 25) }}>
                 <ResponsiveContainer width="100%" height="100%"><BarChart data={jobSummaries} layout="vertical" margin={{ top: 4, right: 12, bottom: 2, left: 0 }} barCategoryGap={8}>
                   <CartesianGrid horizontal={false} stroke="var(--border)" strokeDasharray="3 5" />
                   <XAxis type="number" tickFormatter={(value: number) => formatCompactMoney(value, currency)} tick={{ fill: "var(--muted-foreground)", fontSize: 10 }} axisLine={false} tickLine={false} tickMargin={8} />
@@ -131,7 +137,9 @@ const OverviewPage = () => {
           )}
         </ChartCard>
 
-        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
+        </div>
+
+        <div className="grid min-w-0 content-start gap-3 sm:grid-cols-2 xl:grid-cols-1">
           <ChartCard title="Workforce mix" description={`Employees by job title · ${selectedCountry}`}>
             {areJobAveragesError ? <ChartEmptyState message={jobAveragesErrorMessage} /> : areJobAveragesPending ? <div className="flex min-h-48 items-center justify-center text-xs text-muted-foreground">Loading workforce mix...</div> : workforceTotal === 0 ? <ChartEmptyState message="No workforce data to display yet." /> : (
               <div className="px-4 pb-4 pt-2">
@@ -149,9 +157,9 @@ const OverviewPage = () => {
           <ChartCard title="Salary snapshot" description="Compensation range for the selected country">
             <div className="space-y-3 px-4 py-4">
               <div className="flex items-center justify-between text-xs"><span className="text-muted-foreground">Minimum</span><strong className="font-semibold tabular-nums">{money(salarySummary?.minSalary)}</strong></div>
-              <div className="h-2 overflow-hidden rounded-full bg-[#EEF1F5]"><div className="h-full w-2/3 rounded-full bg-[#73BC91]" /></div>
+              <div className="h-2 overflow-hidden rounded-full bg-[#EEF1F5]"><div className="h-full rounded-full bg-[#73BC91]" style={{ width: `${minimumRatio}%` }} /></div>
               <div className="flex items-center justify-between text-xs"><span className="text-muted-foreground">Average</span><strong className="font-semibold tabular-nums">{money(salarySummary?.averageSalary)}</strong></div>
-              <div className="h-2 overflow-hidden rounded-full bg-[#EEF1F5]"><div className="h-full w-4/5 rounded-full bg-[#5687F3]" /></div>
+              <div className="h-2 overflow-hidden rounded-full bg-[#EEF1F5]"><div className="h-full rounded-full bg-[#5687F3]" style={{ width: `${averageRatio}%` }} /></div>
               <div className="flex items-center justify-between text-xs"><span className="text-muted-foreground">Maximum</span><strong className="font-semibold tabular-nums">{money(salarySummary?.maxSalary)}</strong></div>
               <p className="border-t pt-2 text-[10px] text-muted-foreground">Annual salary · {currency} · deleted employees excluded</p>
             </div>
