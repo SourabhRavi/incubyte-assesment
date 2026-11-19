@@ -1,5 +1,5 @@
-import { Outlet, useLocation } from "react-router"
-import { Moon, Sun } from "lucide-react"
+import { useNavigate, useLocation, Outlet } from "react-router"
+import { Moon, Search, Sun } from "lucide-react"
 
 import { useTheme } from "@/components/theme-provider"
 import { Button } from "@/components/ui/button"
@@ -17,9 +17,8 @@ const pageTitles: Record<string, string> = {
 
 const AppLayout = () => {
   const { pathname } = useLocation()
+  const navigate = useNavigate()
   const title = pageTitles[pathname] ?? "PeopleOps"
-  const isEmployeesPage = pathname === "/employees"
-
   const { theme, setTheme } = useTheme()
   const isDark = theme === "dark"
 
@@ -27,48 +26,58 @@ const AppLayout = () => {
     <SidebarProvider defaultOpen={true}>
       <AppSidebar />
 
-      <SidebarInset className="h-svh min-h-0 min-w-0 overflow-x-hidden overflow-y-auto bg-background">
-        <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between gap-3 border-b border-white/20 bg-background/30 px-3 shadow-sm shadow-muted backdrop-blur-2xl sm:h-16 sm:px-6 dark:border-white/10 dark:bg-slate-950/65">
-          <div className="flex min-w-0 items-center gap-2">
+      <SidebarInset className="min-h-svh min-w-0 overflow-x-hidden bg-background">
+        <header className="sticky top-0 z-30 flex h-20 shrink-0 items-center justify-between gap-4 border-b border-border bg-card px-4 sm:px-6 lg:px-10">
+          <div className="flex min-w-0 items-center gap-4">
             <SidebarTrigger
               className="shrink-0"
               aria-label="Toggle navigation sidebar"
               title="Toggle navigation sidebar"
             />
-
-            <div className="min-w-0">
-              <p className="truncate text-sm font-medium">{title}</p>
-              <p className="hidden text-xs text-muted-foreground sm:block">
-                PeopleOps / {title}
-              </p>
+            <div className="flex min-w-0 items-center gap-3 text-[13px]">
+              <span className="truncate text-muted-foreground">Workspace</span>
+              <span className="text-muted-foreground/60">/</span>
+              <span className="truncate font-medium text-foreground">{title}</span>
             </div>
           </div>
 
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="flex shrink-0 items-center gap-3">
+            <button
+              type="button"
+              onClick={() => navigate("/employees")}
+              className="hidden h-10 w-56 items-center gap-3 rounded-lg bg-background px-3 text-left text-xs text-muted-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:flex lg:w-[280px]"
+              aria-label="Open employee search"
+            >
+              <Search className="size-[17px]" />
+              <span className="flex-1">Search employees</span>
+              <kbd className="rounded border border-border bg-card px-1.5 py-0.5 text-[10px]">⌘ K</kbd>
+            </button>
+
             <Button
               type="button"
-              variant="outline"
+              variant="ghost"
               size="icon"
               aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
               title={`Switch to ${isDark ? "light" : "dark"} mode`}
               onClick={() => setTheme(isDark ? "light" : "dark")}
+              className="size-9 text-muted-foreground hover:bg-muted hover:text-foreground"
             >
-              {isDark ? (
-                <Sun className="size-4" />
-              ) : (
-                <Moon className="size-4" />
-              )}
+              {isDark ? <Sun className="size-[18px]" /> : <Moon className="size-[18px]" />}
             </Button>
+
+            <button
+              type="button"
+              onClick={() => navigate("/employees")}
+              aria-label="HR Manager profile"
+              title="HR Manager"
+              className="flex size-8 items-center justify-center rounded-full bg-accent text-[11px] font-semibold text-primary"
+            >
+              AM
+            </button>
           </div>
         </header>
 
-        <div
-          className={
-            isEmployeesPage
-              ? "mx-auto w-full max-w-7xl md:flex md:min-h-0 md:flex-1 md:flex-col md:overflow-hidden"
-              : "mx-auto w-full max-w-7xl flex-1 p-4 sm:p-6 lg:p-8"
-          }
-        >
+        <div className="mx-auto w-full max-w-none flex-1">
           <Outlet />
         </div>
       </SidebarInset>
