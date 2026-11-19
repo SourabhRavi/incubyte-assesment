@@ -30,26 +30,19 @@ const DeleteEmployeeDialog = ({
 
   const handleOpenChange = (nextOpen: boolean) => {
     if (deleteMutation.isPending) return
-
-    if (nextOpen) {
-      setDeleteError(null)
-    }
-
+    if (nextOpen) setDeleteError(null)
     onOpenChange(nextOpen)
   }
 
   const handleDelete = async () => {
     if (!employee || deleteMutation.isPending) return
-
     setDeleteError(null)
 
     try {
       await deleteMutation.mutateAsync(employee.id)
-
-      toast.success("Employee deleted successfully", {
-        description: `${employee.fullName} was removed from active employees.`,
+      toast.success("Employee removed from active directory", {
+        description: `${employee.fullName} is no longer included in active employee lists or salary analytics.`,
       })
-
       onOpenChange(false)
     } catch (error) {
       setDeleteError(
@@ -62,15 +55,21 @@ const DeleteEmployeeDialog = ({
 
   return (
     <AlertDialog open={open} onOpenChange={handleOpenChange}>
-      <AlertDialogContent>
+      <AlertDialogContent className="rounded-2xl sm:max-w-[480px]">
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete employee?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. The employee record will be
-            permanently deleted.
+          <AlertDialogTitle className="font-heading text-[20px] font-semibold">
+            Delete employee?
+          </AlertDialogTitle>
+          <AlertDialogDescription className="text-[13px] leading-6">
+            This employee will be removed from the active directory and
+            excluded from active salary analytics. The employee record is
+            retained in the database.
             {employee && (
-              <span className="mt-2 block font-medium text-foreground">
-                {employee.fullName} ({employee.email})
+              <span className="mt-4 block rounded-lg border border-border bg-background px-3 py-3 font-medium text-foreground">
+                {employee.fullName}
+                <span className="mt-1 block text-xs font-normal text-muted-foreground">
+                  {employee.email}
+                </span>
               </span>
             )}
           </AlertDialogDescription>
@@ -82,20 +81,19 @@ const DeleteEmployeeDialog = ({
           </p>
         )}
 
-        <AlertDialogFooter>
+        <AlertDialogFooter className="pt-2">
           <AlertDialogCancel disabled={deleteMutation.isPending}>
             Cancel
           </AlertDialogCancel>
-
           <AlertDialogAction
             onClick={(event) => {
               event.preventDefault()
               void handleDelete()
             }}
             disabled={!employee || deleteMutation.isPending}
-            className="text-destructive-foreground bg-destructive hover:bg-destructive/90"
+            className="bg-destructive text-white hover:bg-destructive/90"
           >
-            {deleteMutation.isPending ? "Deleting..." : "Delete Employee"}
+            {deleteMutation.isPending ? "Removing..." : "Delete employee"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
