@@ -93,27 +93,45 @@ export default function OverviewPage() {
     <div className="grid items-stretch gap-6 xl:grid-cols-[1.18fr_0.88fr]">
       <Panel title="Average salary by role" subtitle={"Annual compensation · " + currency} className="h-full flex flex-col">
         {rolesQuery.isPending ? <EmptyState>Loading salary breakdown…</EmptyState> : rolesQuery.isError ? <EmptyState>Unable to load role salary data.</EmptyState> : roles.length === 0 ? <EmptyState>No active employee data for {selectedCountry} yet.</EmptyState> :
-          <div className="peopleops-chart-body flex flex-1 flex-col px-3 pb-4 pt-5">
-            <div className="mb-3 flex items-center justify-between gap-2 px-2">
-              <span className="text-[10px] text-[#78839A]">Select a bar or legend item to focus a role in the table</span>
+          <div className="peopleops-chart-body flex flex-1 flex-col px-5 pb-4 pt-4">
+            <div className="mb-4 flex items-center justify-between gap-2">
+              <span className="text-[10px] text-[#78839A]">Average annual salary by job title</span>
               {activeRole && <button type="button" onClick={() => setActiveRole(null)} className="inline-flex items-center gap-1 text-[10px] font-medium text-[#5146D8] hover:underline">Clear focus <X className="size-3" /></button>}
             </div>
-            <div style={{ minHeight: Math.max(320, roles.length * 43) }} className="relative w-full flex-1">
-              <div className="absolute inset-y-1 right-0 z-[1] flex w-[104px] flex-col justify-around border-l border-[#EEF0F6] bg-white/95 pl-3">
-                {roles.map((role) => <div key={role.jobTitle} className="truncate text-right text-[10px] font-semibold tabular-nums text-[#46516A]">{money(role.averageSalary, currency)}</div>)}
-              </div>
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={roles} layout="vertical" margin={{ top: 4, right: 112, bottom: 4, left: 0 }} barCategoryGap={12}>
-                  <CartesianGrid horizontal={false} stroke="#E9ECF3" strokeDasharray="3 4" />
-                  <XAxis type="number" domain={[0, (dataMax: number) => dataMax * 1.05]} tickFormatter={(value: number) => compactMoney(value, currency)} tick={{ fill: "#78839A", fontSize: 10 }} axisLine={false} tickLine={false} tickMargin={9} />
-                  <YAxis type="category" dataKey="jobTitle" width={132} interval={0} tick={(props: { y?: number; payload?: { value?: string } }) => <text x={0} y={props.y} dy="0.35em" textAnchor="start" fill="#46516A" fontSize={10} fontWeight={500}>{props.payload?.value}</text>} axisLine={false} tickLine={false} />
-                  <Tooltip cursor={{ fill: "#F6F5FF" }} contentStyle={{ border: "1px solid #E3E7F0", borderRadius: 10, boxShadow: "0 8px 24px rgb(35 45 75 / 10%)", fontSize: 12 }} formatter={(value) => [money(Number(value), currency), "Average annual salary"]} />
-                  <Bar dataKey="averageSalary" name="Average salary" radius={[0, 5, 5, 0]} maxBarSize={18} onClick={(entry) => setActiveRole(String(entry.jobTitle ?? ""))}>
-                    {roles.map((role, index) => <Cell key={role.jobTitle} fill={activeRole && activeRole !== role.jobTitle ? "#E9E7F8" : COLORS[index % COLORS.length]} />)}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
+            {(() => {
+              const maxSalary = Math.max(...roles.map((role) => role.averageSalary), 1);
+              const axisMax = Math.ceil(maxSalary / 500000) * 500000;
+              const ticks = [0, 0.25, 0.5, 0.75, 1];
+              return <>
+                <div className="flex flex-1 flex-col justify-between gap-2">
+                  {roles.map((role, index) => {
+                    const isFocused = activeRole === role.jobTitle;
+                    const isDimmed = Boolean(activeRole && !isFocused);
+                    return <button
+                      key={role.jobTitle}
+                      type="button"
+                      onClick={() => setActiveRole(isFocused ? null : role.jobTitle)}
+                      title={role.jobTitle + " · " + money(role.averageSalary, currency)}
+                      aria-pressed={isFocused}
+                      className={`group grid w-full grid-cols-[minmax(112px,150px)_minmax(0,1fr)_minmax(92px,112px)] items-center gap-3 rounded-md py-1.5 text-left transition-colors hover:bg-[#F7F8FC] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5146D8]/40 ${isFocused ? "bg-[#F4F2FF]" : ""}`}
+                    >
+                      <span className={`truncate text-[11px] font-medium ${isDimmed ? "text-[#A5AABC]" : "text-[#394258]"}`}>{role.jobTitle}</span>
+                      <span className="relative block h-5 min-w-0 overflow-hidden rounded-[5px] bg-[#F1F2F8]">
+                        <span className="absolute inset-y-0 left-0 rounded-[5px] transition-[width,opacity] duration-300" style={{ width: `${Math.max(2, (role.averageSalary / axisMax) * 100)}%`, backgroundColor: isDimmed ? "#E4E5EF" : COLORS[index % COLORS.length], opacity: isDimmed ? 0.55 : 1 }} />
+                      </span>
+                      <span className={`whitespace-nowrap text-right text-[10px] font-semibold tabular-nums ${isDimmed ? "text-[#A5AABC]" : "text-[#394258]"}`}>{money(role.averageSalary, currency)}</span>
+                    </button>;
+                  })}
+                </div>
+                <div className="mt-3 grid grid-cols-[minmax(112px,150px)_minmax(0,1fr)_minmax(92px,112px)] items-start gap-3 border-t border-[#EEF0F6] pt-2">
+                  <span />
+                  <div className="flex justify-between text-[9px] tabular-nums text-[#8992A6]">
+                    {ticks.map((tick) => <span key={tick}>{compactMoney(axisMax * tick, currency)}</span>)}
+                  </div>
+                  <span />
+                </div>
+              </>;
+            })()}
           </div>}
       </Panel>
 
