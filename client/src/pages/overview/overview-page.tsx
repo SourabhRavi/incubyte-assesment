@@ -1,5 +1,5 @@
 import { useMemo, useState, type ComponentType, type ReactNode } from "react"
-import { ArrowUpRight, Globe2, LoaderCircle, RefreshCw, Users, Wallet, ChartNoAxesCombined } from "lucide-react"
+import { ArrowUpRight, Globe2, LoaderCircle, RefreshCw, Users, Wallet } from "lucide-react"
 import { Link } from "react-router"
 import { useAllSalarySummaries, useJobTitleAverages, useSalarySummary } from "@/features/analytics/analytics-queries"
 import { COUNTRIES, COUNTRY_CURRENCIES, type Country } from "@/features/employees/employee-types"
