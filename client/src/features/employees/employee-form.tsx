@@ -149,7 +149,7 @@ const EmployeeForm = ({
 
 
   const inputClassName =
-    "h-11 w-full rounded-lg border border-input bg-background px-3.5 text-sm text-foreground shadow-sm outline-none transition-[border-color,box-shadow] placeholder:text-muted-foreground hover:border-muted-foreground/50 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/15 disabled:cursor-not-allowed disabled:opacity-60 aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-visible:ring-destructive/15"
+    "h-9 w-full rounded-lg border border-input bg-background px-3.5 text-sm text-foreground shadow-sm outline-none transition-[border-color,box-shadow] placeholder:text-muted-foreground hover:border-muted-foreground/50 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/15 disabled:cursor-not-allowed disabled:opacity-60 aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-visible:ring-destructive/15"
 
   const labelClassName = "text-[13px] font-medium text-foreground"
 
@@ -157,9 +157,9 @@ const EmployeeForm = ({
   const selectClassName = `${inputClassName} appearance-none pr-10`
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="space-y-6">
+    <form onSubmit={handleSubmit} noValidate className="space-y-3">
       {employee && (
-        <div className="flex items-start gap-3 rounded-xl border border-primary/15 bg-primary/[0.045] p-3.5">
+        <div className="hidden">
           <div className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
             <BriefcaseBusiness className="size-4" aria-hidden="true" />
           </div>
@@ -172,8 +172,8 @@ const EmployeeForm = ({
         </div>
       )}
 
-      <section className="space-y-4">
-        <div className="flex items-center gap-2 border-b pb-2.5">
+      <section className="space-y-2.5">
+        <div className="flex items-center gap-2 border-b pb-2">
           <div className="flex size-7 items-center justify-center rounded-md bg-muted text-muted-foreground">
             <UserRound className="size-4" aria-hidden="true" />
           </div>
@@ -183,8 +183,8 @@ const EmployeeForm = ({
           </div>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className={`${fieldShell} sm:col-span-2`}>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div className={fieldShell}>
             <label htmlFor="employee-full-name" className={labelClassName}>Full name <span className="text-destructive">*</span></label>
             <input
               id="employee-full-name"
@@ -201,7 +201,7 @@ const EmployeeForm = ({
             {errors.fullName && <p id="employee-full-name-error" className="text-xs text-destructive">{errors.fullName}</p>}
           </div>
 
-          <div className={`${fieldShell} sm:col-span-2`}>
+          <div className={fieldShell}>
             <label htmlFor="employee-email" className={labelClassName}>Work email <span className="text-destructive">*</span></label>
             <div className="relative">
               <Mail className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
@@ -223,8 +223,8 @@ const EmployeeForm = ({
         </div>
       </section>
 
-      <section className="space-y-4">
-        <div className="flex items-center gap-2 border-b pb-2.5">
+      <section className="space-y-2.5">
+        <div className="flex items-center gap-2 border-b pb-2">
           <div className="flex size-7 items-center justify-center rounded-md bg-muted text-muted-foreground">
             <BriefcaseBusiness className="size-4" aria-hidden="true" />
           </div>
@@ -234,7 +234,7 @@ const EmployeeForm = ({
           </div>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-3 sm:grid-cols-2">
           <div className={fieldShell}>
             <label htmlFor="employee-job-title" className={labelClassName}>Job title <span className="text-destructive">*</span></label>
             <div className="relative">
@@ -278,8 +278,8 @@ const EmployeeForm = ({
         </div>
       </section>
 
-      <section className="space-y-4">
-        <div className="flex items-center gap-2 border-b pb-2.5">
+      <section className="space-y-2.5">
+        <div className="flex items-center gap-2 border-b pb-2">
           <div className="flex size-7 items-center justify-center rounded-md bg-muted text-muted-foreground">
             <Wallet className="size-4" aria-hidden="true" />
           </div>
@@ -292,7 +292,7 @@ const EmployeeForm = ({
         <div className={fieldShell}>
           <label htmlFor="employee-salary" className={labelClassName}>Annual salary <span className="text-destructive">*</span></label>
           <div className="flex rounded-lg shadow-sm">
-            <div className="flex h-11 min-w-[68px] items-center justify-center rounded-l-lg border border-r-0 bg-muted/70 px-3 text-xs font-semibold text-muted-foreground">
+            <div className="flex h-11 min-w-[60px] items-center justify-center rounded-l-lg border border-r-0 bg-muted/70 px-3 text-xs font-semibold text-muted-foreground">
               {currency ?? "CUR"}
             </div>
             <input
@@ -316,8 +316,8 @@ const EmployeeForm = ({
           </p>
 
           {employee && values.salary.trim() && salaryDelta !== null && Number.isFinite(salaryDelta) && (
-            <div className="rounded-xl border bg-muted/25 p-3.5">
-              <div className="flex flex-wrap items-start justify-between gap-3">
+            <div className="rounded-lg border bg-muted/25 px-3 py-2">
+              <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="min-w-0 space-y-1">
                   <p className="text-xs font-medium text-muted-foreground">Salary change preview</p>
                   <p className="text-sm font-semibold tabular-nums">
@@ -339,7 +339,7 @@ const EmployeeForm = ({
           )}
 
           {employee && (
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
               <CalendarClock className="size-3.5 shrink-0" aria-hidden="true" />
               <span>Last record update: <span className="font-medium text-foreground">{formatDate(employee.updatedAt)}</span></span>
             </div>
@@ -347,19 +347,19 @@ const EmployeeForm = ({
         </div>
       </section>
 
-      <div className="sticky bottom-0 -mx-1 flex flex-col-reverse gap-2 border-t bg-background/95 px-1 pt-4 backdrop-blur supports-[backdrop-filter]:bg-background/80 sm:flex-row sm:justify-end">
+      <div className="flex flex-col-reverse gap-2 border-t bg-background pt-3 sm:flex-row sm:justify-end">
         <button
           type="button"
           onClick={onCancel}
           disabled={isSubmitting}
-          className="h-10 rounded-lg border border-input bg-background px-4 text-sm font-medium transition-colors hover:bg-muted disabled:opacity-50 sm:min-w-24"
+          className="h-9 rounded-lg border border-input bg-background px-4 text-sm font-medium transition-colors hover:bg-muted disabled:opacity-50 sm:min-w-24"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={isSubmitting}
-          className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50 sm:min-w-36"
+          className="inline-flex h-9 items-center justify-center gap-2 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50 sm:min-w-36"
         >
           {isSubmitting ? "Saving..." : employee ? "Save changes" : "Add employee"}
         </button>
