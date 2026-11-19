@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { Link } from "react-router"
 import {
   ArrowDown,
   ChartNoAxesCombined,
@@ -42,21 +43,19 @@ const CHART_COLORS = [
   "var(--chart-5)",
 ]
 
+const getLocale = (currency: string) =>
+  currency === "INR" ? "en-IN" : "en-US"
+
 const formatMoney = (
   value: number | string | null | undefined,
   currency: string
 ) => {
-  if (value === null || value === undefined || value === "") {
-    return "—"
-  }
+  if (value === null || value === undefined || value === "") return "—"
 
   const amount = Number(value)
+  if (!Number.isFinite(amount)) return "—"
 
-  if (!Number.isFinite(amount)) {
-    return "—"
-  }
-
-  return new Intl.NumberFormat("en", {
+  return new Intl.NumberFormat(getLocale(currency), {
     style: "currency",
     currency,
     maximumFractionDigits: 0,
@@ -64,7 +63,7 @@ const formatMoney = (
 }
 
 const formatCompactMoney = (value: number, currency: string) =>
-  new Intl.NumberFormat("en", {
+  new Intl.NumberFormat(getLocale(currency), {
     style: "currency",
     currency,
     notation: "compact",
@@ -77,7 +76,7 @@ type MetricCardProps = {
   detail: string
   icon: typeof Users
   isLoading?: boolean
-  accent: string
+  isUnavailable?: boolean
 }
 
 const MetricCard = ({
@@ -86,30 +85,23 @@ const MetricCard = ({
   detail,
   icon: Icon,
   isLoading = false,
-  accent,
+  isUnavailable = false,
 }: MetricCardProps) => (
-  <section className="group relative overflow-hidden rounded-2xl border bg-card p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-    <div
-      className="absolute inset-x-0 top-0 h-1 opacity-80"
-      style={{ background: accent }}
-    />
-    <div className="flex items-start justify-between gap-3">
-      <p className="text-sm font-medium text-muted-foreground">{title}</p>
-      <span className="flex size-10 items-center justify-center rounded-xl bg-primary/8 text-primary ring-1 ring-primary/10">
-        <Icon className="size-4.5" />
-      </span>
+  <section className="flex h-[136px] min-w-0 flex-col rounded-lg border border-border bg-card px-[19px] py-[18px]">
+    <div className="flex items-center justify-between gap-3">
+      <p className="text-[13px] font-medium text-muted-foreground">{title}</p>
+      <Icon className="size-[17px] shrink-0 text-primary" strokeWidth={1.8} />
     </div>
-
-    <div className="mt-5 flex min-h-9 items-center">
+    <div className="mt-3 flex min-h-10 items-center">
       {isLoading ? (
         <LoaderCircle className="size-5 animate-spin text-muted-foreground" />
       ) : (
-        <p className="font-heading text-[1.7rem] font-semibold tracking-tight tabular-nums">
+        <p className={`truncate font-heading text-[28px] leading-tight font-semibold tracking-tight tabular-nums ${isUnavailable ? "text-muted-foreground" : "text-foreground"}`}>
           {value}
         </p>
       )}
     </div>
-    <p className="mt-1 text-xs text-muted-foreground">{detail}</p>
+    <p className="mt-auto text-[11px] text-muted-foreground">{detail}</p>
   </section>
 )
 
@@ -124,17 +116,17 @@ const ChartCard = ({
   children: React.ReactNode
   className?: string
 }) => (
-  <section className={`min-w-0 overflow-hidden rounded-2xl border bg-card shadow-sm ${className}`}>
-    <div className="border-b px-5 py-4">
-      <h2 className="font-heading text-base font-semibold">{title}</h2>
-      <p className="mt-1 text-sm text-muted-foreground">{description}</p>
+  <section className={`min-w-0 overflow-hidden rounded-xl border border-border bg-card ${className}`}>
+    <div className="px-6 pt-5">
+      <h2 className="font-heading text-[17px] font-semibold">{title}</h2>
+      <p className="mt-1 text-xs text-muted-foreground">{description}</p>
     </div>
     {children}
   </section>
 )
 
 const ChartEmptyState = ({ message }: { message: string }) => (
-  <div className="flex min-h-64 items-center justify-center px-6 text-center text-sm text-muted-foreground">
+  <div className="flex min-h-[270px] items-center justify-center px-6 text-center text-sm text-muted-foreground">
     {message}
   </div>
 )
@@ -189,37 +181,44 @@ const OverviewPage = () => {
       ? jobAveragesError.message
       : "An unexpected error occurred."
 
+  const employeeCountValue = isSummaryError
+    ? "Unavailable"
+    : salarySummary
+      ? salarySummary.employeeCount.toLocaleString()
+      : "—"
+
   return (
-    <div className="space-y-7">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
-            <span className="size-1.5 rounded-full bg-primary" />
-            Workforce intelligence
-          </div>
-          <h1 className="font-heading text-2xl font-semibold tracking-tight sm:text-3xl">
+    <main className="space-y-6 p-5 sm:p-7 lg:px-10 lg:py-8">
+      <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
+        <div className="min-w-0">
+          <h1 className="font-heading text-[28px] leading-tight font-semibold tracking-tight">
             People overview
           </h1>
-          <p className="mt-1.5 text-sm text-muted-foreground">
+          <p className="mt-2 text-sm text-muted-foreground">
             A clear view of your workforce and compensation.
           </p>
+          <div className="mt-5 flex flex-wrap items-center gap-3">
+            <span className="inline-flex h-6 items-center rounded-[5px] bg-accent px-[10px] text-[10px] font-semibold tracking-wide text-primary">
+              {selectedCountry.toUpperCase()} / {currency} · ANNUAL
+            </span>
+            <span className="text-[11px] text-muted-foreground">
+              Salary figures reflect {selectedCountry} only.
+            </span>
+          </div>
         </div>
 
-        <div className="flex items-end gap-2">
-          <div className="flex flex-col justify-end gap-1.5">
-            <label
-              htmlFor="overview-country"
-              className="text-xs font-medium text-muted-foreground"
-            >
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
+          <div className="relative">
+            <label htmlFor="overview-country" className="sr-only">
               Reporting country
             </label>
             <NativeSelect
               id="overview-country"
               value={selectedCountry}
-              onChange={(event) => {
+              onChange={(event) =>
                 setSelectedCountry(event.target.value as Country)
-              }}
-              className="w-full min-w-48 sm:w-48"
+              }
+              className="h-11 w-full min-w-[204px] border-border bg-card pl-10 text-[13px] font-semibold sm:w-[204px]"
               size="lg"
             >
               {COUNTRIES.map((country) => (
@@ -234,7 +233,7 @@ const OverviewPage = () => {
             type="button"
             onClick={() => void handleRefresh()}
             disabled={isRefreshing}
-            className="inline-flex h-9 items-center justify-center gap-2 rounded-lg border bg-card px-3 text-sm font-medium shadow-sm transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-border bg-card px-3 text-xs font-medium text-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
           >
             <RefreshCw
               className={`size-4 ${isRefreshing ? "animate-spin" : ""}`}
@@ -247,16 +246,16 @@ const OverviewPage = () => {
       {isSummaryError && (
         <section
           role="alert"
-          className="rounded-xl border border-destructive/30 bg-destructive/5 p-4"
+          className="rounded-lg border border-destructive/30 bg-destructive/5 p-4"
         >
-          <p className="font-medium">Couldn't load salary statistics</p>
+          <p className="text-sm font-semibold">Couldn't load salary statistics</p>
           <p className="mt-1 text-sm text-muted-foreground">
             {summaryErrorMessage}
           </p>
           <button
             type="button"
             onClick={() => void refetchSummary()}
-            className="mt-3 rounded-md border px-3 py-2 text-sm font-medium transition-colors hover:bg-muted"
+            className="mt-3 rounded-md border border-border bg-card px-3 py-2 text-sm font-medium hover:bg-muted"
           >
             Retry
           </button>
@@ -265,65 +264,66 @@ const OverviewPage = () => {
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <MetricCard
-          title="Employees"
-          value={String(salarySummary?.employeeCount.toLocaleString() ?? 0)}
-          detail={`Active employees in ${selectedCountry}`}
+          title="Total employees"
+          value={employeeCountValue}
+          detail={isSummaryError ? "Statistics unavailable" : `${selectedCountry} · people`}
           icon={Users}
           isLoading={isSummaryPending}
-          accent="var(--chart-1)"
+          isUnavailable={isSummaryError}
         />
         <MetricCard
           title="Minimum salary"
-          value={money(salarySummary?.minSalary)}
-          detail="Annual compensation"
-          icon={ArrowDown}
+          value={isSummaryError ? "Unavailable" : money(salarySummary?.minSalary)}
+          detail={`${selectedCountry} · ${currency} / year`}
+          icon={Wallet}
           isLoading={isSummaryPending}
-          accent="var(--chart-2)"
+          isUnavailable={isSummaryError}
         />
         <MetricCard
           title="Average salary"
-          value={money(salarySummary?.averageSalary)}
-          detail="Annual compensation"
+          value={isSummaryError ? "Unavailable" : money(salarySummary?.averageSalary)}
+          detail={`${selectedCountry} · ${currency} / year`}
           icon={ChartNoAxesCombined}
           isLoading={isSummaryPending}
-          accent="var(--chart-3)"
+          isUnavailable={isSummaryError}
         />
         <MetricCard
           title="Maximum salary"
-          value={money(salarySummary?.maxSalary)}
-          detail="Annual compensation"
-          icon={Wallet}
+          value={isSummaryError ? "Unavailable" : money(salarySummary?.maxSalary)}
+          detail={`${selectedCountry} · ${currency} / year`}
+          icon={ArrowDown}
           isLoading={isSummaryPending}
-          accent="var(--chart-4)"
+          isUnavailable={isSummaryError}
         />
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-[minmax(0,1.65fr)_minmax(300px,1fr)]">
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1.42fr)_minmax(360px,1fr)]">
         <ChartCard
           title="Average salary by role"
-          description={`Annual compensation in ${currency} · ${selectedCountry}`}
+          description={`Annual compensation · ${currency}`}
+          className="min-h-[356px]"
         >
           {areJobAveragesError ? (
             <ChartEmptyState message={jobAveragesErrorMessage} />
           ) : areJobAveragesPending ? (
-            <div className="flex min-h-72 items-center justify-center gap-2 text-sm text-muted-foreground">
+            <div className="flex min-h-[285px] items-center justify-center gap-2 text-sm text-muted-foreground">
               <LoaderCircle className="size-4 animate-spin" />
               Loading salary breakdown...
             </div>
           ) : jobSummaries.length === 0 ? (
             <ChartEmptyState message={`No active employee data for ${selectedCountry} yet.`} />
           ) : (
-            <div className="px-3 pb-4 pt-5 sm:px-5">
+            <div className="px-4 pb-4 pt-5 sm:px-6">
               <div
                 className="w-full"
-                style={{ height: Math.max(280, jobSummaries.length * 38) }}
+                style={{ height: Math.max(270, jobSummaries.length * 42) }}
               >
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
                     data={jobSummaries}
                     layout="vertical"
-                    margin={{ top: 4, right: 16, bottom: 4, left: 4 }}
-                    barCategoryGap={10}
+                    margin={{ top: 4, right: 16, bottom: 4, left: 0 }}
+                    barCategoryGap={12}
                   >
                     <CartesianGrid
                       horizontal={false}
@@ -335,28 +335,28 @@ const OverviewPage = () => {
                       tickFormatter={(value: number) =>
                         formatCompactMoney(value, currency)
                       }
-                      tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
+                      tick={{ fill: "var(--muted-foreground)", fontSize: 10 }}
                       axisLine={false}
                       tickLine={false}
-                      tickMargin={10}
+                      tickMargin={12}
                     />
                     <YAxis
                       type="category"
                       dataKey="jobTitle"
-                      width={138}
+                      width={112}
                       interval={0}
-                      tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
+                      tick={{ fill: "var(--foreground)", fontSize: 11 }}
                       axisLine={false}
                       tickLine={false}
                     />
                     <Tooltip
-                      cursor={{ fill: "var(--muted)", opacity: 0.55 }}
+                      cursor={{ fill: "var(--muted)", opacity: 0.45 }}
                       contentStyle={{
                         background: "var(--popover)",
                         border: "1px solid var(--border)",
-                        borderRadius: 12,
+                        borderRadius: 8,
                         color: "var(--popover-foreground)",
-                        boxShadow: "0 8px 30px rgb(0 0 0 / 0.08)",
+                        fontSize: 12,
                       }}
                       formatter={(value) => [
                         money(Number(value)),
@@ -366,10 +366,16 @@ const OverviewPage = () => {
                     <Bar
                       dataKey="averageSalary"
                       name="Average salary"
-                      fill="var(--chart-3)"
-                      radius={[0, 7, 7, 0]}
-                      maxBarSize={19}
-                    />
+                      radius={[0, 5, 5, 0]}
+                      maxBarSize={16}
+                    >
+                      {jobSummaries.map((item, index) => (
+                        <Cell
+                          key={item.jobTitle}
+                          fill={index === 0 ? "var(--chart-1)" : "var(--accent)"}
+                        />
+                      ))}
+                    </Bar>
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -379,31 +385,32 @@ const OverviewPage = () => {
 
         <ChartCard
           title="Workforce mix"
-          description={`Active employees by job title · ${selectedCountry}`}
+          description={`Employees by job title · ${selectedCountry}`}
+          className="min-h-[356px]"
         >
           {areJobAveragesError ? (
             <ChartEmptyState message={jobAveragesErrorMessage} />
           ) : areJobAveragesPending ? (
-            <div className="flex min-h-72 items-center justify-center gap-2 text-sm text-muted-foreground">
+            <div className="flex min-h-[285px] items-center justify-center gap-2 text-sm text-muted-foreground">
               <LoaderCircle className="size-4 animate-spin" />
               Loading workforce mix...
             </div>
           ) : workforceTotal === 0 ? (
             <ChartEmptyState message="No workforce data to display yet." />
           ) : (
-            <div className="px-5 pb-5 pt-4">
-              <div className="relative mx-auto h-56 max-w-64">
+            <div className="flex flex-col items-center gap-4 px-5 pb-5 pt-4 sm:flex-row sm:items-center sm:justify-center xl:flex-col 2xl:flex-row">
+              <div className="relative h-[200px] w-full max-w-[200px] shrink-0">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
                       data={jobSummaries}
                       dataKey="employeeCount"
                       nameKey="jobTitle"
-                      innerRadius="66%"
+                      innerRadius="68%"
                       outerRadius="88%"
                       paddingAngle={2}
                       stroke="var(--card)"
-                      strokeWidth={3}
+                      strokeWidth={2}
                     >
                       {jobSummaries.map((item, index) => (
                         <Cell
@@ -416,9 +423,9 @@ const OverviewPage = () => {
                       contentStyle={{
                         background: "var(--popover)",
                         border: "1px solid var(--border)",
-                        borderRadius: 12,
+                        borderRadius: 8,
                         color: "var(--popover-foreground)",
-                        boxShadow: "0 8px 30px rgb(0 0 0 / 0.08)",
+                        fontSize: 12,
                       }}
                       formatter={(value, _name, item) => [
                         Number(value).toLocaleString(),
@@ -428,69 +435,79 @@ const OverviewPage = () => {
                   </PieChart>
                 </ResponsiveContainer>
                 <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="font-heading text-3xl font-semibold tracking-tight tabular-nums">
+                  <span className="font-heading text-[28px] font-semibold tabular-nums">
                     {workforceTotal.toLocaleString()}
                   </span>
-                  <span className="mt-0.5 text-xs text-muted-foreground">
+                  <span className="mt-0.5 text-[11px] text-muted-foreground">
                     employees
                   </span>
                 </div>
               </div>
 
-              <div className="mt-3 grid grid-cols-1 gap-x-3 gap-y-2 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
-                {jobSummaries.map((item, index) => (
-                  <div
-                    key={item.jobTitle}
-                    className="flex min-w-0 items-center justify-between gap-2 text-xs"
-                  >
-                    <span className="flex min-w-0 items-center gap-2">
+              <div className="grid w-full min-w-0 grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-1 xl:grid-cols-1 2xl:max-w-[190px]">
+                {jobSummaries.map((item, index) => {
+                  const percentage =
+                    workforceTotal > 0
+                      ? Math.round((item.employeeCount / workforceTotal) * 100)
+                      : 0
+
+                  return (
+                    <div
+                      key={item.jobTitle}
+                      className="flex min-w-0 items-center gap-3 text-xs"
+                    >
                       <span
-                        className="size-2.5 shrink-0 rounded-sm"
+                        className="size-2 shrink-0 rounded-[2px]"
                         style={{
                           background:
                             CHART_COLORS[index % CHART_COLORS.length],
                         }}
                       />
-                      <span className="truncate text-muted-foreground">
-                        {item.jobTitle}
-                      </span>
-                    </span>
-                    <span className="shrink-0 font-medium tabular-nums">
-                      {item.employeeCount.toLocaleString()}
-                    </span>
-                  </div>
-                ))}
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate font-medium text-foreground">
+                          {item.jobTitle}
+                        </p>
+                        <p className="mt-0.5 text-[11px] text-muted-foreground tabular-nums">
+                          {item.employeeCount.toLocaleString()} · {percentage}%
+                        </p>
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
             </div>
           )}
         </ChartCard>
       </div>
 
-      <section className="overflow-hidden rounded-2xl border bg-card shadow-sm">
-        <div className="flex flex-col gap-2 border-b px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+      <section className="overflow-hidden rounded-xl border border-border bg-card">
+        <div className="flex flex-col gap-2 border-b border-border px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="font-heading text-base font-semibold">
-              Role-level compensation details
+            <h2 className="font-heading text-[17px] font-semibold">
+              Compensation by role
             </h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Employee counts and average annual salary by job title.
+            <p className="mt-1 text-xs text-muted-foreground">
+              {selectedCountry} · {jobSummaries.length} job titles
             </p>
           </div>
-          <span className="w-fit rounded-full bg-primary/8 px-2.5 py-1 text-xs font-medium text-primary">
-            {selectedCountry} · {currency}
-          </span>
+          <Link
+            to="/employees"
+            className="text-xs font-semibold text-primary transition-colors hover:text-primary/80"
+          >
+            View employees <span aria-hidden="true">→</span>
+          </Link>
         </div>
 
         {areJobAveragesError ? (
           <div role="alert" className="px-5 py-10 text-center">
-            <p className="font-medium">Couldn't load job-title averages</p>
+            <p className="text-sm font-semibold">Couldn't load job-title averages</p>
             <p className="mt-1 text-sm text-muted-foreground">
               {jobAveragesErrorMessage}
             </p>
             <button
               type="button"
               onClick={() => void refetchJobAverages()}
-              className="mt-4 rounded-md border px-3 py-2 text-sm font-medium transition-colors hover:bg-muted"
+              className="mt-4 rounded-md border border-border bg-card px-3 py-2 text-sm font-medium hover:bg-muted"
             >
               Try again
             </button>
@@ -502,32 +519,39 @@ const OverviewPage = () => {
           </div>
         ) : jobSummaries.length > 0 ? (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-120 text-left text-sm">
-              <thead className="bg-muted/35 text-xs text-muted-foreground">
+            <table className="w-full min-w-[560px] text-left text-[13px]">
+              <thead className="bg-muted/70 text-[10px] font-semibold tracking-wide text-muted-foreground">
                 <tr>
-                  <th className="px-5 py-3 font-medium">Job title</th>
-                  <th className="px-5 py-3 text-right font-medium">
-                    Employees
-                  </th>
-                  <th className="px-5 py-3 text-right font-medium">
-                    Average salary
+                  <th className="px-6 py-3 font-semibold">JOB TITLE</th>
+                  <th className="px-6 py-3 text-right font-semibold">EMPLOYEES</th>
+                  <th className="px-6 py-3 text-right font-semibold">
+                    AVERAGE ANNUAL SALARY
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y">
-                {jobSummaries.map((summary) => (
+              <tbody>
+                {jobSummaries.map((summary, index) => (
                   <tr
                     key={summary.jobTitle}
-                    className="transition-colors hover:bg-muted/30"
+                    className="border-t border-border transition-colors hover:bg-muted/30"
                   >
-                    <td className="px-5 py-3.5 font-medium">
-                      {summary.jobTitle}
+                    <td className="px-6 py-[9px] font-medium">
+                      <span className="flex items-center gap-3">
+                        <span
+                          className="size-[7px] rounded-[2px]"
+                          style={{
+                            background:
+                              CHART_COLORS[index % CHART_COLORS.length],
+                          }}
+                        />
+                        {summary.jobTitle}
+                      </span>
                     </td>
-                    <td className="px-5 py-3.5 text-right text-muted-foreground tabular-nums">
+                    <td className="px-6 py-[9px] text-right tabular-nums">
                       {summary.employeeCount.toLocaleString()}
                     </td>
-                    <td className="px-5 py-3.5 text-right font-medium tabular-nums">
-                      {money(summary.averageSalary)}
+                    <td className="px-6 py-[9px] text-right font-medium tabular-nums">
+                      {money(summary.averageSalary)} {currency}
                     </td>
                   </tr>
                 ))}
@@ -542,13 +566,8 @@ const OverviewPage = () => {
             </p>
           </div>
         )}
-
-        <div className="flex items-center gap-2 border-t bg-muted/50 px-5 py-3 text-xs text-muted-foreground">
-          Salary values are annual and shown only in {currency}. Deleted
-          employees are excluded.
-        </div>
       </section>
-    </div>
+    </main>
   )
 }
 
