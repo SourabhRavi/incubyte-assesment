@@ -121,7 +121,16 @@
   .peopleops-topbar { background: color-mix(in srgb,var(--card) 96%,transparent); }
   .peopleops-page-shell { min-height: calc(100svh - 52px); }
   .peopleops-sidebar [data-slot="sidebar-inner"] { background: var(--sidebar); }
-  .peopleops-overview { gap: 14px; }
+  .peopleops-overview { gap: 14px; width: 100%; }
+  .overview-dashboard-grid { align-items: start; }
+  .overview-dashboard-grid > div { min-width: 0; }
+  .overview-heading { margin-bottom: 1px; }
+  .overview-chart-card { min-width: 0; }
+  .overview-chart-card .recharts-wrapper { max-width: 100%; }
+  .overview-chart-card .recharts-cartesian-axis-tick-value { font-family: 'Manrope Variable', sans-serif; }
+  .overview-metric-card { min-width: 0; }
+  .overview-metric-card > div:first-of-type p { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .overview-data-table { margin-top: 0; }
   .overview-heading { min-height: 62px; }
   .overview-heading h1,.peopleops-employees h1 { color:var(--foreground);font-size:clamp(21px,2vw,25px);line-height:1.2;letter-spacing:-.045em; }
   .overview-heading p { color:var(--muted-foreground);font-size:12px; }
@@ -156,6 +165,13 @@
   .peopleops-employees input,.peopleops-employees select { height:33px;border-radius:7px;font-size:11px; }
   .peopleops-overview button,.peopleops-employees button { transition:background-color 140ms ease,border-color 140ms ease; }
   .peopleops-overview button:not(:disabled):hover,.peopleops-employees button:not(:disabled):hover { transform:none; }
+}
+@media(max-width:1279px) {
+  .overview-dashboard-grid { grid-template-columns: minmax(0,1fr); }
+  .overview-dashboard-grid > div:last-child { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media(max-width:767px) {
+  .overview-dashboard-grid > div:last-child { grid-template-columns: minmax(0,1fr); }
 }
 @media(max-width:639px) {
   .overview-metric-card { min-height:100px;padding:10px; }
