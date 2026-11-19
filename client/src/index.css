@@ -188,3 +188,74 @@
   .peopleops-sidebar [data-slot="sidebar-inner"] { background: #fff; }
   .peopleops-sidebar [data-slot="sidebar-container"] { background: #fff; }
 }
+
+
+/* PeopleOps foundations: consistent surfaces, readable dark mode and chart polish */
+.peopleops-sidebar [data-slot="sidebar-inner"],
+.peopleops-sidebar [data-slot="sidebar-container"] { background: var(--sidebar); }
+.peopleops-overview { color: var(--foreground); }
+.peopleops-overview .peopleops-metric,
+.peopleops-overview .peopleops-chart-panel,
+.peopleops-overview .peopleops-data-panel {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--card-foreground);
+  box-shadow: 0 1px 2px rgb(24 32 56 / 3%), 0 8px 24px rgb(24 32 56 / 2%);
+}
+.peopleops-overview .peopleops-chart-panel { display:flex; flex-direction:column; min-height:100%; }
+.peopleops-overview .peopleops-chart-panel > header {
+  border-bottom: 1px solid var(--border);
+  padding: 18px 20px 15px;
+}
+.peopleops-overview .peopleops-chart-panel > header h2,
+.peopleops-overview .peopleops-data-panel h2 { color:var(--foreground); }
+.peopleops-overview .peopleops-chart-panel > header p,
+.peopleops-overview .peopleops-data-panel p { color:var(--muted-foreground); }
+.peopleops-overview .peopleops-chart-body { flex:1; min-width:0; }
+.peopleops-overview .peopleops-donut-wrap {
+  border-radius: 14px;
+  background: color-mix(in srgb,var(--muted) 72%,var(--card));
+  padding: 12px;
+}
+.peopleops-overview .peopleops-role-legend button { border:1px solid transparent; }
+.peopleops-overview .peopleops-role-legend button:hover,
+.peopleops-overview .peopleops-role-legend button[aria-pressed="true"] {
+  background:var(--accent);
+  border-color:color-mix(in srgb,var(--primary) 16%,var(--border));
+}
+.peopleops-overview .peopleops-country-select,
+.peopleops-overview .peopleops-action-button {
+  background:var(--card);
+  border-color:var(--border);
+  color:var(--foreground);
+}
+.peopleops-overview .peopleops-country-select select { color:var(--foreground); }
+.peopleops-overview .peopleops-country-select option { background:var(--card); color:var(--foreground); }
+.peopleops-overview .peopleops-table-head { background:var(--muted); color:var(--muted-foreground); }
+.peopleops-overview .peopleops-table-row { border-color:var(--border); color:var(--foreground); }
+.peopleops-overview .peopleops-table-row:hover { background:color-mix(in srgb,var(--accent) 55%,var(--card)); }
+.dark .peopleops-sidebar [data-slot="sidebar-inner"],
+.dark .peopleops-sidebar [data-slot="sidebar-container"] { background:var(--sidebar); }
+.dark .peopleops-sidebar [data-slot="sidebar-menu-button"],
+.dark .peopleops-sidebar [data-slot="sidebar-menu-button"] span { color:var(--sidebar-foreground); }
+.dark .peopleops-sidebar [data-slot="sidebar-menu-button"][data-active="true"] { color:var(--sidebar-accent-foreground); background:var(--sidebar-accent); }
+.dark .peopleops-overview [class*="text-[#292D40]"],
+.dark .peopleops-overview [class*="text-[#30354A]"],
+.dark .peopleops-overview [class*="text-[#25283A]"] { color:var(--foreground) !important; }
+.dark .peopleops-overview [class*="text-[#78839A]"],
+.dark .peopleops-overview [class*="text-[#69758D]"],
+.dark .peopleops-overview [class*="text-[#75819A]"],
+.dark .peopleops-overview [class*="text-[#46516A]"] { color:var(--muted-foreground) !important; }
+.dark .peopleops-overview [class*="bg-white"] { background-color:var(--card) !important; }
+.dark .peopleops-overview [class*="border-[#E3E7F0]"],
+.dark .peopleops-overview [class*="border-[#E7EAF2]"] { border-color:var(--border) !important; }
+.dark .peopleops-overview [class*="bg-[#F7F8FC]"],
+.dark .peopleops-overview [class*="bg-[#F8F9FC]"] { background-color:var(--muted) !important; }
+.dark .peopleops-overview [class*="bg-[#EDEBFF]"] { background-color:var(--accent) !important; }
+.dark .peopleops-overview [class*="text-[#5146D8]"] { color:var(--primary) !important; }
+.dark .peopleops-overview .recharts-cartesian-grid line { stroke:var(--border); }
+.dark .peopleops-overview .recharts-cartesian-axis-tick-value { fill:var(--muted-foreground); }
+.dark .peopleops-overview .recharts-tooltip-wrapper > div { background:var(--popover) !important; border-color:var(--border) !important; color:var(--popover-foreground) !important; }
+.dark .peopleops-topbar { background:color-mix(in srgb,var(--card) 94%,transparent); border-color:var(--border); }
+.dark .peopleops-topbar kbd { color:var(--muted-foreground); }
+.dark .cn-toast { background:var(--popover) !important; color:var(--popover-foreground) !important; border-color:var(--border) !important; }
