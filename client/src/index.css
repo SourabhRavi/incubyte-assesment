@@ -308,3 +308,23 @@
 .dark .peopleops-sidebar [class*="text-[#78839A]"] { color:var(--sidebar-foreground) !important; }
 .dark .peopleops-sidebar [class*="bg-white"] { background-color:var(--sidebar) !important; }
 .dark .peopleops-sidebar [class*="border-[#E5E8F0]"] { border-color:var(--sidebar-border) !important; }
+
+
+/* Explicit typography ownership: Geist for every heading and every numeric value. */
+.peopleops-overview :is(h1,h2,h3,h4),
+.peopleops-employees :is(h1,h2,h3,h4),
+.peopleops-topbar :is(h1,h2,h3,h4) {
+  font-family: "Geist", sans-serif !important;
+}
+.peopleops-overview :is(.tabular-nums,[data-numeric]),
+.peopleops-employees :is(.tabular-nums,[data-numeric]),
+.peopleops-topbar :is(.tabular-nums,[data-numeric]),
+.peopleops-overview .peopleops-metric p:last-of-type,
+.peopleops-overview .peopleops-metric .text-\[28px\],
+.peopleops-overview .recharts-text,
+.peopleops-employees table td:is(:nth-child(4),:last-child),
+.peopleops-employees [data-slot="dialog-content"] .salary-value,
+.peopleops-employees [data-slot="dialog-content"] .salary-change {
+  font-family: "Geist", sans-serif !important;
+  font-variant-numeric: tabular-nums lining-nums;
+}
