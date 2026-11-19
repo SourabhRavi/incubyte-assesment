@@ -1,603 +1,163 @@
-import { useState } from "react"
-import {
-  ArrowDown,
-  ChartNoAxesCombined,
-  LoaderCircle,
-  RefreshCw,
-  Users,
-  Wallet,
-} from "lucide-react"
-import {
-  useAllSalarySummaries,
-  useJobTitleAverages,
-  useSalarySummary,
-} from "@/features/analytics/analytics-queries"
-import {
-  COUNTRIES,
-  COUNTRY_CURRENCIES,
-  type Country,
-} from "@/features/employees/employee-types"
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select.tsx"
+import { useMemo, useState, type ComponentType, type ReactNode } from "react"
+import { ArrowUpRight, Globe2, LoaderCircle, RefreshCw, Users, Wallet, ChartNoAxesCombined } from "lucide-react"
+import { Link } from "react-router"
+import { useAllSalarySummaries, useJobTitleAverages, useSalarySummary } from "@/features/analytics/analytics-queries"
+import { COUNTRIES, COUNTRY_CURRENCIES, type Country } from "@/features/employees/employee-types"
+import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select.tsx"
 
-const CHART_COLORS = [
-  "#315DEB",
-  "#73A98A",
-  "#8B78CF",
-  "#D69A5B",
-  "#5A9EAD",
-  "#7C91B8",
-  "#BD7D9D",
-  "#829B68",
-  "#C17E59",
-  "#6D9BCB",
-]
-
-const formatMoney = (
-  value: number | string | null | undefined,
-  currency: string,
-) => {
+const COLORS = ["#5146D8", "#3978DF", "#239F96", "#E49A25", "#9675DF", "#5A9EAD", "#BD7D9D", "#829B68"]
+const money = (value: number | string | null | undefined, currency: string) => {
   if (value === null || value === undefined || value === "") return "—"
   const amount = Number(value)
   if (!Number.isFinite(amount)) return "—"
-
-  return new Intl.NumberFormat("en", {
-    style: "currency",
-    currency,
-    maximumFractionDigits: 0,
-  }).format(amount)
+  return new Intl.NumberFormat("en-IN", { style: "currency", currency, maximumFractionDigits: 0 }).format(amount)
 }
+const compactMoney = (value: number, currency: string) =>
+  new Intl.NumberFormat("en-IN", { style: "currency", currency, notation: "compact", maximumFractionDigits: 0 }).format(value)
 
-const formatCompactMoney = (value: number, currency: string) =>
-  new Intl.NumberFormat("en", {
-    style: "currency",
-    currency,
-    notation: "compact",
-    maximumFractionDigits: 1,
-  }).format(value)
-
-type MetricCardProps = {
-  title: string
-  value: string
-  detail: string
-  icon: typeof Users
-  isLoading?: boolean
-  accent: string
-}
-
-const MetricCard = ({
-  title,
-  value,
-  detail,
-  icon: Icon,
-  isLoading = false,
-  accent,
-}: MetricCardProps) => (
-  <section className="relative overflow-hidden rounded-lg border border-[#E7EAF2] bg-white p-5 shadow-none transition-colors hover:border-[#d5d8e7]">
-    <div
-      className="absolute inset-x-0 top-0 h-0 opacity-0"
-      style={{ background: accent }}
-    />
-    <div className="flex items-start justify-between gap-3">
-      <p className="text-sm font-medium text-muted-foreground">{title}</p>
-      <span className="flex size-8 items-center justify-center rounded-md bg-[#EDEBFF] text-[#5146D8]">
-        <Icon className="size-4.5" />
-      </span>
+type MetricProps = { title: string; value: string; detail: string; icon: ComponentType<{ className?: string }>; loading?: boolean; highlighted?: boolean }
+function MetricCard({ title, value, detail, icon: Icon, loading, highlighted }: MetricProps) {
+  return <section className="min-w-0 rounded-[8px] border border-[#E3E7F0] bg-white px-[18px] py-[18px]">
+    <div className="flex items-center justify-between gap-2">
+      <p className="text-[13px] font-medium text-[#69758D]">{title}</p>
+      <Icon className={`size-[17px] ${highlighted ? "text-[#5146D8]" : "text-[#75819A]"}`} />
     </div>
-    <div className="flex min-h-7 items-center">
-      {isLoading ? (
-        <LoaderCircle className="size-4 animate-spin text-muted-foreground" />
-      ) : (
-        <p className="font-sans text-[28px] font-semibold leading-[1.35] tracking-normal text-[#25283A] tabular-nums">
-          {value}
-        </p>
-      )}
+    <div className="mt-[17px] flex min-h-[37px] items-center">
+      {loading ? <LoaderCircle className="size-5 animate-spin text-[#8993A8]" /> : <p className="truncate text-[28px] font-semibold leading-none tracking-[-0.8px] text-[#292D40] tabular-nums">{value}</p>}
     </div>
-    <p>{detail}</p>
+    <p className="mt-[11px] text-[11px] text-[#78839A]">{detail}</p>
   </section>
-)
-
-const ChartCard = ({
-  title,
-  description,
-  action,
-  children,
-  className = "",
-}: {
-  title: string
-  description?: string
-  action?: React.ReactNode
-  children: React.ReactNode
-  className?: string
-}) => (
-  <section className={`min-w-0 overflow-hidden rounded-lg border border-[#E7EAF2] bg-white shadow-none ${className}`}>
-    <div className="border-b border-[#E7EAF2] px-6 py-4">
-      <h2 className="font-sans text-[16px] font-semibold text-[#25283A]">{title}</h2>
-      <p className="mt-1 text-[12px] text-[#777F92]">{description}</p>
-    </div>
+}
+function Panel({ title, subtitle, children, className = "" }: { title: string; subtitle: string; children: ReactNode; className?: string }) {
+  return <section className={`min-w-0 overflow-hidden rounded-[12px] border border-[#E3E7F0] bg-white ${className}`}>
+    <header className="px-[22px] pt-[20px]">
+      <h2 className="text-[16px] font-semibold tracking-[-0.25px] text-[#292D40]">{title}</h2>
+      <p className="mt-[5px] text-[12px] text-[#78839A]">{subtitle}</p>
+    </header>
     {children}
   </section>
-)
-
-const ChartEmptyState = ({ message }: { message: string }) => (
-  <div className="flex min-h-40 items-center justify-center px-5 text-center text-xs text-muted-foreground">
-    {message}
-  </div>
-)
-
-const OverviewPage = () => {
-  const [selectedCountry, setSelectedCountry] = useState<Country>(COUNTRIES[0])
-  const allSalarySummaries = useAllSalarySummaries()
-  const {
-    data: salarySummary,
-    isPending: isSummaryPending,
-    isError: isSummaryError,
-    error: summaryError,
-    isFetching: isSummaryFetching,
-    refetch: refetchSummary,
-  } = useSalarySummary(selectedCountry)
-  const {
-    data: jobAverages,
-    isPending: areJobAveragesPending,
-    isError: areJobAveragesError,
-    error: jobAveragesError,
-    isFetching: areJobAveragesFetching,
-    refetch: refetchJobAverages,
-  } = useJobTitleAverages(selectedCountry)
-
-  const currency =
-    salarySummary?.currency ??
-    jobAverages?.currency ??
-    COUNTRY_CURRENCIES[selectedCountry]
-  const money = (value: number | string | null | undefined) =>
-    formatMoney(value, currency)
-
-  const marketSummaries = COUNTRIES.map((country, index) => ({
-    country,
-    summary: allSalarySummaries[index]?.data,
-  })).filter((market) => market.summary !== undefined)
-  const allMarketsLoaded = allSalarySummaries.every(
-    (query) => query.data !== undefined,
-  )
-  const hasMarketError = allSalarySummaries.some((query) => query.isError)
-  const totalEmployees = allMarketsLoaded
-    ? marketSummaries.reduce(
-        (total, market) => total + market.summary!.employeeCount,
-        0,
-      )
-    : 0
-  const largestMarket = marketSummaries.reduce<
-    (typeof marketSummaries)[number] | undefined
-  >(
-    (largest, market) =>
-      !largest ||
-      market.summary!.employeeCount > largest.summary!.employeeCount
-        ? market
-        : largest,
-    undefined,
-  )
-
-  const jobSummaries = jobAverages?.data ?? []
-  const workforceTotal = jobSummaries.reduce(
-    (total, item) => total + item.employeeCount,
-    0,
-  )
-  const minimumSalary = Number(salarySummary?.minSalary ?? 0)
-  const averageSalary = Number(salarySummary?.averageSalary ?? 0)
-  const maximumSalary = Number(salarySummary?.maxSalary ?? 0)
-  const salaryScale = maximumSalary > 0 ? maximumSalary : 1
-  const minimumRatio = Math.min(
-    100,
-    Math.max(0, (minimumSalary / salaryScale) * 100),
-  )
-  const averageRatio = Math.min(
-    100,
-    Math.max(0, (averageSalary / salaryScale) * 100),
-  )
-  const maxRoleSalary = Math.max(
-    1,
-    ...jobSummaries.map((item) => Number(item.averageSalary)),
-  )
-  const maxMarketEmployees = Math.max(
-    1,
-    ...marketSummaries.map((market) => market.summary!.employeeCount),
-  )
-  const summaryErrorMessage =
-    summaryError instanceof Error
-      ? summaryError.message
-      : "An unexpected error occurred."
-  const jobAveragesErrorMessage =
-    jobAveragesError instanceof Error
-      ? jobAveragesError.message
-      : "An unexpected error occurred."
-  const isRefreshing =
-    isSummaryFetching ||
-    areJobAveragesFetching ||
-    allSalarySummaries.some((query) => query.isFetching)
-
-  const handleRefresh = async () => {
-    await Promise.all([
-      refetchSummary(),
-      refetchJobAverages(),
-      ...allSalarySummaries.map((query) => query.refetch()),
-    ])
-  }
-
-  return (
-    <div className="space-y-6 pb-8">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
-            <span className="size-1.5 rounded-full bg-primary" />
-            Workforce intelligence
-          </div>
-          <h1 className="font-heading text-2xl font-semibold tracking-tight sm:text-3xl">
-            People overview
-          </h1>
-          <p className="mt-1.5 text-[14px] text-[#777F92]">
-            A clear view of your workforce and compensation.
-          </p>
-        </div>
-
-        <div className="flex items-end gap-3">
-          <div className="flex flex-col justify-end gap-1.5">
-            <label
-              htmlFor="overview-country"
-              className="sr-only"
-            >
-              Reporting country
-            </label>
-            <NativeSelect
-              id="overview-country"
-              value={selectedCountry}
-              onChange={(event) =>
-                setSelectedCountry(event.target.value as Country)
-              }}
-              className="h-11 w-full min-w-[204px] border-[#E7EAF2] bg-white text-[13px] sm:w-[204px]"
-              size="lg"
-            >
-              {COUNTRIES.map((country) => (
-                <NativeSelectOption key={country} value={country}>
-                  {country}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
-          </div>
-          <button
-            type="button"
-            onClick={() => void handleRefresh()}
-            disabled={isRefreshing}
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-[#E7EAF2] bg-white px-3 text-[12px] font-medium text-[#25283A] shadow-none transition-colors hover:bg-[#F7F8FC] disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            <RefreshCw
-              className={`size-3.5 ${isRefreshing ? "animate-spin" : ""}`}
-            />
-            Refresh
-          </button>
-        </div>
-      </div>
-
-      {(isSummaryError || hasMarketError) && (
-        <section
-          role="alert"
-          className="rounded-lg border border-destructive/30 bg-destructive/5 p-3 text-xs"
-        >
-          <p className="font-semibold">Some compensation data couldn't load</p>
-          <p className="mt-1 text-muted-foreground">
-            {isSummaryError
-              ? summaryErrorMessage
-              : "One or more country summaries are unavailable. Refresh to try again."}
-          </p>
-          <button
-            type="button"
-            onClick={() => void handleRefresh()}
-            className="mt-2 rounded-md border px-3 py-1.5"
-          >
-            Retry
-          </button>
-        </section>
-      )}
-
-      <div className="grid min-w-0 grid-cols-2 gap-3 xl:grid-cols-4">
-        <MetricCard
-          title="Global workforce"
-          value={
-            allMarketsLoaded ? totalEmployees.toLocaleString() : "—"
-          }
-          detail="Active employees across all markets"
-          icon={Users}
-          isLoading={!allMarketsLoaded && !hasMarketError}
-          accent="#315DEB"
-        />
-        <MetricCard
-          title="Markets covered"
-          value={String(COUNTRIES.length)}
-          detail="Countries with salary reporting"
-          icon={ChartNoAxesCombined}
-          accent="#73A98A"
-        />
-        <MetricCard
-          title="Largest market"
-          value={allMarketsLoaded ? (largestMarket?.country ?? "—") : "—"}
-          detail={
-            allMarketsLoaded && largestMarket
-              ? `${largestMarket.summary!.employeeCount.toLocaleString()} active employees`
-              : "Market distribution"
-          }
-          icon={Wallet}
-          isLoading={allSalarySummaries.some((query) => query.isPending)}
-          accent="#8B78CF"
-        />
-        <MetricCard
-          title={`Average salary · ${selectedCountry}`}
-          value={money(salarySummary?.averageSalary)}
-          detail={`Annual compensation · ${currency}`}
-          icon={ArrowDown}
-          isLoading={isSummaryPending}
-          accent="#D69A5B"
-        />
-      </div>
-
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,648fr)_minmax(360px,456fr)]">
-        <ChartCard
-          title="Average salary by role"
-          description={`Annual compensation in ${currency} · ${selectedCountry}`}
-        >
-          {areJobAveragesError ? (
-            <ChartEmptyState message={jobAveragesErrorMessage} />
-          ) : areJobAveragesPending ? (
-            <div className="flex min-h-56 items-center justify-center gap-2 text-xs text-muted-foreground">
-              <LoaderCircle className="size-4 animate-spin" />
-              Loading salary breakdown...
-            </div>
-          ) : jobSummaries.length === 0 ? (
-            <ChartEmptyState
-              message={`No active employee data for ${selectedCountry} yet.`}
-            />
-          ) : (
-            <div className="px-4 pb-3 pt-4 sm:px-5">
-              <div
-                className="w-full"
-                style={{ height: Math.max(280, jobSummaries.length * 38) }}
-              >
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    data={jobSummaries}
-                    layout="vertical"
-                    margin={{ top: 4, right: 16, bottom: 4, left: 4 }}
-                    barCategoryGap={10}
-                  >
-                    <CartesianGrid
-                      horizontal={false}
-                      stroke="var(--border)"
-                      strokeDasharray="3 5"
-                    />
-                    <XAxis
-                      type="number"
-                      tickFormatter={(value: number) =>
-                        formatCompactMoney(value, currency)
-                      }
-                      tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
-                      axisLine={false}
-                      tickLine={false}
-                      tickMargin={10}
-                    />
-                    <YAxis
-                      type="category"
-                      dataKey="jobTitle"
-                      width={138}
-                      interval={0}
-                      tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
-                      axisLine={false}
-                      tickLine={false}
-                    />
-                    <Tooltip
-                      cursor={{ fill: "var(--muted)", opacity: 0.55 }}
-                      contentStyle={{
-                        background: "var(--popover)",
-                        border: "1px solid var(--border)",
-                        borderRadius: 12,
-                        color: "var(--popover-foreground)",
-                        boxShadow: "0 8px 30px rgb(0 0 0 / 0.08)",
-                      }}
-                      formatter={(value) => [
-                        money(Number(value)),
-                        "Average salary",
-                      ]}
-                    />
-                    <Bar
-                      dataKey="averageSalary"
-                      name="Average salary"
-                      fill="var(--chart-3)"
-                      radius={[0, 7, 7, 0]}
-                      maxBarSize={19}
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-          )}
-        </ChartCard>
-
-        <ChartCard
-          title="Workforce mix"
-          description={`Employees by job title · ${selectedCountry}`}
-        >
-          {areJobAveragesError ? (
-            <ChartEmptyState message={jobAveragesErrorMessage} />
-          ) : areJobAveragesPending ? (
-            <div className="flex min-h-56 items-center justify-center text-xs text-muted-foreground">
-              Loading workforce mix...
-            </div>
-          ) : workforceTotal === 0 ? (
-            <ChartEmptyState message="No workforce data to display yet." />
-          ) : (
-            <div className="px-4 pb-4 pt-3">
-              <div className="relative mx-auto flex h-40 w-full max-w-52 items-center justify-center">
-                <svg
-                  viewBox="0 0 160 160"
-                  className="h-40 w-40 -rotate-90"
-                  role="img"
-                  aria-label={`Workforce distribution across ${jobSummaries.length} job titles`}
-                >
-                  <circle
-                    cx="80"
-                    cy="80"
-                    r="57"
-                    fill="none"
-                    stroke="#EEF1F5"
-                    strokeWidth="17"
-                  />
-                  {(() => {
-                    const circumference = 2 * Math.PI * 57
-                    let offset = 0
-                    return jobSummaries.map((item, index) => {
-                      const segment =
-                        workforceTotal > 0
-                          ? (item.employeeCount / workforceTotal) *
-                            circumference
-                          : 0
-                      const element = (
-                        <circle
-                          key={item.jobTitle}
-                          cx="80"
-                          cy="80"
-                          r="57"
-                          fill="none"
-                          stroke={CHART_COLORS[index % CHART_COLORS.length]}
-                          strokeWidth="17"
-                          strokeDasharray={`${Math.max(0, segment - 2)} ${circumference}`}
-                          strokeDashoffset={-offset}
-                        />
-                      )
-                      offset += segment
-                      return element
-                    })
-                  })()}
-                </svg>
-                <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="font-sans text-[28px] font-semibold tracking-normal text-[#25283A] tabular-nums">
-                    {workforceTotal.toLocaleString()}
-                  </span>
-                  <span className="text-[10px] text-muted-foreground">
-                    employees
-                  </span>
-                </div>
-              </div>
-              <div className="mt-2 grid grid-cols-2 gap-x-3 gap-y-2">
-                {jobSummaries.map((item, index) => (
-                  <div
-                    key={item.jobTitle}
-                    className="flex min-w-0 items-center justify-between gap-2 text-[10px]"
-                  >
-                    <span className="flex min-w-0 items-center gap-1.5">
-                      <span
-                        className="size-2 shrink-0 rounded-full"
-                        style={{
-                          background: CHART_COLORS[index % CHART_COLORS.length],
-                        }}
-                      />
-                      <span className="truncate text-muted-foreground">
-                        {item.jobTitle}
-                      </span>
-                    </span>
-                    <span className="shrink-0 font-semibold tabular-nums">
-                      {item.employeeCount.toLocaleString()}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </ChartCard>
-      </div>
-
-      <section className="overflow-hidden rounded-lg border border-[#E7EAF2] bg-white shadow-none">
-        <div className="flex flex-col gap-2 border-b border-[#E7EAF2] px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h2 className="font-heading">Role-level compensation details</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              India · job-title compensation summary.
-            </p>
-          </div>
-          <span className="w-fit rounded-md bg-[#EDEBFF] px-2.5 py-1 text-[10px] font-semibold tracking-wide text-[#5146D8]">
-            {selectedCountry} · {currency}
-          </span>
-        </div>
-        {areJobAveragesError ? (
-          <div
-            role="alert"
-            className="px-5 py-8 text-center text-xs"
-          >
-            <p className="font-medium">Couldn't load job-title averages</p>
-            <p className="mt-1 text-muted-foreground">
-              {jobAveragesErrorMessage}
-            </p>
-            <button
-              type="button"
-              onClick={() => void refetchJobAverages()}
-              className="mt-3 rounded-md border px-3 py-1.5"
-            >
-              Try again
-            </button>
-          </div>
-        ) : areJobAveragesPending ? (
-          <div className="flex min-h-32 items-center justify-center gap-2 text-xs text-muted-foreground">
-            <LoaderCircle className="size-4 animate-spin" />
-            Loading role details...
-          </div>
-        ) : jobSummaries.length > 0 ? (
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-120 text-left text-sm">
-              <thead className="bg-[#F7F8FC] text-[10px] tracking-wide text-[#777F92]">
-                <tr>
-                  <th className="px-6 py-3 font-semibold">Job title</th>
-                  <th className="px-6 py-3 text-right font-semibold">
-                    Employees
-                  </th>
-                  <th className="px-4 py-2.5 text-right font-medium">
-                    Average salary
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                {jobSummaries.map((summary) => (
-                  <tr
-                    key={summary.jobTitle}
-                    className="transition-colors hover:bg-muted/30"
-                  >
-                    <td className="px-6 py-3.5 font-medium text-[#25283A]">
-                      {summary.jobTitle}
-                    </td>
-                    <td className="px-6 py-3.5 text-right text-[#777F92] tabular-nums">
-                      {summary.employeeCount.toLocaleString()}
-                    </td>
-                    <td className="px-6 py-3.5 text-right font-semibold text-[#25283A] tabular-nums">
-                      {money(summary.averageSalary)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <div className="px-5 py-10 text-center text-xs">
-            <p className="font-medium">No employee data available</p>
-            <p className="mt-1 text-muted-foreground">
-              There are no active employees for {selectedCountry} yet.
-            </p>
-          </div>
-        )}
-
-        <div className="flex items-center gap-2 border-t border-[#E7EAF2] bg-[#F7F8FC] px-6 py-3 text-[11px] text-[#777F92]">
-          Salary values are annual and shown only in {currency}. Deleted
-          employees are excluded.
-        </div>
-      </section>
-    </div>
-  )
+}
+function EmptyState({ children }: { children: ReactNode }) {
+  return <div className="flex min-h-[210px] items-center justify-center px-6 text-center text-[12px] text-[#78839A]">{children}</div>
 }
 
-export default OverviewPage
+export default function OverviewPage() {
+  const [selectedCountry, setSelectedCountry] = useState<Country>(COUNTRIES[0])
+  const allMarkets = useAllSalarySummaries()
+  const summaryQuery = useSalarySummary(selectedCountry)
+  const rolesQuery = useJobTitleAverages(selectedCountry)
+  const summary = summaryQuery.data
+  const roles = rolesQuery.data?.data ?? []
+  const currency = summary?.currency ?? rolesQuery.data?.currency ?? COUNTRY_CURRENCIES[selectedCountry]
+  const count = summary?.employeeCount ?? roles.reduce((total, role) => total + role.employeeCount, 0)
+  const min = Number(summary?.minSalary ?? 0)
+  const avg = Number(summary?.averageSalary ?? 0)
+  const max = Number(summary?.maxSalary ?? 0)
+  const maxRole = Math.max(1, ...roles.map((role) => Number(role.averageSalary)))
+  const totalRoleEmployees = roles.reduce((total, role) => total + role.employeeCount, 0)
+  const isRefreshing = summaryQuery.isFetching || rolesQuery.isFetching || allMarkets.some((query) => query.isFetching)
+  const refresh = async () => {
+    await Promise.all([summaryQuery.refetch(), rolesQuery.refetch(), ...allMarkets.map((query) => query.refetch())])
+  }
+  const donut = useMemo(() => {
+    const total = roles.reduce((sum, role) => sum + role.employeeCount, 0)
+    const circumference = 2 * Math.PI * 57
+    let offset = 0
+    return roles.map((role, index) => {
+      const length = total ? (role.employeeCount / total) * circumference : 0
+      const segment = { ...role, color: COLORS[index % COLORS.length], dash: `${Math.max(0, length - 1.5)} ${circumference}`, offset: -offset, percent: total ? Math.round((role.employeeCount / total) * 100) : 0 }
+      offset += length
+      return segment
+    })
+  }, [roles])
+
+  return <main className="mx-auto w-full max-w-[1440px] space-y-[23px] px-[26px] pb-12 pt-[31px] max-sm:px-4">
+    <div className="flex flex-wrap items-start justify-between gap-4">
+      <div>
+        <h1 className="text-[28px] font-semibold leading-[1.2] tracking-[-0.8px] text-[#292D40]">People overview</h1>
+        <p className="mt-[10px] text-[14px] text-[#78839A]">A clear view of your workforce and compensation.</p>
+        <div className="mt-[15px] flex flex-wrap items-center gap-3">
+          <span className="rounded-[5px] bg-[#EDEBFF] px-[10px] py-[6px] text-[9px] font-semibold tracking-[0.02em] text-[#5146D8]">{selectedCountry.toUpperCase()} / {currency} · ANNUAL</span>
+          <span className="text-[10px] text-[#78839A]">Salary figures reflect {selectedCountry} only. Sample data.</span>
+        </div>
+      </div>
+      <div className="flex items-center gap-3 pt-[1px]">
+        <label className="relative">
+          <span className="sr-only">Reporting country</span>
+          <Globe2 className="pointer-events-none absolute left-[15px] top-1/2 size-[16px] -translate-y-1/2 text-[#5146D8]" />
+          <NativeSelect id="overview-country" value={selectedCountry} onChange={(event) => setSelectedCountry(event.target.value as Country)} className="h-[43px] w-[199px] rounded-[8px] border-[#E3E7F0] bg-white pl-[39px] pr-8 text-[12px] font-semibold text-[#30354A]">
+            {COUNTRIES.map((country) => <NativeSelectOption key={country} value={country}>{country}</NativeSelectOption>)}
+          </NativeSelect>
+        </label>
+        <button type="button" onClick={() => void refresh()} disabled={isRefreshing} className="inline-flex h-[43px] items-center gap-2 rounded-[8px] border border-[#E3E7F0] bg-white px-[14px] text-[12px] font-medium text-[#30354A] hover:bg-[#F8F9FC] disabled:opacity-60">
+          <RefreshCw className={`size-[14px] ${isRefreshing ? "animate-spin" : ""}`} /> Refresh
+        </button>
+      </div>
+    </div>
+
+    {(summaryQuery.isError || rolesQuery.isError) && <div role="alert" className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-[12px] text-red-800">Some compensation data could not be loaded. <button className="ml-2 underline" onClick={() => void refresh()}>Retry</button></div>}
+
+    <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
+      <MetricCard title="Total employees" value={summaryQuery.isPending ? "—" : count.toLocaleString("en-IN")} detail={`${selectedCountry} · people`} icon={Users} loading={summaryQuery.isPending} />
+      <MetricCard title="Minimum salary" value={money(summary?.minSalary, currency)} detail={`${selectedCountry} · ${currency} / year`} icon={Wallet} loading={summaryQuery.isPending} />
+      <MetricCard title="Average salary" value={money(summary?.averageSalary, currency)} detail={`${selectedCountry} · ${currency} / year`} icon={Wallet} highlighted loading={summaryQuery.isPending} />
+      <MetricCard title="Maximum salary" value={money(summary?.maxSalary, currency)} detail={`${selectedCountry} · ${currency} / year`} icon={Wallet} loading={summaryQuery.isPending} />
+    </div>
+
+    <div className="grid items-stretch gap-6 xl:grid-cols-[1.18fr_0.88fr]">
+      <Panel title="Average salary by role" subtitle={`Annual compensation · ${currency}`}>
+        {rolesQuery.isPending ? <EmptyState>Loading salary breakdown…</EmptyState> : rolesQuery.isError ? <EmptyState>Unable to load role salary data.</EmptyState> : roles.length === 0 ? <EmptyState>No active employee data for {selectedCountry} yet.</EmptyState> :
+          <div className="px-[22px] pb-[16px] pt-[28px]">
+            <div className="space-y-[21px]">
+              {roles.map((role, index) => <div key={role.jobTitle} className="grid grid-cols-[105px_minmax(0,1fr)_108px] items-center gap-3 max-sm:grid-cols-[78px_minmax(0,1fr)]">
+                <span className="truncate text-[12px] font-medium text-[#30354A]">{role.jobTitle}</span>
+                <div className="h-[16px] overflow-hidden rounded-[4px] bg-[#F4F5FA]">
+                  <div className="h-full rounded-[4px]" style={{ width: `${Math.max(2, (Number(role.averageSalary) / maxRole) * 100)}%`, background: index === 0 ? "#5146D8" : "#EDEBFF" }} />
+                </div>
+                <span className="text-right text-[12px] font-semibold text-[#30354A] tabular-nums max-sm:col-start-2 max-sm:text-left">{money(role.averageSalary, currency)}</span>
+              </div>)}
+            </div>
+            <div className="ml-[118px] mr-[108px] mt-[31px] flex justify-between text-[9px] text-[#78839A] max-sm:ml-[90px] max-sm:mr-0">
+              <span>{compactMoney(0, currency)}</span><span>{compactMoney(maxRole / 3, currency)}</span><span>{compactMoney((maxRole * 2) / 3, currency)}</span><span>{compactMoney(maxRole, currency)}</span>
+            </div>
+          </div>}
+      </Panel>
+
+      <Panel title="Workforce mix" subtitle={`Employees by job title · ${selectedCountry}`}>
+        {rolesQuery.isPending ? <EmptyState>Loading workforce mix…</EmptyState> : rolesQuery.isError || roles.length === 0 ? <EmptyState>No workforce data to display yet.</EmptyState> :
+          <div className="flex min-h-[280px] items-center justify-center gap-5 px-5 pb-5 pt-7 max-sm:flex-col">
+            <div className="relative h-[184px] w-[184px] shrink-0">
+              <svg viewBox="0 0 160 160" className="h-full w-full -rotate-90" role="img" aria-label={`Workforce distribution across ${roles.length} job titles`}>
+                <circle cx="80" cy="80" r="57" fill="none" stroke="#F0F1F6" strokeWidth="17" />
+                {donut.map((segment) => <circle key={segment.jobTitle} cx="80" cy="80" r="57" fill="none" stroke={segment.color} strokeWidth="17" strokeDasharray={segment.dash} strokeDashoffset={segment.offset} />)}
+              </svg>
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <strong className="text-[27px] font-semibold tracking-[-0.8px] text-[#292D40] tabular-nums">{totalRoleEmployees.toLocaleString("en-IN")}</strong>
+                <span className="mt-1 text-[10px] text-[#78839A]">employees</span>
+              </div>
+            </div>
+            <div className="min-w-[145px] space-y-[11px]">
+              {donut.map((item) => <div key={item.jobTitle} className="flex items-start gap-[11px]">
+                <span className="mt-[4px] size-[8px] shrink-0 rounded-[2px]" style={{ background: item.color }} />
+                <div className="min-w-0"><p className="text-[12px] font-medium leading-[1.2] text-[#30354A]">{item.jobTitle}</p><p className="mt-[3px] text-[10px] text-[#78839A]">{item.employeeCount.toLocaleString("en-IN")} · {item.percent}%</p></div>
+              </div>)}
+            </div>
+          </div>}
+      </Panel>
+    </div>
+
+    <section className="overflow-hidden rounded-[12px] border border-[#E3E7F0] bg-white">
+      <header className="flex items-center justify-between gap-3 px-[22px] py-[19px]">
+        <div><h2 className="text-[16px] font-semibold tracking-[-0.25px] text-[#292D40]">Compensation by role</h2><p className="mt-[4px] text-[11px] text-[#78839A]">{selectedCountry} · {roles.length} job titles</p></div>
+        <Link to="/employees" className="inline-flex items-center gap-2 text-[12px] font-semibold text-[#5146D8] hover:text-[#3F35B8]">View employees <ArrowUpRight className="size-[14px]" /></Link>
+      </header>
+      {rolesQuery.isPending ? <EmptyState>Loading role details…</EmptyState> : rolesQuery.isError ? <EmptyState>Unable to load compensation details.</EmptyState> : roles.length === 0 ? <EmptyState>No active employees for {selectedCountry}.</EmptyState> :
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[560px] border-collapse text-left">
+            <thead className="bg-[#F7F8FC] text-[9px] font-semibold uppercase text-[#78839A]"><tr><th className="px-[22px] py-[10px]">Job title</th><th className="px-[22px] py-[10px] text-right">Employees</th><th className="px-[22px] py-[10px] text-right">Average annual salary</th></tr></thead>
+            <tbody>{roles.map((role, index) => <tr key={role.jobTitle} className="border-t border-[#E3E7F0] hover:bg-[#FAFBFD]"><td className="px-[22px] py-[7px]"><span className="inline-flex items-center gap-[13px] text-[12px] text-[#30354A]"><span className="size-[7px] rounded-[2px]" style={{ background: COLORS[index % COLORS.length] }} />{role.jobTitle}</span></td><td className="px-[22px] py-[7px] text-right text-[12px] text-[#30354A] tabular-nums">{role.employeeCount.toLocaleString("en-IN")}</td><td className="px-[22px] py-[7px] text-right text-[12px] font-medium text-[#30354A] tabular-nums">{money(role.averageSalary, currency)} {currency}</td></tr>)}</tbody>
+          </table>
+        </div>}
+    </section>
+  </main>
+}
