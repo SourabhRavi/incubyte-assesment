@@ -312,7 +312,7 @@ const EmployeesPage = () => {
           </p>
         </div>
 
-        <div className="flex flex-col gap-2 sm:flex-row">
+        <div className="flex flex-col items-center gap-2 sm:flex-row">
           <button
             type="button"
             onClick={() => void refetch()}
@@ -366,7 +366,7 @@ const EmployeesPage = () => {
             )}
           </div>
 
-          <div className="flex flex-col gap-2 sm:flex-row">
+          <div className="flex flex-col items-center gap-2 sm:flex-row">
             {(country || jobTitle || search) && (
               <button
                 type="button"
