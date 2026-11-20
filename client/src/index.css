@@ -652,25 +652,25 @@
   --brand-900: #1e3a8a;
 
   /* Core surfaces and typography */
-  --background: #f8fafc;
+  --background: #eef2f7;
   --foreground: #1e293b;
-  --card: #ffffff;
+  --card: #f9fbfd;
   --card-foreground: #1e293b;
-  --popover: #ffffff;
+  --popover: #f9fbfd;
   --popover-foreground: #1e293b;
-  --surface: #ffffff;
-  --surface-raised: #ffffff;
-  --surface-subtle: #f1f5f9;
-  --surface-sunken: #f8fafc;
-  --muted: #f1f5f9;
+  --surface: #f8fafd;
+  --surface-raised: #fbfcfe;
+  --surface-subtle: #e9eef5;
+  --surface-sunken: #edf1f6;
+  --muted: #e9eef5;
   --muted-foreground: #64748b;
 
   /* Actions and interaction */
   --primary: #2563eb;
   --primary-foreground: #ffffff;
-  --secondary: #eff6ff;
+  --secondary: #e8effa;
   --secondary-foreground: #1d4ed8;
-  --accent: #dbeafe;
+  --accent: #dce8f8;
   --accent-foreground: #1e40af;
   --ring: #60a5fa;
   --link: #1d4ed8;
@@ -686,10 +686,10 @@
   --info-soft: #e0f2fe;
 
   /* Borders and controls */
-  --border: #e2e8f0;
-  --border-strong: #cbd5e1;
-  --input: #cbd5e1;
-  --control: #ffffff;
+  --border: #dce3ec;
+  --border-strong: #c4cedb;
+  --input: #c8d2df;
+  --control: #f8fafd;
 
   /* Vibrant categorical chart palette */
   --chart-1: #2563eb; /* blue */
@@ -704,13 +704,13 @@
   --chart-10: #e11d48; /* rose */
 
   /* Navigation */
-  --sidebar: #ffffff;
+  --sidebar: #f4f6fa;
   --sidebar-foreground: #334155;
   --sidebar-primary: #2563eb;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #eff6ff;
+  --sidebar-accent: #e8effa;
   --sidebar-accent-foreground: #1d4ed8;
-  --sidebar-border: #e2e8f0;
+  --sidebar-border: #dce3ec;
   --sidebar-ring: #60a5fa;
 
   /* Shape, elevation and motion */
@@ -1036,4 +1036,15 @@
   *::after {
     outline-color: transparent !important;
   }
+}
+
+
+/* Softer light surfaces: avoid stark white panels against the page canvas. */
+:root:not(.dark) .peopleops-overview [class*="bg-white"],
+:root:not(.dark) .peopleops-employees [class*="bg-white"] {
+  background-color: var(--card) !important;
+}
+:root:not(.dark) .peopleops-sidebar [data-slot="sidebar-inner"],
+:root:not(.dark) .peopleops-sidebar [data-slot="sidebar-container"] {
+  background-color: var(--sidebar);
 }
