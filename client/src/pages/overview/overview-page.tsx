@@ -1,11 +1,13 @@
 import { useState, type ComponentType, type ReactNode } from "react"
 import {
+  ArrowDownToLine,
+  ArrowUpFromLine,
   ArrowUpRight,
+  ChartNoAxesCombined,
   Globe,
   LoaderCircle,
   RefreshCw,
-  Users,
-  Wallet,
+  UsersRound,
   X,
 } from "lucide-react"
 import {
@@ -61,44 +63,75 @@ const compactMoney = (value: number, currency: string) =>
     maximumFractionDigits: 0,
   }).format(value)
 
+type MetricTone = "people" | "minimum" | "average" | "maximum"
+
 type MetricProps = {
   title: string
   value: string
   detail: string
   icon: ComponentType<{ className?: string }>
   loading?: boolean
-  highlighted?: boolean
+  tone: MetricTone
 }
+
+const metricToneClasses: Record<MetricTone, { icon: string; accent: string }> = {
+  people: {
+    icon: "bg-blue-50 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300",
+    accent: "before:bg-blue-500",
+  },
+  minimum: {
+    icon: "bg-teal-50 text-teal-700 dark:bg-teal-950/50 dark:text-teal-300",
+    accent: "before:bg-teal-500",
+  },
+  average: {
+    icon: "bg-violet-50 text-violet-700 dark:bg-violet-950/50 dark:text-violet-300",
+    accent: "before:bg-violet-500",
+  },
+  maximum: {
+    icon: "bg-orange-50 text-orange-700 dark:bg-orange-950/50 dark:text-orange-300",
+    accent: "before:bg-orange-500",
+  },
+}
+
 function MetricCard({
   title,
   value,
   detail,
   icon: Icon,
   loading,
-  highlighted,
+  tone,
 }: MetricProps) {
+  const styles = metricToneClasses[tone]
+
   return (
-    <section className="peopleops-metric min-w-0 rounded-[8px] border border-[var(--border)] bg-[var(--card)] px-[18px] py-[18px]">
-      <div className="flex items-center justify-between gap-2">
-        <p className="text-[13px] font-medium text-[var(--muted-foreground)]">
+    <section
+      className={`peopleops-metric relative flex min-w-0 flex-col overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-[0_1px_2px_rgb(15_23_42/3%)] transition-[border-color,box-shadow,transform] duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] ${styles.accent} hover:-translate-y-0.5 hover:border-[var(--ring)]/35 hover:shadow-[0_8px_24px_rgb(15_23_42/6%)]`}
+    >
+      <div className="flex min-w-0 items-center justify-between gap-3">
+        <p className="truncate text-[13px] font-medium text-[var(--muted-foreground)]">
           {title}
         </p>
-        <Icon
-          className={`size-[17px] ${highlighted ? "text-[var(--primary)]" : "text-[var(--muted-foreground)]"}`}
-        />
+        <span className={`inline-flex size-10 shrink-0 items-center justify-center rounded-xl ${styles.icon}`}>
+          <Icon aria-hidden="true" className="size-[18px]" />
+        </span>
       </div>
-      <div className="mt-[17px] flex min-h-[37px] items-center">
+
+      <div className="mt-4 flex min-h-[34px] min-w-0 items-center">
         {loading ? (
           <LoaderCircle className="size-5 animate-spin text-[var(--muted-foreground)]" />
         ) : (
-          <p className="truncate text-[28px] leading-none font-semibold tracking-[-0.8px] text-[var(--foreground)] tabular-nums">
+          <p className="truncate text-[clamp(21px,1.8vw,27px)] leading-none font-semibold tracking-[-0.8px] text-[var(--foreground)] tabular-nums">
             {value}
           </p>
         )}
       </div>
-      <p className="mt-[11px] text-[11px] text-[var(--muted-foreground)]">
-        {detail}
-      </p>
+
+      <div className="mt-4 flex min-w-0 items-center gap-2 border-t border-[var(--border)] pt-3">
+        <span className="size-1.5 shrink-0 rounded-full bg-[var(--muted-foreground)]/55" />
+        <p className="truncate text-[11px] text-[var(--muted-foreground)]">
+          {detail}
+        </p>
+      </div>
     </section>
   )
 }
@@ -239,34 +272,37 @@ export default function OverviewPage() {
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4 xl:gap-4">
         <MetricCard
           title="Total employees"
           value={summaryQuery.isPending ? "—" : count.toLocaleString("en-IN")}
-          detail={`${selectedCountry} · people`}
-          icon={Users}
+          detail={`${selectedCountry} · active employees`}
+          icon={UsersRound}
+          tone="people"
           loading={summaryQuery.isPending}
         />
         <MetricCard
           title="Minimum salary"
           value={money(summary?.minSalary, currency)}
-          detail={`${selectedCountry} · ${currency} / year`}
-          icon={Wallet}
+          detail={`${currency} · annual compensation`}
+          icon={ArrowDownToLine}
+          tone="minimum"
           loading={summaryQuery.isPending}
         />
         <MetricCard
           title="Average salary"
           value={money(summary?.averageSalary, currency)}
-          detail={`${selectedCountry} · ${currency} / year`}
-          icon={Wallet}
-          highlighted
+          detail={`${currency} · annual compensation`}
+          icon={ChartNoAxesCombined}
+          tone="average"
           loading={summaryQuery.isPending}
         />
         <MetricCard
           title="Maximum salary"
           value={money(summary?.maxSalary, currency)}
-          detail={`${selectedCountry} · ${currency} / year`}
-          icon={Wallet}
+          detail={`${currency} · annual compensation`}
+          icon={ArrowUpFromLine}
+          tone="maximum"
           loading={summaryQuery.isPending}
         />
       </div>
