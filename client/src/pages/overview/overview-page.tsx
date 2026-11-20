@@ -74,24 +74,25 @@ type MetricProps = {
   tone: MetricTone
 }
 
-const metricToneClasses: Record<MetricTone, { icon: string; accent: string }> = {
-  people: {
-    icon: "bg-[var(--primary)]/10 text-[var(--primary)]",
-    accent: "before:bg-[var(--primary)]",
-  },
-  minimum: {
-    icon: "bg-[var(--primary)]/10 text-[var(--primary)]",
-    accent: "before:bg-[var(--primary)]",
-  },
-  average: {
-    icon: "bg-[var(--primary)]/10 text-[var(--primary)]",
-    accent: "before:bg-[var(--primary)]",
-  },
-  maximum: {
-    icon: "bg-[var(--primary)]/10 text-[var(--primary)]",
-    accent: "before:bg-[var(--primary)]",
-  },
-}
+const metricToneClasses: Record<MetricTone, { icon: string; accent: string }> =
+  {
+    people: {
+      icon: "bg-[var(--primary)]/10 text-[var(--primary)]",
+      accent: "before:bg-[var(--primary)]",
+    },
+    minimum: {
+      icon: "bg-[var(--primary)]/10 text-[var(--primary)]",
+      accent: "before:bg-[var(--primary)]",
+    },
+    average: {
+      icon: "bg-[var(--primary)]/10 text-[var(--primary)]",
+      accent: "before:bg-[var(--primary)]",
+    },
+    maximum: {
+      icon: "bg-[var(--primary)]/10 text-[var(--primary)]",
+      accent: "before:bg-[var(--primary)]",
+    },
+  }
 
 function MetricCard({
   title,
@@ -105,13 +106,16 @@ function MetricCard({
 
   return (
     <section
-      className={`peopleops-metric relative flex min-w-0 flex-col overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-[0_1px_2px_rgb(15_23_42/3%)] transition-[border-color,box-shadow,transform] duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] ${styles.accent} hover:-translate-y-0.5 hover:border-[var(--ring)]/35 hover:shadow-[0_8px_24px_rgb(15_23_42/6%)]`}
+      className={`peopleops-metric relative flex min-w-0 flex-col overflow-hidden rounded-tr-xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-[0_1px_2px_rgb(15_23_42/3%)] transition-[border-color,box-shadow,transform] duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] ${styles.accent} hover:-translate-y-0.5 hover:border-[var(--ring)]/35 hover:shadow-[0_8px_24px_rgb(15_23_42/6%)]`}
     >
       <div className="flex min-w-0 items-center justify-between gap-3">
         <p className="truncate text-[13px] font-medium text-[var(--muted-foreground)]">
           {title}
         </p>
-        <span aria-hidden="true" className={`inline-flex size-10 shrink-0 items-center justify-center rounded-xl ${styles.icon}`}>
+        <span
+          aria-hidden="true"
+          className={`inline-flex size-10 shrink-0 items-center justify-center rounded-xl ${styles.icon}`}
+        >
           <Icon className="size-[18px]" />
         </span>
       </div>
