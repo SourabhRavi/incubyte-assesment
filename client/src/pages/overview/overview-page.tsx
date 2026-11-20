@@ -137,6 +137,8 @@ function EmptyState({ children }: { children: ReactNode }) {
 export default function OverviewPage() {
   const [selectedCountry, setSelectedCountry] = useState<Country>(COUNTRIES[0])
   const [activeRole, setActiveRole] = useState<string | null>(null)
+  const [hoveredRole, setHoveredRole] = useState<string | null>(null)
+  const focusedRole = activeRole ?? hoveredRole
   const allMarkets = useAllSalarySummaries()
   const summaryQuery = useSalarySummary(selectedCountry)
   const rolesQuery = useJobTitleAverages(selectedCountry)
@@ -305,37 +307,35 @@ export default function OverviewPage() {
                   <>
                     <div className="flex flex-1 flex-col justify-between gap-2">
                       {roles.map((role, index) => {
-                        const isFocused = activeRole === role.jobTitle
-                        const isDimmed = Boolean(activeRole && !isFocused)
+                        const isFocused = focusedRole === role.jobTitle
+                        const isDimmed = Boolean(focusedRole && !isFocused)
                         return (
                           <button
                             key={role.jobTitle}
                             type="button"
                             onClick={() =>
-                              setActiveRole(isFocused ? null : role.jobTitle)
+                              setActiveRole(activeRole === role.jobTitle ? null : role.jobTitle)
                             }
-                            title={
-                              role.jobTitle +
-                              " · " +
-                              money(role.averageSalary, currency)
-                            }
-                            aria-pressed={isFocused}
-                            className={`group grid w-full grid-cols-[minmax(112px,150px)_minmax(0,1fr)_minmax(92px,112px)] items-center gap-3 rounded-md py-1.5 text-left transition-colors hover:bg-[var(--hover-surface)] focus-visible:ring-2 focus-visible:ring-[var(--primary)]/40 focus-visible:outline-none ${isFocused ? "bg-[var(--accent)]" : ""}`}
+                            onMouseEnter={() => setHoveredRole(role.jobTitle)}
+                            onMouseLeave={() => setHoveredRole(null)}
+                            aria-label={`${role.jobTitle}, average annual salary ${money(role.averageSalary, currency)}. Select to focus this role.`}
+                            aria-pressed={activeRole === role.jobTitle}
+                            className={`group grid w-full grid-cols-[minmax(112px,150px)_minmax(0,1fr)_minmax(92px,112px)] items-center gap-3 rounded-lg border px-2 py-2 text-left transition-all duration-150 focus-visible:ring-2 focus-visible:ring-[var(--primary)]/40 focus-visible:outline-none ${isFocused ? "border-[var(--primary)]/30 bg-[var(--active-surface)] shadow-sm" : "border-transparent hover:border-[var(--border)] hover:bg-[var(--hover-surface)]"}`}
                           >
                             <span
                               className={`truncate text-[11px] font-medium ${isDimmed ? "text-[var(--muted-foreground)]" : "text-[var(--foreground)]"}`}
                             >
                               {role.jobTitle}
                             </span>
-                            <span className="relative block h-5 min-w-0 overflow-hidden rounded-[5px] bg-[var(--muted)]">
+                            <span className={`relative block h-5 min-w-0 overflow-hidden rounded-[5px] bg-[var(--muted)] transition-shadow ${isFocused ? "ring-2 ring-[var(--primary)]/25" : ""}`}>
                               <span
                                 className="absolute inset-y-0 left-0 rounded-[5px] transition-[width,opacity] duration-300"
                                 style={{
                                   width: `${Math.max(2, (role.averageSalary / axisMax) * 100)}%`,
-                                  backgroundColor: isDimmed
-                                    ? "var(--border)"
-                                    : COLORS[index % COLORS.length],
-                                  opacity: isDimmed ? 0.55 : 1,
+                                  backgroundColor: COLORS[index % COLORS.length],
+                                  opacity: isDimmed ? 0.22 : 1,
+                                  boxShadow: isFocused ? "0 0 0 2px color-mix(in srgb, var(--primary) 18%, transparent)" : "none",
+                                  filter: isFocused ? "saturate(1.15)" : "none",
                                 }}
                               />
                             </span>
@@ -472,11 +472,10 @@ export default function OverviewPage() {
                         <Cell
                           key={role.jobTitle}
                           fill={COLORS[index % COLORS.length]}
-                          opacity={
-                            activeRole && activeRole !== role.jobTitle
-                              ? 0.28
-                              : 1
-                          }
+                          opacity={focusedRole && focusedRole !== role.jobTitle ? 0.22 : 1}
+                          onMouseEnter={() => setHoveredRole(role.jobTitle)}
+                          onMouseLeave={() => setHoveredRole(null)}
+                          cursor="pointer"
                         />
                       ))}
                     </Bar>
@@ -488,20 +487,21 @@ export default function OverviewPage() {
                   const share = totalRoleEmployees
                     ? (role.employeeCount / totalRoleEmployees) * 100
                     : 0
-                  const selected = activeRole === role.jobTitle
+                  const selected = focusedRole === role.jobTitle
+                  const pinned = activeRole === role.jobTitle
                   return (
                     <button
                       type="button"
                       key={role.jobTitle}
-                      aria-pressed={selected}
-                      onClick={() =>
-                        setActiveRole(selected ? null : role.jobTitle)
-                      }
+                      aria-pressed={pinned}
+                      onClick={() => setActiveRole(pinned ? null : role.jobTitle)}
+                      onMouseEnter={() => setHoveredRole(role.jobTitle)}
+                      onMouseLeave={() => setHoveredRole(null)}
                       className={
-                        "flex min-w-0 items-center gap-2 rounded-md px-2 py-1.5 text-left transition-colors " +
+                        "flex min-w-0 items-center gap-2 rounded-md border px-2 py-1.5 text-left transition-all " +
                         (selected
-                          ? "bg-accent ring-1 ring-primary/30"
-                          : "hover:bg-muted/70")
+                          ? "border-[var(--primary)]/25 bg-[var(--active-surface)] text-[var(--foreground)]"
+                          : "border-transparent hover:border-[var(--border)] hover:bg-[var(--hover-surface)]")
                       }
                     >
                       <span
