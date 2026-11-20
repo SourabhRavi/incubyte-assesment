@@ -180,7 +180,7 @@ const EmployeeForm = ({
   const fieldShell = "space-y-1.5"
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="space-y-4">
+    <form onSubmit={handleSubmit} noValidate className="min-h-0 flex-1 overflow-y-auto overscroll-contain touch-pan-y pr-1 space-y-4">
       {employee && (
         <div className="hidden">
           <div className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
