@@ -220,7 +220,7 @@ export default function OverviewPage() {
               {selectedCountry.toUpperCase()} / {currency} · ANNUAL
             </span>
             <span className="text-[10px] text-[var(--muted-foreground)]">
-              Salary figures reflect {selectedCountry} only.
+              Salary figures reflect <b>{selectedCountry}</b> only.
             </span>
           </div>
         </div>
