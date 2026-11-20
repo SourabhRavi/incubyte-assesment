@@ -368,16 +368,16 @@ export default function OverviewPage() {
                             onMouseLeave={() => setHoveredRole(null)}
                             aria-label={`${role.jobTitle}, average annual salary ${money(role.averageSalary, currency)}. Select to focus this role.`}
                             aria-pressed={focusedRole === role.jobTitle}
-                            className={`group grid w-full flex-1 grid-cols-[minmax(112px,150px)_minmax(0,1fr)_minmax(92px,112px)] items-center gap-3 border ${isFocused ? "border-primary/25 bg-[var(--active-surface)] text-[var(--foreground)]" : "border-transparent"} rounded-lg p-2 text-left transition-all duration-150 ...`}
+                            className={`group grid w-full flex-1 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 border sm:grid-cols-[minmax(112px,150px)_minmax(0,1fr)_minmax(92px,112px)] ${isFocused ? "border-primary/25 bg-[var(--active-surface)] text-[var(--foreground)]" : "border-transparent"} rounded-lg p-2 text-left transition-all duration-150 ...`}
                           >
                             <span
-                              className={`truncate text-[11px] font-medium ${isDimmed ? "text-[var(--muted-foreground)]" : "text-[var(--foreground)]"}`}
+                              className={`col-start-1 row-start-1 truncate text-[11px] font-medium sm:col-auto sm:row-auto ${isDimmed ? "text-[var(--muted-foreground)]" : "text-[var(--foreground)]"}`}
                             >
                               {role.jobTitle}
                             </span>
                             <span
                               // className={`relative block h-5 min-w-0 overflow-hidden rounded-[5px] bg-[var(--muted)] transition-shadow ${isFocused ? "ring-10 ring-[var(--primary)]/25" : ""}`}
-                              className={`relative block h-5 min-w-0 overflow-hidden rounded-[5px] transition-shadow ${isFocused ? "bg-muted-foreground/10" : "bg-muted-foreground/10"}`}
+                              className={`relative col-span-2 row-start-2 block h-3.5 min-w-0 overflow-hidden rounded-[5px] transition-shadow sm:col-span-1 sm:row-auto sm:h-5 ${isFocused ? "bg-muted-foreground/10" : "bg-muted-foreground/10"}`}
                             >
                               <span
                                 className="absolute inset-y-0 left-0 rounded-[5px] transition-[width,opacity] duration-300"
@@ -394,7 +394,7 @@ export default function OverviewPage() {
                               />
                             </span>
                             <span
-                              className={`text-right text-[10px] font-semibold whitespace-nowrap tabular-nums ${isDimmed ? "text-[var(--muted-foreground)]" : "text-[var(--foreground)]"}`}
+                              className={`col-start-2 row-start-1 text-right text-[10px] font-semibold whitespace-nowrap tabular-nums sm:col-auto sm:row-auto ${isDimmed ? "text-[var(--muted-foreground)]" : "text-[var(--foreground)]"}`}
                             >
                               {money(role.averageSalary, currency)}
                             </span>
@@ -402,9 +402,9 @@ export default function OverviewPage() {
                         )
                       })}
                     </div>
-                    <div className="mt-3 grid grid-cols-[minmax(112px,150px)_minmax(0,1fr)_minmax(92px,112px)] items-start gap-3 border-t border-[var(--border)] pt-2">
-                      <span />
-                      <div className="flex justify-between text-[9px] text-[var(--muted-foreground)] tabular-nums">
+                    <div className="mt-3 border-t border-[var(--border)] pt-2 sm:grid sm:grid-cols-[minmax(112px,150px)_minmax(0,1fr)_minmax(92px,112px)] sm:gap-3">
+                      <span className="hidden sm:block" />
+                      <div className="flex justify-between text-[9px] text-[var(--muted-foreground)] tabular-nums [&>span:nth-child(2)]:hidden [&>span:nth-child(4)]:hidden sm:[&>span:nth-child(2)]:inline sm:[&>span:nth-child(4)]:inline">
                         {ticks.map((tick) => (
                           <span key={tick}>
                             {compactMoney(axisMax * tick, currency)}
