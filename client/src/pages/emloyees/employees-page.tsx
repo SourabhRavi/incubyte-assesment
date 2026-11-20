@@ -272,6 +272,9 @@ const EmployeesPage = () => {
 
   const pagination = data?.pagination
   const employees = data?.data ?? []
+  const totalPages = pagination?.totalPages ?? 0
+  const canGoToPreviousPage = page > 1
+  const canGoToNextPage = page < totalPages
 
   return (
     <main className="peopleops-employees flex min-h-0 flex-col gap-6 p-4 md:h-full md:overflow-hidden md:p-8">
@@ -494,12 +497,12 @@ const EmployeesPage = () => {
 
           <div className="flex items-center justify-between gap-3 sm:justify-end">
             <p className="text-sm text-muted-foreground">
-              Page {pagination?.page ?? page} of {pagination?.totalPages ?? 0}
+              Page {page} of {totalPages}
             </p>
 
             <button
               type="button"
-              disabled={!pagination?.hasPreviousPage || isFetching}
+              disabled={!canGoToPreviousPage || isFetching}
               onClick={() => updateParams({ page: String(page - 1) })}
               className="h-9 rounded-md border px-3 text-sm font-medium hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
             >
@@ -508,7 +511,7 @@ const EmployeesPage = () => {
 
             <button
               type="button"
-              disabled={!pagination?.hasNextPage || isFetching}
+              disabled={!canGoToNextPage || isFetching}
               onClick={() => updateParams({ page: String(page + 1) })}
               className="h-9 rounded-md border px-3 text-sm font-medium hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
             >
