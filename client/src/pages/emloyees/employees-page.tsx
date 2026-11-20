@@ -557,6 +557,7 @@ const EmployeesPage = () => {
         open={isViewDialogOpen}
         onOpenChange={setIsViewDialogOpen}
         employee={selectedEmployee}
+        onEdit={openEditDialog}
       />
 
       <EmployeeDialog
