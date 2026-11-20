@@ -110,9 +110,11 @@ See [performance.md](./performance.md) for the reproducible benchmark procedure.
 - Request data is validated at the API boundary.
 - Database uniqueness and check constraints protect core data invariants.
 - CORS is configured from `CLIENT_URL`.
-- Secrets and database connection strings belong in environment variables, never in committed files.
+- The assessment integration test uses a dedicated Neon test branch and a restricted database role. It is separate from the deployed application's runtime database.
+- The test branch is intended for synthetic assessment data only. The integration test creates a uniquely named employee and soft-deletes it during cleanup.
+- The assessment repository currently includes the test connection configuration to make the integration test runnable by evaluators without provisioning their own PostgreSQL instance. This is a convenience for this assessment, not a production credential-management pattern. The role should be restricted to the test database and rotated or revoked after evaluation.
+- Never use the assessment test connection for production workloads, schema migrations, or seeding.
 - Authentication and authorization are not implemented because they were explicitly excluded from the assessment scope. This is not a recommendation for a production HR deployment.
-- Integration tests require a dedicated disposable PostgreSQL database. Never point them at production data.
 
 ## 10. Deliberate non-goals
 
