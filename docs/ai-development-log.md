@@ -85,7 +85,7 @@ This log records development themes visible in the available project conversatio
 - Measure search separately because leading-wildcard substring matching has different index behavior from equality filters.
 - Do not add indexes until query plans and timings justify them.
 
-**Verification:** [performance.md](./performance.md) documents the benchmark runner and leaves result fields explicitly pending until it is executed against a seeded 10,000-record database.
+**Verification:** [performance.md](./performance.md) records a completed local benchmark against 10,000 active employees: seven API scenarios, each with 5 warm-up requests and 30 measured requests. The report includes mean, p50, p95, minimum and maximum latency, plus the environment and methodology limitations. These are local API measurements, not production latency or a concurrency/load-test result.
 
 ## 6. Responsible use and limitations
 
