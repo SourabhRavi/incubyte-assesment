@@ -4,6 +4,7 @@ import {
   Clock3,
   Mail,
   MapPin,
+  Pencil,
   Wallet,
 } from "lucide-react"
 
@@ -24,6 +25,7 @@ type EmployeeDetailsDialogProps = {
   open: boolean
   onOpenChange: (open: boolean) => void
   employee?: Employee
+  onEdit: (employee: Employee) => void
 }
 
 const formatSalary = (employee: Employee) => {
@@ -125,6 +127,7 @@ const EmployeeDetailsDialog = ({
   open,
   onOpenChange,
   employee,
+  onEdit,
 }: EmployeeDetailsDialogProps) => (
   <Dialog open={open} onOpenChange={onOpenChange}>
     <DialogContent className="max-h-[min(90vh,760px)] gap-0 overflow-y-auto p-0 sm:max-w-xl">
@@ -265,6 +268,21 @@ const EmployeeDetailsDialog = ({
                 It does not necessarily indicate a salary revision date.
               </p> */}
             </section>
+
+            <Separator />
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={() => {
+                  onOpenChange(false)
+                  onEdit(employee)
+                }}
+                className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
+              >
+                <Pencil className="size-4" aria-hidden="true" />
+                Edit details
+              </button>
+            </div>
           </div>
         </>
       )}
