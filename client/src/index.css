@@ -1,131 +1,1039 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/manrope";
-@import "@fontsource-variable/geist";
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap");
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.491 0.27 292.581);
-    --primary-foreground: oklch(0.969 0.016 293.756);
-    --secondary: oklch(0.967 0.001 286.375);
-    --secondary-foreground: oklch(0.21 0.006 285.885);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
-    --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
-    --chart-1: oklch(0.811 0.111 293.571);
-    --chart-2: oklch(0.606 0.25 292.717);
-    --chart-3: oklch(0.541 0.281 293.009);
-    --chart-4: oklch(0.491 0.27 292.581);
-    --chart-5: oklch(0.432 0.232 292.759);
-    --radius: 0.625rem;
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.541 0.281 293.009);
-    --sidebar-primary-foreground: oklch(0.969 0.016 293.756);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.708 0 0);
+  --background: #f7f8fc;
+  --foreground: #25283a;
+  --card: #ffffff;
+  --card-foreground: #25283a;
+  --popover: #ffffff;
+  --popover-foreground: #25283a;
+  --primary: #5146d8;
+  --primary-foreground: #ffffff;
+  --secondary: #edebff;
+  --secondary-foreground: #5146d8;
+  --muted: #f7f8fc;
+  --muted-foreground: #777f92;
+  --accent: #edebff;
+  --accent-foreground: #5146d8;
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: #e7eaf2;
+  --input: #e7eaf2;
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.811 0.111 293.571);
+  --chart-2: oklch(0.606 0.25 292.717);
+  --chart-3: oklch(0.541 0.281 293.009);
+  --chart-4: oklch(0.491 0.27 292.581);
+  --chart-5: oklch(0.432 0.232 292.759);
+  --radius: 0.5rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #25283a;
+  --sidebar-primary: #5146d8;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #edebff;
+  --sidebar-accent-foreground: #5146d8;
+  --sidebar-border: #e7eaf2;
+  --sidebar-ring: oklch(0.708 0 0);
 }
-
 .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.205 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.432 0.232 292.759);
-    --primary-foreground: oklch(0.969 0.016 293.756);
-    --secondary: oklch(0.274 0.006 286.033);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
-    --chart-1: oklch(0.811 0.111 293.571);
-    --chart-2: oklch(0.606 0.25 292.717);
-    --chart-3: oklch(0.541 0.281 293.009);
-    --chart-4: oklch(0.491 0.27 292.581);
-    --chart-5: oklch(0.432 0.232 292.759);
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.606 0.25 292.717);
-    --sidebar-primary-foreground: oklch(0.969 0.016 293.756);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.556 0 0);
+  --background: #171c25;
+  --foreground: #edf1f7;
+  --card: #202735;
+  --card-foreground: #edf1f7;
+  --popover: #202735;
+  --popover-foreground: #edf1f7;
+  --primary: #91a8ff;
+  --primary-foreground: #17203a;
+  --secondary: #293345;
+  --secondary-foreground: #e5ebf5;
+  --muted: #252f3e;
+  --muted-foreground: #a1aec1;
+  --accent: #2b3a5e;
+  --accent-foreground: #dde5ff;
+  --destructive: #f07878;
+  --border: #303c4e;
+  --input: #39465a;
+  --ring: #91a8ff;
+  --sidebar: #1c2431;
+  --sidebar-foreground: #edf1f7;
+  --sidebar-primary: #91a8ff;
+  --sidebar-primary-foreground: #17203a;
+  --sidebar-accent: #293345;
+  --sidebar-accent-foreground: #edf1f7;
+  --sidebar-border: #303c4e;
 }
-
 @theme inline {
-    --font-sans: 'Manrope Variable', sans-serif;
-    --font-heading: 'Geist Variable', sans-serif;
-    --color-sidebar-ring: var(--sidebar-ring);
-    --color-sidebar-border: var(--sidebar-border);
-    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-    --color-sidebar-accent: var(--sidebar-accent);
-    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-    --color-sidebar-primary: var(--sidebar-primary);
-    --color-sidebar-foreground: var(--sidebar-foreground);
-    --color-sidebar: var(--sidebar);
-    --color-chart-5: var(--chart-5);
-    --color-chart-4: var(--chart-4);
-    --color-chart-3: var(--chart-3);
-    --color-chart-2: var(--chart-2);
-    --color-chart-1: var(--chart-1);
-    --color-ring: var(--ring);
-    --color-input: var(--input);
-    --color-border: var(--border);
-    --color-destructive: var(--destructive);
-    --color-accent-foreground: var(--accent-foreground);
-    --color-accent: var(--accent);
-    --color-muted-foreground: var(--muted-foreground);
-    --color-muted: var(--muted);
-    --color-secondary-foreground: var(--secondary-foreground);
-    --color-secondary: var(--secondary);
-    --color-primary-foreground: var(--primary-foreground);
-    --color-primary: var(--primary);
-    --color-popover-foreground: var(--popover-foreground);
-    --color-popover: var(--popover);
-    --color-card-foreground: var(--card-foreground);
-    --color-card: var(--card);
-    --color-foreground: var(--foreground);
-    --color-background: var(--background);
-    --radius-sm: calc(var(--radius) * 0.6);
-    --radius-md: calc(var(--radius) * 0.8);
-    --radius-lg: var(--radius);
-    --radius-xl: calc(var(--radius) * 1.4);
-    --radius-2xl: calc(var(--radius) * 1.8);
-    --radius-3xl: calc(var(--radius) * 2.2);
-    --radius-4xl: calc(var(--radius) * 2.6);
+  --font-sans: "Manrope", sans-serif;
+  --font-heading: "Geist", sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    }
-  body {
-    @apply bg-background text-foreground;
-    }
+  }
   html {
     @apply font-sans;
+  }
+  body {
+    @apply bg-background text-foreground;
+    background: var(--background);
+  }
+  button,
+  input,
+  select {
+    font: inherit;
+  }
+  ::selection {
+    background: rgb(151 169 247 / 28%);
+  }
+}
+@layer components {
+  .peopleops-inset {
+    background: var(--background);
+  }
+  .peopleops-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: color-mix(in srgb, var(--card) 78%, transparent);
+    -webkit-backdrop-filter: blur(20px) saturate(165%);
+    backdrop-filter: blur(20px) saturate(165%);
+    border-bottom-color: color-mix(in srgb, var(--border) 72%, transparent);
+    box-shadow: 0 4px 20px rgb(30 41 59 / 3%);
+    isolation: isolate;
+  }
+  .dark .peopleops-topbar {
+    background: color-mix(in srgb, var(--card) 76%, transparent);
+    border-bottom-color: color-mix(in srgb, var(--border) 78%, transparent);
+    box-shadow: 0 4px 22px rgb(0 0 0 / 12%);
+  }
+  .peopleops-page-shell {
+    min-height: calc(100svh - 52px);
+  }
+  .peopleops-sidebar [data-slot="sidebar-inner"] {
+    background: var(--sidebar);
+  }
+  .peopleops-overview {
+    gap: 14px;
+    width: 100%;
+  }
+  .overview-dashboard-grid {
+    align-items: start;
+  }
+  .overview-dashboard-grid > div {
+    min-width: 0;
+  }
+  .overview-heading {
+    margin-bottom: 1px;
+  }
+  .overview-chart-card {
+    min-width: 0;
+  }
+  .overview-chart-card .recharts-wrapper {
+    max-width: 100%;
+  }
+  .overview-chart-card .recharts-cartesian-axis-tick-value {
+    font-family: "Manrope", sans-serif;
+  }
+  .overview-metric-card {
+    min-width: 0;
+  }
+  .overview-metric-card > div:first-of-type p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .overview-data-table {
+    margin-top: 0;
+  }
+  .overview-heading {
+    min-height: 62px;
+  }
+  .overview-heading h1,
+  .peopleops-employees h1 {
+    color: var(--foreground);
+    font-size: clamp(21px, 2vw, 25px);
+    line-height: 1.2;
+    letter-spacing: -0.045em;
+  }
+  .overview-heading p {
+    color: var(--muted-foreground);
+    font-size: 12px;
+  }
+  .overview-heading label {
+    color: var(--muted-foreground);
+    font-size: 10px;
+  }
+  .overview-heading select,
+  .overview-heading button {
+    min-height: 32px;
+    height: 32px;
+    border-radius: 7px;
+    font-size: 11px;
+    box-shadow: none;
+    background: var(--card);
+    border-color: var(--border);
+  }
+  .overview-metric-card {
+    min-height: 106px;
+    padding: 12px 13px;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    background: var(--card);
+    box-shadow: 0 1px 3px rgb(34 48 70 / 3%);
+  }
+  .overview-metric-card > div:first-of-type {
+    align-items: center;
+  }
+  .overview-metric-card > div:first-of-type p {
+    color: #596579;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .overview-metric-card > div:first-of-type span {
+    width: 23px;
+    height: 23px;
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--primary) 10%, white);
+    color: var(--primary);
+    box-shadow: none;
+  }
+  .overview-metric-card > div:first-of-type span svg {
+    width: 12px;
+    height: 12px;
+  }
+  .overview-metric-card > div:nth-of-type(2) {
+    margin-top: 10px;
+  }
+  .overview-metric-card > div:nth-of-type(2) p {
+    color: var(--foreground);
+    font-family: "Geist", sans-serif;
+    font-size: 21px;
+    font-weight: 650;
+    letter-spacing: -0.045em;
+  }
+  .overview-metric-card > p:last-child {
+    margin-top: 2px;
+    color: var(--muted-foreground);
+    font-size: 9px;
+  }
+  .overview-chart-card,
+  .overview-data-table {
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    background: var(--card);
+    box-shadow: 0 1px 3px rgb(34 48 70 / 3%);
+  }
+  .overview-chart-card > div:first-child {
+    padding: 12px 14px;
+    border-color: var(--border);
+  }
+  .overview-chart-card h2,
+  .overview-data-table h2 {
+    color: var(--foreground);
+    font-size: 12px;
+    font-weight: 650;
+    letter-spacing: -0.015em;
+  }
+  .overview-chart-card > div:first-child p {
+    margin-top: 3px;
+    font-size: 10px;
+    color: var(--muted-foreground);
+  }
+  .overview-data-table > div:first-child {
+    padding: 12px 14px;
+    border-color: var(--border);
+  }
+  .overview-data-table thead,
+  .peopleops-employees thead {
+    background: #f7f9fa;
+  }
+  .dark .overview-data-table thead,
+  .dark .peopleops-employees thead {
+    background: #252f3e;
+  }
+  .overview-data-table th,
+  .peopleops-employees thead th {
+    font-size: 10px;
+  }
+  .overview-data-table td,
+  .peopleops-employees tbody td {
+    font-size: 11px;
+  }
+  .peopleops-employees {
+    gap: 14px;
+    padding: 18px 20px;
+  }
+  .peopleops-employees > div:first-child p {
+    font-size: 11px;
+  }
+  .peopleops-employees > div:first-child button {
+    height: 34px;
+    border-radius: 7px;
+    font-size: 11px;
+  }
+  .peopleops-employees > section {
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    background: var(--card);
+    box-shadow: 0 1px 3px rgb(34 48 70 / 3%);
+  }
+  .peopleops-employees section > div:first-child {
+    padding: 12px 14px;
+  }
+  .peopleops-employees section h2 {
+    font-size: 12px;
+  }
+  .peopleops-employees section p {
+    font-size: 10px;
+  }
+  .peopleops-employees tbody td {
+    padding-top: 11px;
+    padding-bottom: 11px;
+  }
+  .peopleops-employees tbody tr:hover {
+    background: color-mix(in srgb, var(--primary) 4%, var(--card));
+  }
+  .peopleops-employees input,
+  .peopleops-employees select {
+    height: 33px;
+    border-radius: 7px;
+    font-size: 11px;
+  }
+  .peopleops-overview button,
+  .peopleops-employees button {
+    transition:
+      background-color 140ms ease,
+      border-color 140ms ease;
+  }
+  .peopleops-overview button:not(:disabled):hover,
+  .peopleops-employees button:not(:disabled):hover {
+    transform: none;
+  }
+}
+@media (max-width: 1279px) {
+  .overview-dashboard-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .overview-dashboard-grid > div:last-child {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 767px) {
+  .overview-dashboard-grid > div:last-child {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 639px) {
+  .overview-metric-card {
+    min-height: 100px;
+    padding: 10px;
+  }
+  .overview-metric-card > div:nth-of-type(2) p {
+    font-size: 18px;
+  }
+  .peopleops-employees {
+    padding: 14px 12px;
+  }
+}
+
+/* Desktop PeopleOps reference layout */
+@layer base {
+  body {
+    font-family: "Manrope", sans-serif;
+  }
+}
+@layer components {
+  .peopleops-sidebar [data-slot="sidebar-inner"] {
+    background: #fff;
+  }
+  .peopleops-sidebar [data-slot="sidebar-container"] {
+    background: #fff;
+  }
+}
+
+/* PeopleOps foundations: consistent surfaces, readable dark mode and chart polish */
+.peopleops-sidebar [data-slot="sidebar-inner"],
+.peopleops-sidebar [data-slot="sidebar-container"] {
+  background: var(--sidebar);
+}
+.peopleops-overview {
+  color: var(--foreground);
+}
+.peopleops-overview .peopleops-metric,
+.peopleops-overview .peopleops-chart-panel,
+.peopleops-overview .peopleops-data-panel {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--card-foreground);
+  box-shadow:
+    0 1px 2px rgb(24 32 56 / 3%),
+    0 8px 24px rgb(24 32 56 / 2%);
+}
+.peopleops-overview .peopleops-chart-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+.peopleops-overview .peopleops-chart-panel > header {
+  border-bottom: 1px solid var(--border);
+  padding: 18px 20px 15px;
+}
+.peopleops-overview .peopleops-chart-panel > header h2,
+.peopleops-overview .peopleops-data-panel h2 {
+  color: var(--foreground);
+}
+.peopleops-overview .peopleops-chart-panel > header p,
+.peopleops-overview .peopleops-data-panel p {
+  color: var(--muted-foreground);
+}
+.peopleops-overview .peopleops-chart-body {
+  flex: 1;
+  min-width: 0;
+}
+.peopleops-overview .peopleops-donut-wrap {
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--muted) 72%, var(--card));
+  padding: 12px;
+}
+.peopleops-overview .peopleops-role-legend button {
+  border: 1px solid transparent;
+}
+.peopleops-overview .peopleops-role-legend button:hover,
+.peopleops-overview .peopleops-role-legend button[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: color-mix(in srgb, var(--primary) 16%, var(--border));
+}
+.peopleops-overview .peopleops-country-select,
+.peopleops-overview .peopleops-action-button {
+  background: none;
+  border-color: var(--border);
+  color: var(--foreground);
+}
+.peopleops-overview .peopleops-country-select select {
+  color: var(--foreground);
+}
+.peopleops-overview .peopleops-country-select option {
+  background: var(--card);
+  color: var(--foreground);
+}
+.peopleops-overview .peopleops-table-head {
+  background: var(--muted);
+  color: var(--muted-foreground);
+}
+.peopleops-overview .peopleops-table-row {
+  border-color: var(--border);
+  color: var(--foreground);
+}
+.peopleops-overview .peopleops-table-row:hover {
+  background: color-mix(in srgb, var(--accent) 55%, var(--card));
+}
+.dark .peopleops-sidebar [data-slot="sidebar-inner"],
+.dark .peopleops-sidebar [data-slot="sidebar-container"] {
+  background: var(--sidebar);
+}
+.dark .peopleops-sidebar [data-slot="sidebar-menu-button"],
+.dark .peopleops-sidebar [data-slot="sidebar-menu-button"] span {
+  color: var(--sidebar-foreground);
+}
+.dark .peopleops-sidebar [data-slot="sidebar-menu-button"][data-active="true"] {
+  color: var(--sidebar-accent-foreground);
+  background: var(--sidebar-accent);
+}
+.dark .peopleops-overview [class*="text-[#292D40]"],
+.dark .peopleops-overview [class*="text-[#30354A]"],
+.dark .peopleops-overview [class*="text-[#25283A]"] {
+  color: var(--foreground) !important;
+}
+.dark .peopleops-overview [class*="text-[#78839A]"],
+.dark .peopleops-overview [class*="text-[#69758D]"],
+.dark .peopleops-overview [class*="text-[#75819A]"],
+.dark .peopleops-overview [class*="text-[#46516A]"] {
+  color: var(--muted-foreground) !important;
+}
+.dark .peopleops-overview [class*="bg-white"] {
+  background-color: var(--card) !important;
+}
+.dark .peopleops-overview [class*="border-[#E3E7F0]"],
+.dark .peopleops-overview [class*="border-[#E7EAF2]"] {
+  border-color: var(--border) !important;
+}
+.dark .peopleops-overview [class*="bg-[#F7F8FC]"],
+.dark .peopleops-overview [class*="bg-[#F8F9FC]"] {
+  background-color: var(--muted) !important;
+}
+.dark .peopleops-overview [class*="bg-[#EDEBFF]"] {
+  background-color: var(--accent) !important;
+}
+.dark .peopleops-overview [class*="text-[#5146D8]"] {
+  color: var(--primary) !important;
+}
+.dark .peopleops-overview .recharts-cartesian-grid line {
+  stroke: var(--border);
+}
+.dark .peopleops-overview .recharts-cartesian-axis-tick-value {
+  fill: var(--muted-foreground);
+}
+.dark .peopleops-overview .recharts-tooltip-wrapper > div {
+  background: var(--popover) !important;
+  border-color: var(--border) !important;
+  color: var(--popover-foreground) !important;
+}
+.dark .peopleops-topbar {
+  background: color-mix(in srgb, var(--card) 94%, transparent);
+  border-color: var(--border);
+}
+.dark .peopleops-topbar kbd {
+  color: var(--muted-foreground);
+}
+.dark .cn-toast {
+  background: var(--popover) !important;
+  color: var(--popover-foreground) !important;
+  border-color: var(--border) !important;
+}
+
+/* Brand typography follows the PeopleOps Foundations guide. */
+.peopleops-overview,
+.peopleops-sidebar,
+.peopleops-topbar,
+.peopleops-employees {
+  font-family: "Manrope", sans-serif;
+}
+\n.peopleops-overview h1,
+.peopleops-overview h2,
+.peopleops-employees h1,
+.peopleops-employees h2,
+.peopleops-topbar [data-slot="breadcrumb-list"],
+.peopleops-sidebar [data-slot="sidebar-brand"] {
+  font-family: "Geist", sans-serif;
+}
+
+/* Typography system: Geist for hierarchy and all numeric data; Manrope for UI copy. */
+.peopleops-overview h1,
+.peopleops-overview h2,
+.peopleops-overview h3,
+.peopleops-employees h1,
+.peopleops-employees h2,
+.peopleops-employees h3,
+.peopleops-topbar [data-slot="breadcrumb-list"],
+.peopleops-sidebar [data-slot="sidebar-brand"] {
+  font-family: "Geist", sans-serif;
+}
+.peopleops-overview .overview-metric-card > div:nth-of-type(2) p,
+.peopleops-overview .recharts-cartesian-axis-tick-value,
+.peopleops-overview .recharts-label,
+.peopleops-overview .recharts-tooltip-wrapper,
+.peopleops-overview .overview-data-table td:last-child,
+.peopleops-employees tbody td:nth-child(4),
+.peopleops-employees [data-numeric],
+.peopleops-overview [data-numeric] {
+  font-family: "Geist", sans-serif;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.dark .peopleops-sidebar [class*="text-[#292D40]"],
+.dark .peopleops-sidebar [class*="text-[#30354A]"],
+.dark .peopleops-sidebar [class*="text-[#68758E]"],
+.dark .peopleops-sidebar [class*="text-[#77829A]"],
+.dark .peopleops-sidebar [class*="text-[#78839A]"] {
+  color: var(--sidebar-foreground) !important;
+}
+.dark .peopleops-sidebar [class*="bg-white"] {
+  background-color: var(--sidebar) !important;
+}
+.dark .peopleops-sidebar [class*="border-[#E5E8F0]"] {
+  border-color: var(--sidebar-border) !important;
+}
+
+/* Explicit typography ownership: Geist for every heading and every numeric value. */
+.peopleops-overview :is(h1, h2, h3, h4),
+.peopleops-employees :is(h1, h2, h3, h4),
+.peopleops-topbar :is(h1, h2, h3, h4) {
+  font-family: "Geist", sans-serif !important;
+}
+.peopleops-overview :is(.tabular-nums, [data-numeric]),
+.peopleops-employees :is(.tabular-nums, [data-numeric]),
+.peopleops-topbar :is(.tabular-nums, [data-numeric]),
+.peopleops-overview .peopleops-metric p:last-of-type,
+.peopleops-overview .peopleops-metric .text-\[28px\],
+.peopleops-overview .recharts-text,
+.peopleops-employees table td:is(:nth-child(4), :last-child),
+.peopleops-employees [data-slot="dialog-content"] .salary-value,
+.peopleops-employees [data-slot="dialog-content"] .salary-change {
+  font-family: "Geist", sans-serif !important;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* PeopleOps button scale: shared actions use one predictable control height. */
+@layer components {
+  .peopleops-overview .overview-heading button,
+  .peopleops-employees > div:first-child button {
+    min-height: 36px;
+    height: 36px;
+    padding-inline: 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1;
+  }
+
+  .peopleops-overview .overview-heading button:has(svg:only-child),
+  .peopleops-employees button[aria-label]:has(svg:only-child) {
+    width: 36px;
+    min-width: 36px;
+    padding-inline: 0;
+  }
+
+  .peopleops-overview button,
+  .peopleops-employees button {
+    line-height: 1.25;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   PeopleOps design tokens v2
+   Brand: Slate & Cobalt | Charts: vibrant categorical palette
+   Keep component styling semantic: consume these tokens, not raw hex values.
+   -------------------------------------------------------------------------- */
+
+:root {
+  color-scheme: light;
+
+  /* Brand */
+  --brand-50: #eff6ff;
+  --brand-100: #dbeafe;
+  --brand-200: #bfdbfe;
+  --brand-300: #93c5fd;
+  --brand-400: #60a5fa;
+  --brand-500: #3b82f6;
+  --brand-600: #2563eb;
+  --brand-700: #1d4ed8;
+  --brand-800: #1e40af;
+  --brand-900: #1e3a8a;
+
+  /* Core surfaces and typography */
+  --background: #f8fafc;
+  --foreground: #1e293b;
+  --card: #ffffff;
+  --card-foreground: #1e293b;
+  --popover: #ffffff;
+  --popover-foreground: #1e293b;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --surface-subtle: #f1f5f9;
+  --surface-sunken: #f8fafc;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+
+  /* Actions and interaction */
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --secondary: #eff6ff;
+  --secondary-foreground: #1d4ed8;
+  --accent: #dbeafe;
+  --accent-foreground: #1e40af;
+  --ring: #60a5fa;
+  --link: #1d4ed8;
+
+  /* Feedback */
+  --success: #15803d;
+  --success-soft: #dcfce7;
+  --warning: #b45309;
+  --warning-soft: #fef3c7;
+  --destructive: #dc2626;
+  --destructive-soft: #fee2e2;
+  --info: #0369a1;
+  --info-soft: #e0f2fe;
+
+  /* Borders and controls */
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --input: #cbd5e1;
+  --control: #ffffff;
+
+  /* Vibrant categorical chart palette */
+  --chart-1: #2563eb; /* blue */
+  --chart-2: #0d9488; /* teal */
+  --chart-3: #f59e0b; /* amber */
+  --chart-4: #8b5cf6; /* violet */
+  --chart-5: #ec4899; /* pink */
+  --chart-6: #16a34a; /* green */
+  --chart-7: #f97316; /* orange */
+  --chart-8: #06b6d4; /* cyan */
+  --chart-9: #6366f1; /* indigo */
+  --chart-10: #e11d48; /* rose */
+
+  /* Navigation */
+  --sidebar: #ffffff;
+  --sidebar-foreground: #334155;
+  --sidebar-primary: #2563eb;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #eff6ff;
+  --sidebar-accent-foreground: #1d4ed8;
+  --sidebar-border: #e2e8f0;
+  --sidebar-ring: #60a5fa;
+
+  /* Shape, elevation and motion */
+  --radius: 0.625rem;
+  --shadow-xs: 0 1px 2px rgb(15 23 42 / 4%);
+  --shadow-sm: 0 1px 3px rgb(15 23 42 / 6%), 0 1px 2px rgb(15 23 42 / 4%);
+  --shadow-md: 0 4px 12px rgb(15 23 42 / 6%);
+  --shadow-lg: 0 12px 32px rgb(15 23 42 / 10%);
+  --focus-ring: 0 0 0 3px rgb(96 165 250 / 28%);
+  --motion-fast: 120ms;
+  --motion-normal: 180ms;
+  --motion-slow: 240ms;
+}
+
+.dark {
+  color-scheme: dark;
+
+  /* Brand remains recognizable, with a brighter accessible action color. */
+  --brand-50: #eff6ff;
+  --brand-100: #dbeafe;
+  --brand-200: #bfdbfe;
+  --brand-300: #93c5fd;
+  --brand-400: #60a5fa;
+  --brand-500: #3b82f6;
+  --brand-600: #2563eb;
+  --brand-700: #1d4ed8;
+  --brand-800: #1e40af;
+  --brand-900: #1e3a8a;
+
+  /* Layered dark surfaces */
+  --background: #0b1220;
+  --foreground: #e2e8f0;
+  --card: #111c2e;
+  --card-foreground: #e2e8f0;
+  --popover: #172338;
+  --popover-foreground: #e2e8f0;
+  --surface: #111c2e;
+  --surface-raised: #172338;
+  --surface-subtle: #1b2a40;
+  --surface-sunken: #0b1220;
+  --muted: #1b2a40;
+  --muted-foreground: #94a3b8;
+
+  /* Actions and interaction */
+  --primary: #60a5fa;
+  --primary-foreground: #0b1b33;
+  --secondary: #172b49;
+  --secondary-foreground: #bfdbfe;
+  --accent: #1d3558;
+  --accent-foreground: #dbeafe;
+  --ring: #60a5fa;
+  --link: #93c5fd;
+
+  /* Feedback */
+  --success: #4ade80;
+  --success-soft: #123524;
+  --warning: #fbbf24;
+  --warning-soft: #3b2b12;
+  --destructive: #f87171;
+  --destructive-soft: #3b1e27;
+  --info: #38bdf8;
+  --info-soft: #102f45;
+
+  /* Borders and controls */
+  --border: #26364d;
+  --border-strong: #3b4d66;
+  --input: #34465f;
+  --control: #172338;
+
+  /* Charts stay vivid against dark surfaces */
+  --chart-1: #60a5fa;
+  --chart-2: #2dd4bf;
+  --chart-3: #fbbf24;
+  --chart-4: #a78bfa;
+  --chart-5: #f472b6;
+  --chart-6: #4ade80;
+  --chart-7: #fb923c;
+  --chart-8: #22d3ee;
+  --chart-9: #818cf8;
+  --chart-10: #fb7185;
+
+  /* Navigation */
+  --sidebar: #0f1a2b;
+  --sidebar-foreground: #cbd5e1;
+  --sidebar-primary: #60a5fa;
+  --sidebar-primary-foreground: #0b1b33;
+  --sidebar-accent: #172b49;
+  --sidebar-accent-foreground: #dbeafe;
+  --sidebar-border: #26364d;
+  --sidebar-ring: #60a5fa;
+
+  /* Dark elevation is restrained and border-led */
+  --shadow-xs: 0 1px 2px rgb(0 0 0 / 16%);
+  --shadow-sm: 0 1px 3px rgb(0 0 0 / 20%);
+  --shadow-md: 0 6px 18px rgb(0 0 0 / 24%);
+  --shadow-lg: 0 14px 36px rgb(0 0 0 / 32%);
+  --focus-ring: 0 0 0 3px rgb(96 165 250 / 32%);
+}
+
+/* Semantic utility hooks for charts, status labels and consistent controls. */
+@layer components {
+  .peopleops-chart-color-1 {
+    color: var(--chart-1);
+  }
+  .peopleops-chart-color-2 {
+    color: var(--chart-2);
+  }
+  .peopleops-chart-color-3 {
+    color: var(--chart-3);
+  }
+  .peopleops-chart-color-4 {
+    color: var(--chart-4);
+  }
+  .peopleops-chart-color-5 {
+    color: var(--chart-5);
+  }
+  .peopleops-chart-color-6 {
+    color: var(--chart-6);
+  }
+  .peopleops-chart-color-7 {
+    color: var(--chart-7);
+  }
+  .peopleops-chart-color-8 {
+    color: var(--chart-8);
+  }
+  .peopleops-chart-color-9 {
+    color: var(--chart-9);
+  }
+  .peopleops-chart-color-10 {
+    color: var(--chart-10);
+  }
+
+  .peopleops-status-success {
+    color: var(--success);
+    background: var(--success-soft);
+  }
+  .peopleops-status-warning {
+    color: var(--warning);
+    background: var(--warning-soft);
+  }
+  .peopleops-status-danger {
+    color: var(--destructive);
+    background: var(--destructive-soft);
+  }
+  .peopleops-status-info {
+    color: var(--info);
+    background: var(--info-soft);
+  }
+
+  .peopleops-overview :is(button, a, input, select, textarea):focus-visible,
+  .peopleops-employees :is(button, a, input, select, textarea):focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    box-shadow: var(--focus-ring);
+  }
+}
+
+/* Expose extended semantic tokens to Tailwind's theme namespace. */
+@theme inline {
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-subtle: var(--surface-subtle);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-link: var(--link);
+  --color-chart-6: var(--chart-6);
+  --color-chart-7: var(--chart-7);
+  --color-chart-8: var(--chart-8);
+  --color-chart-9: var(--chart-9);
+  --color-chart-10: var(--chart-10);
+}
+
+/* PeopleOps final component polish: consistent spacing, hover and theme behavior. */
+@layer components {
+  :root {
+    --control-height-sm: 2rem;
+    --control-height: 2.25rem;
+    --control-height-lg: 2.5rem;
+    --control-radius: 0.5rem;
+    --control-px: 0.75rem;
+    --hover-surface: color-mix(in srgb, var(--foreground) 5%, var(--surface));
+    --active-surface: color-mix(in srgb, var(--primary) 10%, var(--surface));
+  }
+
+  .dark {
+    --hover-surface: color-mix(in srgb, var(--foreground) 8%, var(--surface));
+    --active-surface: color-mix(in srgb, var(--primary) 18%, var(--surface));
+  }
+
+  [data-slot="button"] {
+    min-height: var(--control-height);
+    border-radius: var(--control-radius);
+    transition:
+      color 150ms ease,
+      background-color 150ms ease,
+      border-color 150ms ease,
+      box-shadow 150ms ease;
+  }
+
+  [data-slot="button"][data-variant="outline"],
+  [data-slot="button"].border {
+    border-color: var(--border);
+  }
+
+  [data-slot="button"]:not(:disabled):hover {
+    filter: brightness(0.97);
+  }
+  .dark [data-slot="button"]:not(:disabled):hover {
+    filter: brightness(1.12);
+  }
+
+  [data-slot="input"],
+  [data-slot="native-select"] {
+    min-height: var(--control-height);
+    border-radius: var(--control-radius);
+    border-color: var(--input);
+    color: var(--foreground);
+    background-color: var(--control, var(--surface));
+  }
+
+  [data-slot="input"]:hover,
+  [data-slot="native-select"]:hover {
+    border-color: var(--border-strong);
+  }
+
+  [data-slot="dropdown-menu-content"],
+  [data-slot="select-content"],
+  [data-slot="popover-content"],
+  [data-slot="command"] {
+    border: 1px solid var(--border);
+    border-radius: 0.625rem;
+    background: var(--popover);
+    color: var(--popover-foreground);
+    box-shadow: var(--shadow-md);
+    padding: 0.25rem;
+  }
+
+  [data-slot="dropdown-menu-item"],
+  [data-slot="dropdown-menu-checkbox-item"],
+  [data-slot="dropdown-menu-radio-item"] {
+    min-height: 2rem;
+    padding: 0.375rem 0.625rem;
+    border-radius: 0.375rem;
+    color: var(--popover-foreground);
+    transition:
+      background-color 120ms ease,
+      color 120ms ease;
+  }
+
+  [data-slot="dropdown-menu-item"]:hover,
+  [data-slot="dropdown-menu-checkbox-item"]:hover,
+  [data-slot="dropdown-menu-radio-item"]:hover,
+  [data-slot="dropdown-menu-item"]:focus,
+  [data-slot="dropdown-menu-checkbox-item"]:focus,
+  [data-slot="dropdown-menu-radio-item"]:focus {
+    background: var(--accent);
+    color: var(--accent-foreground);
+  }
+
+  [data-slot="badge"] {
+    border-radius: 999px;
+    padding-inline: 0.625rem;
+    font-weight: 600;
+  }
+
+  [data-slot="dialog-content"],
+  [data-slot="alert-dialog-content"] {
+    border-color: var(--border);
+    background: var(--card);
+    color: var(--card-foreground);
+    box-shadow: var(--shadow-lg);
+  }
+
+  [data-slot="sidebar"] {
+    background: var(--sidebar);
+    color: var(--sidebar-foreground);
+    border-color: var(--sidebar-border);
+  }
+
+  [data-slot="sidebar-menu-button"]:not([data-active="true"]):hover {
+    background: var(--sidebar-accent);
+    color: var(--sidebar-accent-foreground);
+  }
+
+  .peopleops-topbar {
+    background: color-mix(in srgb, var(--background) 88%, transparent);
+    border-color: var(--border);
+  }
+
+  .peopleops-sidebar {
+    background: var(--sidebar);
+    color: var(--sidebar-foreground);
+  }
+
+  :is(
+    button,
+    a,
+    input,
+    select,
+    textarea,
+    [role="button"],
+    [role="menuitem"]
+  ):focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-slot="button"],
+    [data-slot="dropdown-menu-item"],
+    [data-slot="dropdown-menu-checkbox-item"],
+    [data-slot="dropdown-menu-radio-item"] {
+      transition-duration: 0.01ms;
     }
+  }
+  *,
+  *::before,
+  *::after {
+    outline-color: transparent !important;
+  }
 }

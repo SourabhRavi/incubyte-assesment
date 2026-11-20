@@ -1,7 +1,6 @@
 import * as React from "react"
 import { NavLink, useLocation } from "react-router"
-import { ChartNoAxesCombined, Command, Users } from "lucide-react"
-
+import { LayoutGrid, Users } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -16,16 +15,8 @@ import {
 } from "@/components/ui/sidebar"
 
 const navigation = [
-  {
-    title: "Overview",
-    url: "/overview",
-    icon: ChartNoAxesCombined,
-  },
-  {
-    title: "Employees",
-    url: "/employees",
-    icon: Users,
-  },
+  { title: "Overview", url: "/overview", icon: LayoutGrid },
+  { title: "Employees", url: "/employees", icon: Users },
 ] as const
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -33,88 +24,83 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { isMobile, setOpenMobile } = useSidebar()
 
   return (
-    <Sidebar collapsible="offcanvas" className="border-r border-[#E7EAF2] bg-white" {...props}>
-      <SidebarHeader className="border-b border-[#E7EAF2] px-5 py-6">
+    <Sidebar
+      collapsible="icon"
+      className="peopleops-sidebar border-r border-[var(--sidebar-border)] bg-[var(--sidebar)]"
+      {...props}
+    >
+      <SidebarHeader className="border-b-0 px-[27px] pt-[29px] pb-[30px] transition-[padding] duration-200 ease-linear group-data-[collapsible=icon]:px-3">
         <SidebarMenu>
-          <SidebarMenuItem>
+          <SidebarMenuItem className="group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
             <SidebarMenuButton
               size="lg"
-              tooltip="PeopleOps"
-              className="h-11 data-[slot=sidebar-menu-button]:p-1.5!"
-              render={
-                <NavLink
-                  to="/overview"
-                  onClick={() => {
-                    if (isMobile) {
-                      setOpenMobile(false)
-                    }
-                  }}
-                />
-              }
+              tooltip="ACME"
+              className="h-auto min-h-0 gap-[10px] p-0 hover:bg-transparent data-[slot=sidebar-menu-button]:p-0"
             >
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-[9px] bg-[#5146D8] text-white">
-                <span className="text-[21px] font-semibold leading-none">p</span>
-              </span>
-
-              <span className="flex min-w-0 flex-col items-start gap-0.5">
-                <span className="text-[22px] leading-none font-semibold tracking-[-0.5px] text-[#25283A]">
-                  PeopleOps
+              <NavLink
+                to="/overview"
+                className="flex w-full items-center gap-[10px]"
+                onClick={() => isMobile && setOpenMobile(false)}
+              >
+                <span className="flex size-[31px] shrink-0 items-center justify-center rounded-[9px] bg-[var(--primary)] text-white">
+                  <span className="text-[22px] leading-none font-semibold">
+                    A
+                  </span>
                 </span>
-                <span className="text-xs font-normal text-muted-foreground">
-                  Salary management
+                <span className="text-[21px] font-semibold tracking-[-0.55px] text-[var(--foreground)] group-data-[collapsible=icon]:hidden">
+                  ACME
                 </span>
-              </span>
+              </NavLink>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel className="px-2 pb-3 pt-7 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#777F92]">Workspace</SidebarGroupLabel>
-
-          <SidebarMenu className="gap-1.5">
+      <SidebarContent className="px-[15px] pt-[15px] transition-[padding] duration-200 ease-linear group-data-[collapsible=icon]:px-2">
+        <SidebarGroup className="p-0">
+          <SidebarGroupLabel className="px-[12px] pb-[14px] text-[9px] font-semibold tracking-[0.02em] text-[var(--muted-foreground)] uppercase group-data-[collapsible=icon]:hidden">
+            Workspace
+          </SidebarGroupLabel>
+          <SidebarMenu className="gap-[5px]">
             {navigation.map(({ title, url, icon: Icon }) => (
-              <SidebarMenuItem key={url}>
+              <SidebarMenuItem key={url} className="group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
                 <SidebarMenuButton
+                  isActive={pathname === url}
+                  tooltip={title}
+                  className="relative h-[43px] rounded-[8px] px-[15px] text-[13px] font-medium text-[var(--sidebar-foreground)] before:absolute before:top-[12px] before:bottom-[12px] before:left-0 before:w-[3px] before:rounded-r before:bg-transparent hover:bg-[var(--sidebar-accent)] hover:text-[var(--primary)] data-[active=true]:bg-[var(--secondary)] data-[active=true]:font-semibold data-[active=true]:text-[var(--primary)] data-[active=true]:shadow-none data-[active=true]:before:bg-[var(--primary)]"
                   render={
                     <NavLink
                       to={url}
-                      onClick={() => {
-                        if (isMobile) {
-                          setOpenMobile(false)
-                        }
-                      }}
+                      onClick={() => isMobile && setOpenMobile(false)}
                     />
                   }
-                  isActive={pathname === url}\n                  className="h-11 rounded-lg px-4 text-[13px] data-[active=true]:bg-[#EDEBFF] data-[active=true]:font-semibold data-[active=true]:text-[#5146D8] data-[active=true]:shadow-none"
-                  tooltip={title}
                 >
-                  <Icon />
-                  <span>{title}</span>
+                  <Icon className="size-[17px] shrink-0" />
+                  <span className="group-data-[collapsible=icon]:hidden">
+                    {title}
+                  </span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
-
-      <SidebarFooter className="border-t border-[#E7EAF2] px-5 py-5">
+      <SidebarFooter className="mx-[23px] border-t border-[var(--sidebar-border)] px-0 pt-[22px] pb-[27px] transition-[margin] duration-200 ease-linear group-data-[collapsible=icon]:mx-2">
         <SidebarMenu>
-          <SidebarMenuItem>
+          <SidebarMenuItem className="group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
             <SidebarMenuButton
               size="lg"
-              tooltip="HR Manager"
-              className="cursor-default"
+              tooltip="Alex Morgan"
+              className="h-auto min-h-0 cursor-default gap-[12px] p-0 hover:bg-transparent"
             >
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#EDEBFF] text-xs font-semibold text-[#5146D8]">
-                HR
+              <span className="flex size-[31px] shrink-0 items-center justify-center rounded-full bg-[var(--secondary)] text-[11px] font-semibold text-[var(--primary)]">
+                AM
               </span>
-
-              <span className="flex min-w-0 flex-col items-start gap-1">
-                <span className="truncate text-[13px] font-semibold text-[#25283A]">Alex Morgan</span>
-                <span className="truncate text-xs text-muted-foreground">
-                  People team
+              <span className="flex min-w-0 flex-col items-start gap-[3px] group-data-[collapsible=icon]:hidden">
+                <span className="text-[12px] font-semibold text-[var(--foreground)]">
+                  Alex Morgan
+                </span>
+                <span className="text-[10px] text-[var(--muted-foreground)]">
+                  HR Manager
                 </span>
               </span>
             </SidebarMenuButton>
@@ -124,5 +110,4 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     </Sidebar>
   )
 }
-
 export default AppSidebar

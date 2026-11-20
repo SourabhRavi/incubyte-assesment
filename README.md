@@ -1,17 +1,24 @@
-# PeopleOps
+# ACME People
 
 Employee and salary management application built for the Incubyte engineering assessment.
 
 ## Links
 
-- **Live Application:** [PeopleOps](https://incubyte.chitua.site)
+- **Live Application:** [ACME People](https://incubyte-assesment-murex.vercel.app)
 - **Demo Video:** [Watch the Loom walkthrough](https://www.loom.com/share/77c3471354f74b9ba38ba96c64132a64)
+
+## Product artifacts
+
+- [Product requirements](docs/requirements.md)
+- [Dashboard design and interaction notes](docs/dashboard-design.md)
 
 ## Features
 
-- Employee CRUD: create, view, update, and delete records.
+- Employee CRUD: create, view, update, and soft-delete records.
 - Search employees by name or email, filter by country and job title, and paginate results.
-- View employee count, minimum, maximum, and average salary by country.
+- View active workforce distribution across supported countries.
+- Compare country-level employee counts and local-currency average salaries without combining unlike currencies.
+- View minimum, maximum, and average salary by country.
 - View average salary and employee count by job title within a country.
 - Seed the database with 10,000 synthetic employees.
 
@@ -106,17 +113,18 @@ npm --prefix client run test:coverage
 ## Assumptions and Trade-offs
 
 - Supported countries and job titles are fixed lists. Currency is derived from the employee's country.
-- Salary analytics are calculated for one country at a time. Salaries across different currencies are not directly compared.
+- Salary analytics are calculated for one country at a time. Salaries across different currencies are not directly compared or added.
 - Employee deletion uses soft deletion. Deleted employees are excluded from active listings and salary analytics.
-- Salary analytics use database aggregations on request instead of a separately maintained summary table. This avoids synchronization complexity and keeps results current for the assessment's dataset.
+- Salary statistics are calculated directly from database aggregations so results stay current without maintaining a separate summary table.
 - Search uses case-insensitive substring matching on employee names and email addresses.
 - The seed data is synthetic and intended for development and demonstration, not real HR use.
 
-## Out of Scope and Trade-offs
+## Out of Scope
 
-- **Authentication & RBAC:** Excluded to prioritize the assessment's core employee management and salary analytics workflows.
+- **Authentication & RBAC:** Excluded to prioritize the assessment's core employee management and salary analytics workflows. This is not a production security recommendation.
 - **Payroll, Attendance, Leave & Recruitment:** Excluded because these require separate business workflows beyond the stated requirements.
-- **Precomputed Analytics:** Salary statistics are calculated directly from database aggregations to keep results current without introducing summary synchronization logic.
+- **Historical salary trends and approvals:** Not implemented because the current data model does not capture salary history or approval events.
+- **External salary benchmarking:** Excluded because no trusted benchmark source or methodology is supplied.
 - **Advanced Search Optimization:** Deferred because the assessment dataset is limited to 10,000 employees; optimization should follow measured performance results.
 
 The implementation prioritizes working end-to-end flows, meaningful automated tests, and maintainable code over additional features outside the assessment scope.

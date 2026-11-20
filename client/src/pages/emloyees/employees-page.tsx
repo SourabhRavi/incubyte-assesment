@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { useSearchParams } from "react-router"
 import {
   Eye,
@@ -140,33 +140,74 @@ const EmployeeRow = ({
   </tr>
 )
 
+type EmployeeSearchInputProps = {
+  search: string
+  onCommit: (value: string) => void
+}
+
+const EmployeeSearchInput = ({ search, onCommit }: EmployeeSearchInputProps) => {
+  const [searchInput, setSearchInput] = useState(search)
+  const onCommitRef = useRef(onCommit)
+
+  useEffect(() => {
+    onCommitRef.current = onCommit
+  }, [onCommit])
+
+  useEffect(() => {
+    const value = searchInput.trim()
+    if (value === search) return
+
+    const timeout = window.setTimeout(() => {
+      onCommitRef.current(value)
+    }, 300)
+
+    return () => window.clearTimeout(timeout)
+  }, [searchInput, search])
+
+  return (
+    <div className="relative w-full sm:w-64">
+      <Search
+        aria-hidden="true"
+        className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
+      />
+      <Input
+        type="search"
+        aria-label="Search employees"
+        placeholder="Search name or email..."
+        value={searchInput}
+        onChange={(event) => setSearchInput(event.target.value)}
+        className="h-9 pr-9 pl-9 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none"
+      />
+      {search && (
+        <button
+          type="button"
+          aria-label="Clear search"
+          onClick={() => {
+            setSearchInput("")
+            onCommit("")
+          }}
+          className="absolute top-1/2 right-2 flex size-6 -translate-y-1/2 items-center justify-center rounded text-muted-foreground hover:bg-muted hover:text-foreground"
+        >
+          <X aria-hidden="true" className="size-4" />
+        </button>
+      )}
+    </div>
+  )
+}
 const EmployeesPage = () => {
   const [searchParams, setSearchParams] = useSearchParams()
 
   const search = searchParams.get("search") ?? ""
-  const [searchInput, setSearchInput] = useState(search)
 
-  useEffect(() => {
-    const timeout = window.setTimeout(() => {
-      const value = searchInput.trim()
-
-      if (value === search) return
-
-      const nextParams = new URLSearchParams(searchParams)
-
-      if (value) {
-        nextParams.set("search", value)
-      } else {
-        nextParams.delete("search")
-      }
-
+  const commitSearch = useCallback((value: string) => {
+    setSearchParams((currentParams) => {
+      const nextParams = new URLSearchParams(currentParams)
+      if (value) nextParams.set("search", value)
+      else nextParams.delete("search")
       nextParams.delete("page")
-
-      setSearchParams(nextParams, { replace: true })
-    }, 300)
-
-    return () => window.clearTimeout(timeout)
-  }, [searchInput, search, searchParams, setSearchParams])
+      return nextParams
+    }, { replace: true })
+  }, [setSearchParams])
 
   const [isEmployeeDialogOpen, setIsEmployeeDialogOpen] = useState(false)
   const [selectedEmployee, setSelectedEmployee] = useState<
@@ -198,17 +239,19 @@ const EmployeesPage = () => {
     updates: Record<string, string>,
     options?: { replace?: boolean }
   ) => {
-    const nextParams = new URLSearchParams(searchParams)
+    setSearchParams((currentParams) => {
+      const nextParams = new URLSearchParams(currentParams)
 
-    Object.entries(updates).forEach(([key, value]) => {
-      if (value) {
-        nextParams.set(key, value)
-      } else {
-        nextParams.delete(key)
-      }
-    })
+      Object.entries(updates).forEach(([key, value]) => {
+        if (value) {
+          nextParams.set(key, value)
+        } else {
+          nextParams.delete(key)
+        }
+      })
 
-    setSearchParams(nextParams, options)
+      return nextParams
+    }, options)
   }
 
   const updateFilter = (key: "country" | "jobTitle", value: string) => {
@@ -240,9 +283,12 @@ const EmployeesPage = () => {
 
   const pagination = data?.pagination
   const employees = data?.data ?? []
+  const totalPages = pagination?.totalPages ?? 0
+  const canGoToPreviousPage = page > 1
+  const canGoToNextPage = page < totalPages
 
   return (
-    <main className="flex min-h-0 flex-col gap-6 p-4 md:h-full md:overflow-hidden md:p-8">
+    <main className="peopleops-employees flex min-h-0 flex-col gap-6 p-4 md:h-full md:overflow-hidden md:p-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           {/* <p className="text-sm text-muted-foreground/60">People management</p> */}
@@ -272,7 +318,7 @@ const EmployeesPage = () => {
           <button
             type="button"
             onClick={openAddDialog}
-            className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90"
           >
             + Add Employee
           </button>
@@ -296,7 +342,6 @@ const EmployeesPage = () => {
                 aria-label="Clear filters"
                 title="Clear filters"
                 onClick={() => {
-                  setSearchInput("")
                   updateParams({
                     country: "",
                     jobTitle: "",
@@ -318,8 +363,6 @@ const EmployeesPage = () => {
                 aria-label="Clear filters"
                 title="Clear filters"
                 onClick={() => {
-                  setSearchInput("")
-
                   updateParams({
                     country: "",
                     jobTitle: "",
@@ -333,35 +376,7 @@ const EmployeesPage = () => {
               </button>
             )}
 
-            <div className="relative w-full sm:w-64">
-              <Search
-                aria-hidden="true"
-                className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
-              />
-
-              <Input
-                type="search"
-                aria-label="Search employees"
-                placeholder="Search name or email..."
-                value={searchInput}
-                onChange={(event) => setSearchInput(event.target.value)}
-                className="h-9 pr-9 pl-9 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none"
-              />
-
-              {search && (
-                <button
-                  type="button"
-                  aria-label="Clear search"
-                  onClick={() => {
-                    setSearchInput("")
-                    updateParams({ search: "", page: "" }, { replace: true })
-                  }}
-                  className="absolute top-1/2 right-2 flex size-6 -translate-y-1/2 items-center justify-center rounded text-muted-foreground hover:bg-muted hover:text-foreground"
-                >
-                  <X aria-hidden="true" className="size-4" />
-                </button>
-              )}
-            </div>
+            <EmployeeSearchInput key={`${search}:${page}`} search={search} onCommit={commitSearch} />
 
             <NativeSelect
               aria-label="Filter by country"
@@ -493,12 +508,12 @@ const EmployeesPage = () => {
 
           <div className="flex items-center justify-between gap-3 sm:justify-end">
             <p className="text-sm text-muted-foreground">
-              Page {pagination?.page ?? page} of {pagination?.totalPages ?? 0}
+              Page {page} of {totalPages}
             </p>
 
             <button
               type="button"
-              disabled={!pagination?.hasPreviousPage || isFetching}
+              disabled={!canGoToPreviousPage || isFetching}
               onClick={() => updateParams({ page: String(page - 1) })}
               className="h-9 rounded-md border px-3 text-sm font-medium hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
             >
@@ -507,7 +522,7 @@ const EmployeesPage = () => {
 
             <button
               type="button"
-              disabled={!pagination?.hasNextPage || isFetching}
+              disabled={!canGoToNextPage || isFetching}
               onClick={() => updateParams({ page: String(page + 1) })}
               className="h-9 rounded-md border px-3 text-sm font-medium hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
             >

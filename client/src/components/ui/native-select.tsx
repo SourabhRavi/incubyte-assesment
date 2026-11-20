@@ -1,35 +1,44 @@
 import * as React from "react"
+import { ChevronDown } from "lucide-react"
 import { cn } from "cn"
-import { ChevronDownIcon } from "lucide-react"
 
 type NativeSelectProps = Omit<React.ComponentProps<"select">, "size"> & {
   size?: "sm" | "default" | "lg"
+  /** Classes for the native select element. */
+  selectClassName?: string
 }
 
+/**
+ * Native HTML select styled with the app's shadcn design tokens.
+ * The wrapper owns layout sizing so the chevron always stays inside the field.
+ */
 function NativeSelect({
   className,
+  selectClassName,
   size = "default",
+  children,
   ...props
 }: NativeSelectProps) {
   return (
     <div
-      className={cn(
-        "group/native-select relative w-fit has-[select:disabled]:opacity-50",
-        className
-      )}
       data-slot="native-select-wrapper"
       data-size={size}
+      className={cn("relative inline-flex min-w-0", className)}
     >
       <select
         data-slot="native-select"
         data-size={size}
-        className="h-9 w-full min-w-0 appearance-none rounded-lg border border-input bg-transparent py-1 pr-8 pl-2.5 text-sm transition-colors outline-none select-none selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 data-[size=sm]:h-7 data-[size=sm]:rounded-[min(var(--radius-md),10px)] data-[size=sm]:py-0.5 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+        className={cn(
+          "h-9 w-full min-w-0 appearance-none rounded-lg border border-input bg-background py-1 pl-3 pr-9 text-sm text-foreground shadow-none outline-none transition-colors focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/15 data-[size=sm]:h-8 data-[size=lg]:h-10",
+          selectClassName
+        )}
         {...props}
-      />
-      <ChevronDownIcon
-        className="pointer-events-none absolute top-1/2 right-2.5 size-4 -translate-y-1/2 text-muted-foreground select-none"
+      >
+        {children}
+      </select>
+      <ChevronDown
         aria-hidden="true"
-        data-slot="native-select-icon"
+        className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
       />
     </div>
   )

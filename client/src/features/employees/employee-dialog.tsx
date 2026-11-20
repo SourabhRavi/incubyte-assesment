@@ -84,25 +84,25 @@ const EmployeeDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
-        <DialogHeader>
-          <DialogTitle>
+      <DialogContent className="flex max-h-[calc(100dvh-2rem)] flex-col gap-4 overflow-hidden rounded-xl p-5 sm:max-w-xl sm:p-6">
+        <DialogHeader className="shrink-0 space-y-1">
+          <DialogTitle className="text-base font-semibold tracking-tight">
             {isEditing ? "Edit employee" : "Add employee"}
           </DialogTitle>
 
-          <DialogDescription>
+          <DialogDescription className="text-sm text-muted-foreground">
             {isEditing
               ? "Update the employee's information below."
               : "Enter the employee's details to add them to your directory."}
           </DialogDescription>
         </DialogHeader>
 
-        <Separator />
+        <Separator className="shrink-0" />
 
         {submitError && (
           <div
             role="alert"
-            className="rounded-md border border-destructive/30 bg-destructive/5 p-3 text-sm text-destructive"
+            className="shrink-0 rounded-md border border-destructive/30 bg-destructive/5 p-2 text-xs text-destructive"
           >
             {submitError}
           </div>

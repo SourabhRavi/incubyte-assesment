@@ -1,26 +1,26 @@
-import { useState } from "react"
+import { useState, type ComponentType, type ReactNode } from "react"
 import {
-  ArrowDown,
-  ChartNoAxesCombined,
+  ArrowUpRight,
+  Globe,
   LoaderCircle,
   RefreshCw,
   Users,
   Wallet,
+  X,
 } from "lucide-react"
 import {
   Bar,
   BarChart,
   CartesianGrid,
   Cell,
-  Pie,
-  PieChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from "recharts"
-
+import { Link } from "react-router"
 import {
+  useAllSalarySummaries,
   useJobTitleAverages,
   useSalarySummary,
 } from "@/features/analytics/analytics-queries"
@@ -29,198 +29,180 @@ import {
   COUNTRY_CURRENCIES,
   type Country,
 } from "@/features/employees/employee-types"
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select.tsx"
+import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 
-const CHART_COLORS = [
+const COLORS = [
   "var(--chart-1)",
   "var(--chart-2)",
   "var(--chart-3)",
   "var(--chart-4)",
   "var(--chart-5)",
+  "var(--chart-6)",
+  "var(--chart-7)",
+  "var(--chart-8)",
+  "var(--chart-9)",
+  "var(--chart-10)",
 ]
-
-const formatMoney = (
-  value: number | string | null | undefined,
-  currency: string
-) => {
-  if (value === null || value === undefined || value === "") {
-    return "—"
-  }
-
+const money = (value: number | string | null | undefined, currency: string) => {
+  if (value === null || value === undefined || value === "") return "—"
   const amount = Number(value)
-
-  if (!Number.isFinite(amount)) {
-    return "—"
-  }
-
-  return new Intl.NumberFormat("en", {
+  if (!Number.isFinite(amount)) return "—"
+  return new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency,
     maximumFractionDigits: 0,
   }).format(amount)
 }
-
-const formatCompactMoney = (value: number, currency: string) =>
-  new Intl.NumberFormat("en", {
+const compactMoney = (value: number, currency: string) =>
+  new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency,
     notation: "compact",
-    maximumFractionDigits: 1,
+    maximumFractionDigits: 0,
   }).format(value)
 
-type MetricCardProps = {
+type MetricProps = {
   title: string
   value: string
   detail: string
-  icon: typeof Users
-  isLoading?: boolean
-  accent: string
+  icon: ComponentType<{ className?: string }>
+  loading?: boolean
+  highlighted?: boolean
 }
-
-const MetricCard = ({
+function MetricCard({
   title,
   value,
   detail,
   icon: Icon,
-  isLoading = false,
-  accent,
-}: MetricCardProps) => (
-  <section className="relative overflow-hidden rounded-lg border border-[#E7EAF2] bg-white p-5 shadow-none transition-colors hover:border-[#d5d8e7]">
-    <div
-      className="absolute inset-x-0 top-0 h-0 opacity-0"
-      style={{ background: accent }}
-    />
-    <div className="flex items-start justify-between gap-3">
-      <p className="text-sm font-medium text-muted-foreground">{title}</p>
-      <span className="flex size-8 items-center justify-center rounded-md bg-[#EDEBFF] text-[#5146D8]">
-        <Icon className="size-4.5" />
-      </span>
-    </div>
-
-    <div className="mt-5 flex min-h-9 items-center">
-      {isLoading ? (
-        <LoaderCircle className="size-5 animate-spin text-muted-foreground" />
-      ) : (
-        <p className="font-sans text-[28px] font-semibold leading-[1.35] tracking-normal text-[#25283A] tabular-nums">
-          {value}
-        </p>
-      )}
-    </div>
-    <p className="mt-1 text-xs text-muted-foreground">{detail}</p>
-  </section>
-)
-
-const ChartCard = ({
+  loading,
+  highlighted,
+}: MetricProps) {
+  return (
+    <section className="peopleops-metric min-w-0 rounded-[8px] border border-[var(--border)] bg-[var(--card)] px-[18px] py-[18px]">
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-[13px] font-medium text-[var(--muted-foreground)]">{title}</p>
+        <Icon
+          className={`size-[17px] ${highlighted ? "text-[var(--primary)]" : "text-[var(--muted-foreground)]"}`}
+        />
+      </div>
+      <div className="mt-[17px] flex min-h-[37px] items-center">
+        {loading ? (
+          <LoaderCircle className="size-5 animate-spin text-[var(--muted-foreground)]" />
+        ) : (
+          <p className="truncate text-[28px] leading-none font-semibold tracking-[-0.8px] text-[var(--foreground)] tabular-nums">
+            {value}
+          </p>
+        )}
+      </div>
+      <p className="mt-[11px] text-[11px] text-[var(--muted-foreground)]">{detail}</p>
+    </section>
+  )
+}
+function Panel({
   title,
-  description,
+  subtitle,
   children,
   className = "",
 }: {
   title: string
-  description: string
-  children: React.ReactNode
+  subtitle: string
+  children: ReactNode
   className?: string
-}) => (
-  <section className={`min-w-0 overflow-hidden rounded-lg border border-[#E7EAF2] bg-white shadow-none ${className}`}>
-    <div className="border-b border-[#E7EAF2] px-6 py-4">
-      <h2 className="font-sans text-[16px] font-semibold text-[#25283A]">{title}</h2>
-      <p className="mt-1 text-[12px] text-[#777F92]">{description}</p>
+}) {
+  return (
+    <section
+      className={`peopleops-chart-panel min-w-0 overflow-hidden rounded-[12px] border border-[var(--border)] bg-[var(--card)] ${className}`}
+    >
+      <header className="px-[22px] pt-[20px]">
+        <h2 className="text-[16px] font-semibold tracking-[-0.25px] text-[var(--foreground)]">
+          {title}
+        </h2>
+        <p className="mt-[5px] text-[12px] text-[var(--muted-foreground)]">{subtitle}</p>
+      </header>
+      {children}
+    </section>
+  )
+}
+function EmptyState({ children }: { children: ReactNode }) {
+  return (
+    <div className="flex min-h-[210px] items-center justify-center px-6 text-center text-[12px] text-[var(--muted-foreground)]">
+      {children}
     </div>
-    {children}
-  </section>
-)
+  )
+}
 
-const ChartEmptyState = ({ message }: { message: string }) => (
-  <div className="flex min-h-64 items-center justify-center px-6 text-center text-sm text-muted-foreground">
-    {message}
-  </div>
-)
-
-const OverviewPage = () => {
+export default function OverviewPage() {
   const [selectedCountry, setSelectedCountry] = useState<Country>(COUNTRIES[0])
-
-  const {
-    data: salarySummary,
-    isPending: isSummaryPending,
-    isError: isSummaryError,
-    error: summaryError,
-    isFetching: isSummaryFetching,
-    refetch: refetchSummary,
-  } = useSalarySummary(selectedCountry)
-
-  const {
-    data: jobAverages,
-    isPending: areJobAveragesPending,
-    isError: areJobAveragesError,
-    error: jobAveragesError,
-    isFetching: areJobAveragesFetching,
-    refetch: refetchJobAverages,
-  } = useJobTitleAverages(selectedCountry)
-
-  const isRefreshing = isSummaryFetching || areJobAveragesFetching
+  const [salaryFocusRole, setSalaryFocusRole] = useState<string | null>(null)
+  const [salaryHoveredRole, setSalaryHoveredRole] = useState<string | null>(null)
+  const [workforceFocusRole, setWorkforceFocusRole] = useState<string | null>(null)
+  const [workforceHoveredRole, setWorkforceHoveredRole] = useState<string | null>(null)
+  const salaryHighlightedRole = salaryFocusRole ?? salaryHoveredRole
+  const workforceHighlightedRole = workforceFocusRole ?? workforceHoveredRole
+  const allMarkets = useAllSalarySummaries()
+  const summaryQuery = useSalarySummary(selectedCountry)
+  const rolesQuery = useJobTitleAverages(selectedCountry)
+  const summary = summaryQuery.data
+  const roles = rolesQuery.data?.data ?? []
   const currency =
-    salarySummary?.currency ??
-    jobAverages?.currency ??
+    summary?.currency ??
+    rolesQuery.data?.currency ??
     COUNTRY_CURRENCIES[selectedCountry]
-
-  const money = (value: number | string | null | undefined) =>
-    formatMoney(value, currency)
-
-  const handleRefresh = async () => {
-    await Promise.all([refetchSummary(), refetchJobAverages()])
-  }
-
-  const jobSummaries = jobAverages?.data ?? []
-  const workforceTotal = jobSummaries.reduce(
-    (total, item) => total + item.employeeCount,
+  const count =
+    summary?.employeeCount ??
+    roles.reduce((total, role) => total + role.employeeCount, 0)
+  const totalRoleEmployees = roles.reduce(
+    (total, role) => total + role.employeeCount,
     0
   )
-
-  const summaryErrorMessage =
-    summaryError instanceof Error
-      ? summaryError.message
-      : "An unexpected error occurred."
-
-  const jobAveragesErrorMessage =
-    jobAveragesError instanceof Error
-      ? jobAveragesError.message
-      : "An unexpected error occurred."
-
+  const isRefreshing =
+    summaryQuery.isFetching ||
+    rolesQuery.isFetching ||
+    allMarkets.some((query) => query.isFetching)
+  const refresh = async () => {
+    await Promise.all([
+      summaryQuery.refetch(),
+      rolesQuery.refetch(),
+      ...allMarkets.map((query) => query.refetch()),
+    ])
+  }
   return (
-    <div className="space-y-6 pb-8">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+    <main className="peopleops-overview w-full space-y-[23px] px-[26px] pt-[31px] pb-12 max-sm:px-4">
+      <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
-            <span className="size-1.5 rounded-full bg-primary" />
-            Workforce intelligence
-          </div>
-          <h1 className="font-heading text-2xl font-semibold tracking-tight sm:text-3xl">
+          <h1 className="text-[28px] leading-[1.2] font-semibold tracking-[-0.8px] text-[var(--foreground)]">
             People overview
           </h1>
-          <p className="mt-1.5 text-[14px] text-[#777F92]">
+          <p className="mt-[10px] text-[14px] text-[var(--muted-foreground)]">
             A clear view of your workforce and compensation.
           </p>
+          <div className="mt-[15px] flex flex-wrap items-center gap-3">
+            <span className="rounded-[5px] bg-[var(--secondary)] px-[10px] py-[6px] text-[9px] font-semibold tracking-[0.02em] text-[var(--primary)]">
+              {selectedCountry.toUpperCase()} / {currency} · ANNUAL
+            </span>
+            <span className="text-[10px] text-[var(--muted-foreground)]">
+              Salary figures reflect {selectedCountry} only. Sample data.
+            </span>
+          </div>
         </div>
-
-        <div className="flex items-end gap-3">
-          <div className="flex flex-col justify-end gap-1.5">
-            <label
-              htmlFor="overview-country"
-              className="sr-only"
-            >
-              Reporting country
-            </label>
+        <div className="flex items-center gap-3 pt-[1px]">
+          <div className="peopleops-country-select relative">
+            <Globe
+              aria-hidden="true"
+              className="pointer-events-none absolute top-1/2 left-[14px] z-[1] size-[16px] -translate-y-1/2 text-[var(--primary)]"
+            />
             <NativeSelect
               id="overview-country"
+              aria-label="Reporting country"
               value={selectedCountry}
               onChange={(event) => {
                 setSelectedCountry(event.target.value as Country)
+                setSalaryFocusRole(null)
+                setSalaryHoveredRole(null)
+                setWorkforceFocusRole(null)
+                setWorkforceHoveredRole(null)
               }}
-              className="h-11 w-full min-w-[204px] border-[#E7EAF2] bg-white text-[13px] sm:w-[204px]"
-              size="lg"
+              selectClassName="h-[43px] w-full rounded-[8px] border-[var(--border)] bg-[var(--card)] pl-[40px] pr-9 text-[12px] font-semibold text-[var(--foreground)] shadow-none focus-visible:border-[var(--primary)] focus-visible:ring-2 focus-visible:ring-[var(--primary)]/15"
             >
               {COUNTRIES.map((country) => (
                 <NativeSelectOption key={country} value={country}>
@@ -229,327 +211,406 @@ const OverviewPage = () => {
               ))}
             </NativeSelect>
           </div>
-
           <button
             type="button"
-            onClick={() => void handleRefresh()}
+            onClick={() => void refresh()}
             disabled={isRefreshing}
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-[#E7EAF2] bg-white px-3 text-[12px] font-medium text-[#25283A] shadow-none transition-colors hover:bg-[#F7F8FC] disabled:cursor-not-allowed disabled:opacity-50"
+            className="peopleops-action-button inline-flex h-[43px] items-center gap-2 rounded-[8px] border border-[var(--border)] bg-[var(--card)] px-[14px] text-[12px] font-medium text-[var(--foreground)] hover:bg-[var(--hover-surface)] disabled:opacity-60"
           >
             <RefreshCw
-              className={`size-4 ${isRefreshing ? "animate-spin" : ""}`}
-            />
+              className={`size-[14px] ${isRefreshing ? "animate-spin" : ""}`}
+            />{" "}
             Refresh
           </button>
         </div>
       </div>
 
-      {isSummaryError && (
-        <section
+      {(summaryQuery.isError || rolesQuery.isError) && (
+        <div
           role="alert"
-          className="rounded-xl border border-destructive/30 bg-destructive/5 p-4"
+          className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-[12px] text-red-800"
         >
-          <p className="font-medium">Couldn't load salary statistics</p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {summaryErrorMessage}
-          </p>
-          <button
-            type="button"
-            onClick={() => void refetchSummary()}
-            className="mt-3 rounded-md border px-3 py-2 text-sm font-medium transition-colors hover:bg-muted"
-          >
+          Some compensation data could not be loaded.{" "}
+          <button className="ml-2 underline" onClick={() => void refresh()}>
             Retry
           </button>
-        </section>
+        </div>
       )}
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
         <MetricCard
-          title="Employees"
-          value={String(salarySummary?.employeeCount.toLocaleString() ?? 0)}
-          detail={`Active employees in ${selectedCountry}`}
+          title="Total employees"
+          value={summaryQuery.isPending ? "—" : count.toLocaleString("en-IN")}
+          detail={`${selectedCountry} · people`}
           icon={Users}
-          isLoading={isSummaryPending}
-          accent="var(--chart-1)"
+          loading={summaryQuery.isPending}
         />
         <MetricCard
           title="Minimum salary"
-          value={money(salarySummary?.minSalary)}
-          detail="Annual compensation"
-          icon={ArrowDown}
-          isLoading={isSummaryPending}
-          accent="var(--chart-2)"
+          value={money(summary?.minSalary, currency)}
+          detail={`${selectedCountry} · ${currency} / year`}
+          icon={Wallet}
+          loading={summaryQuery.isPending}
         />
         <MetricCard
           title="Average salary"
-          value={money(salarySummary?.averageSalary)}
-          detail="Annual compensation"
-          icon={ChartNoAxesCombined}
-          isLoading={isSummaryPending}
-          accent="var(--chart-3)"
+          value={money(summary?.averageSalary, currency)}
+          detail={`${selectedCountry} · ${currency} / year`}
+          icon={Wallet}
+          highlighted
+          loading={summaryQuery.isPending}
         />
         <MetricCard
           title="Maximum salary"
-          value={money(salarySummary?.maxSalary)}
-          detail="Annual compensation"
+          value={money(summary?.maxSalary, currency)}
+          detail={`${selectedCountry} · ${currency} / year`}
           icon={Wallet}
-          isLoading={isSummaryPending}
-          accent="var(--chart-4)"
+          loading={summaryQuery.isPending}
         />
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,648fr)_minmax(360px,456fr)]">
-        <ChartCard
+      <div className="grid items-start gap-6 xl:grid-cols-[1.18fr_0.88fr]">
+        <Panel
           title="Average salary by role"
-          description={`Annual compensation in ${currency} · ${selectedCountry}`}
+          subtitle={"Annual compensation · " + currency}
+          className="flex h-full flex-col"
         >
-          {areJobAveragesError ? (
-            <ChartEmptyState message={jobAveragesErrorMessage} />
-          ) : areJobAveragesPending ? (
-            <div className="flex min-h-72 items-center justify-center gap-2 text-sm text-muted-foreground">
-              <LoaderCircle className="size-4 animate-spin" />
-              Loading salary breakdown...
-            </div>
-          ) : jobSummaries.length === 0 ? (
-            <ChartEmptyState message={`No active employee data for ${selectedCountry} yet.`} />
+          {rolesQuery.isPending ? (
+            <EmptyState>Loading salary breakdown…</EmptyState>
+          ) : rolesQuery.isError ? (
+            <EmptyState>Unable to load role salary data.</EmptyState>
+          ) : roles.length === 0 ? (
+            <EmptyState>
+              No active employee data for {selectedCountry} yet.
+            </EmptyState>
           ) : (
-            <div className="px-4 pb-3 pt-4 sm:px-5">
-              <div
-                className="w-full"
-                style={{ height: Math.max(280, jobSummaries.length * 38) }}
-              >
-                <ResponsiveContainer width="100%" height="100%">
+            <div className="peopleops-chart-body flex flex-1 flex-col px-5 pt-4 pb-4">
+              <div className="mb-4 flex items-center justify-between gap-2">
+                <span className="text-[10px] text-[var(--muted-foreground)]">
+                  Average annual salary by job title
+                </span>
+                {salaryFocusRole && (
+                  <button
+                    type="button"
+                    onClick={() => setSalaryFocusRole(null)}
+                    className="inline-flex items-center gap-1 text-[10px] font-medium text-[var(--primary)] hover:underline"
+                  >
+                    Clear focus <X className="size-3" />
+                  </button>
+                )}
+              </div>
+              {(() => {
+                const maxSalary = Math.max(
+                  ...roles.map((role) => Number(role.averageSalary ?? 0)),
+                  1
+                )
+                const axisMax = Math.ceil(maxSalary / 500000) * 500000
+                const ticks = [0, 0.25, 0.5, 0.75, 1]
+                return (
+                  <>
+                    <div className="flex flex-1 flex-col justify-between gap-2">
+                      {roles.map((role, index) => {
+                        const averageSalary = Number(role.averageSalary ?? 0)
+                        const isFocused = salaryHighlightedRole === role.jobTitle
+                        const isDimmed = Boolean(salaryHighlightedRole && !isFocused)
+                        return (
+                          <button
+                            key={role.jobTitle}
+                            type="button"
+                            onClick={() =>
+                              setSalaryFocusRole(salaryFocusRole === role.jobTitle ? null : role.jobTitle)
+                            }
+                            onMouseEnter={() => setSalaryHoveredRole(role.jobTitle)}
+                            onMouseLeave={() => setSalaryHoveredRole(null)}
+                            aria-label={`${role.jobTitle}, average annual salary ${money(role.averageSalary, currency)}. Select to focus this role.`}
+                            aria-pressed={salaryFocusRole === role.jobTitle}
+                            className={`group grid w-full grid-cols-[minmax(112px,150px)_minmax(0,1fr)_minmax(92px,112px)] items-center gap-3 rounded-lg border px-2 py-2 text-left transition-all duration-150 focus-visible:ring-2 focus-visible:ring-[var(--primary)]/40 focus-visible:outline-none ${isFocused ? "border-[var(--primary)]/30 bg-[var(--active-surface)] shadow-sm" : "border-transparent hover:border-[var(--border)] hover:bg-[var(--hover-surface)]"}`}
+                          >
+                            <span
+                              className={`truncate text-[11px] font-medium ${isDimmed ? "text-[var(--muted-foreground)]" : "text-[var(--foreground)]"}`}
+                            >
+                              {role.jobTitle}
+                            </span>
+                            <span className={`relative block h-5 min-w-0 overflow-hidden rounded-[5px] bg-[var(--muted)] transition-shadow ${isFocused ? "ring-2 ring-[var(--primary)]/25" : ""}`}>
+                              <span
+                                className="absolute inset-y-0 left-0 rounded-[5px] transition-[width,opacity] duration-300"
+                                style={{
+                                  width: `${Math.max(2, (averageSalary / axisMax) * 100)}%`,
+                                  backgroundColor: COLORS[index % COLORS.length],
+                                  opacity: isDimmed ? 0.22 : 1,
+                                  boxShadow: isFocused ? "0 0 0 2px color-mix(in srgb, var(--primary) 18%, transparent)" : "none",
+                                  filter: isFocused ? "saturate(1.15)" : "none",
+                                }}
+                              />
+                            </span>
+                            <span
+                              className={`text-right text-[10px] font-semibold whitespace-nowrap tabular-nums ${isDimmed ? "text-[var(--muted-foreground)]" : "text-[var(--foreground)]"}`}
+                            >
+                              {money(role.averageSalary, currency)}
+                            </span>
+                          </button>
+                        )
+                      })}
+                    </div>
+                    <div className="mt-3 grid grid-cols-[minmax(112px,150px)_minmax(0,1fr)_minmax(92px,112px)] items-start gap-3 border-t border-[var(--border)] pt-2">
+                      <span />
+                      <div className="flex justify-between text-[9px] text-[var(--muted-foreground)] tabular-nums">
+                        {ticks.map((tick) => (
+                          <span key={tick}>
+                            {compactMoney(axisMax * tick, currency)}
+                          </span>
+                        ))}
+                      </div>
+                      <span />
+                    </div>
+                  </>
+                )
+              })()}
+            </div>
+          )}
+        </Panel>
+
+        <Panel
+          title="Workforce mix"
+          subtitle={"Active employees by job title · " + selectedCountry}
+          className="flex h-full flex-col"
+        >
+          {rolesQuery.isPending ? (
+            <EmptyState>Loading workforce mix…</EmptyState>
+          ) : rolesQuery.isError || roles.length === 0 ? (
+            <EmptyState>No workforce data to display yet.</EmptyState>
+          ) : (
+            <div className="peopleops-chart-body flex flex-1 min-h-0 flex-col px-4 pt-4 pb-4">
+              <div className="mb-2 flex items-center justify-between gap-3 px-1">
+                <span className="text-[10px] text-muted-foreground">
+                  Employee distribution
+                </span>
+                <span className="text-[10px] font-semibold text-foreground tabular-nums">
+                  {totalRoleEmployees.toLocaleString("en-IN")} employees
+                </span>
+              </div>
+              <div className="min-h-[300px] w-full min-w-0 flex-1">
+                <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={300}>
                   <BarChart
-                    data={jobSummaries}
-                    layout="vertical"
-                    margin={{ top: 4, right: 16, bottom: 4, left: 4 }}
-                    barCategoryGap={10}
+                    data={roles}
+                    margin={{ top: 12, right: 4, bottom: 12, left: 0 }}
+                    barCategoryGap="28%"
                   >
                     <CartesianGrid
-                      horizontal={false}
+                      vertical={false}
                       stroke="var(--border)"
-                      strokeDasharray="3 5"
+                      strokeDasharray="3 4"
                     />
                     <XAxis
-                      type="number"
-                      tickFormatter={(value: number) =>
-                        formatCompactMoney(value, currency)
-                      }
-                      tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
+                      dataKey="jobTitle"
+                      interval={0}
+                      angle={0}
+                      textAnchor="middle"
+                      height={34}
+                      tickFormatter={(value: string) => {
+                        const labels: Record<string, string> = {
+                          "Backend Developer": "Backend",
+                          "Data Analyst": "Data",
+                          "DevOps Engineer": "DevOps",
+                          "Engineering Manager": "Eng. Mgr",
+                          "Frontend Developer": "Frontend",
+                          "Full Stack Developer": "Full Stack",
+                          "Product Manager": "Product",
+                          "QA Engineer": "QA",
+                          "Software Engineer": "Software",
+                          "UI/UX Designer": "UI/UX",
+                        }
+                        return labels[value] ?? value
+                      }}
+                      tick={{ fill: "var(--muted-foreground)", fontSize: 9 }}
                       axisLine={false}
                       tickLine={false}
-                      tickMargin={10}
+                      tickMargin={7}
                     />
                     <YAxis
-                      type="category"
-                      dataKey="jobTitle"
-                      width={138}
-                      interval={0}
-                      tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
+                      allowDecimals={false}
+                      width={34}
+                      tick={{ fill: "var(--muted-foreground)", fontSize: 9 }}
                       axisLine={false}
                       tickLine={false}
+                      tickMargin={5}
                     />
                     <Tooltip
                       cursor={{ fill: "var(--muted)", opacity: 0.55 }}
                       contentStyle={{
-                        background: "var(--popover)",
                         border: "1px solid var(--border)",
-                        borderRadius: 12,
+                        borderRadius: 9,
+                        background: "var(--popover)",
                         color: "var(--popover-foreground)",
-                        boxShadow: "0 8px 30px rgb(0 0 0 / 0.08)",
+                        boxShadow: "0 8px 24px rgb(24 32 56 / 10%)",
+                        fontSize: 11,
                       }}
-                      formatter={(value) => [
-                        money(Number(value)),
-                        "Average salary",
-                      ]}
+                      formatter={(value) => {
+                        const amount = Number(value)
+                        return [
+                          amount.toLocaleString("en-IN") +
+                            " employees · " +
+                            (totalRoleEmployees
+                              ? ((amount / totalRoleEmployees) * 100).toFixed(1)
+                              : "0.0") +
+                            "%",
+                          "Workforce",
+                        ]
+                      }}
+                      labelFormatter={(label) => String(label)}
                     />
                     <Bar
-                      dataKey="averageSalary"
-                      name="Average salary"
-                      fill="var(--chart-3)"
-                      radius={[0, 7, 7, 0]}
-                      maxBarSize={19}
-                    />
+                      dataKey="employeeCount"
+                      name="Employees"
+                      maxBarSize={42}
+                      radius={[5, 5, 0, 0]}
+                      onClick={(_, index) => {
+                        const role = roles[index]
+                        if (!role) return
+                        setWorkforceFocusRole(
+                          workforceFocusRole === role.jobTitle
+                            ? null
+                            : role.jobTitle
+                        )
+                      }}
+                      className="cursor-pointer"
+                    >
+                      {roles.map((role, index) => (
+                        <Cell
+                          key={role.jobTitle}
+                          fill={COLORS[index % COLORS.length]}
+                          opacity={workforceHighlightedRole && workforceHighlightedRole !== role.jobTitle ? 0.22 : 1}
+                          onMouseEnter={() => setWorkforceHoveredRole(role.jobTitle)}
+                          onMouseLeave={() => setWorkforceHoveredRole(null)}
+                          cursor="pointer"
+                        />
+                      ))}
+                    </Bar>
                   </BarChart>
                 </ResponsiveContainer>
               </div>
-            </div>
-          )}
-        </ChartCard>
-
-        <ChartCard
-          title="Workforce mix"
-          description={`Active employees by job title · ${selectedCountry}`}
-        >
-          {areJobAveragesError ? (
-            <ChartEmptyState message={jobAveragesErrorMessage} />
-          ) : areJobAveragesPending ? (
-            <div className="flex min-h-72 items-center justify-center gap-2 text-sm text-muted-foreground">
-              <LoaderCircle className="size-4 animate-spin" />
-              Loading workforce mix...
-            </div>
-          ) : workforceTotal === 0 ? (
-            <ChartEmptyState message="No workforce data to display yet." />
-          ) : (
-            <div className="px-5 pb-5 pt-4">
-              <div className="relative mx-auto h-56 max-w-64">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={jobSummaries}
-                      dataKey="employeeCount"
-                      nameKey="jobTitle"
-                      innerRadius="66%"
-                      outerRadius="88%"
-                      paddingAngle={2}
-                      stroke="var(--card)"
-                      strokeWidth={3}
+              <div className="mt-1 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                {roles.map((role, index) => {
+                  const share = totalRoleEmployees
+                    ? (role.employeeCount / totalRoleEmployees) * 100
+                    : 0
+                  const selected = workforceHighlightedRole === role.jobTitle
+                  const pinned = workforceFocusRole === role.jobTitle
+                  return (
+                    <button
+                      type="button"
+                      key={role.jobTitle}
+                      aria-pressed={pinned}
+                      onClick={() => setWorkforceFocusRole(pinned ? null : role.jobTitle)}
+                      onMouseEnter={() => setWorkforceHoveredRole(role.jobTitle)}
+                      onMouseLeave={() => setWorkforceHoveredRole(null)}
+                      className={
+                        "flex min-w-0 items-center gap-2 rounded-md border px-2 py-1.5 text-left transition-all " +
+                        (selected
+                          ? "border-[var(--primary)]/25 bg-[var(--active-surface)] text-[var(--foreground)]"
+                          : "border-transparent hover:border-[var(--border)] hover:bg-[var(--hover-surface)]")
+                      }
                     >
-                      {jobSummaries.map((item, index) => (
-                        <Cell
-                          key={item.jobTitle}
-                          fill={CHART_COLORS[index % CHART_COLORS.length]}
-                        />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      contentStyle={{
-                        background: "var(--popover)",
-                        border: "1px solid var(--border)",
-                        borderRadius: 12,
-                        color: "var(--popover-foreground)",
-                        boxShadow: "0 8px 30px rgb(0 0 0 / 0.08)",
-                      }}
-                      formatter={(value, _name, item) => [
-                        Number(value).toLocaleString(),
-                        item.payload.jobTitle,
-                      ]}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-                <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="font-sans text-[28px] font-semibold tracking-normal text-[#25283A] tabular-nums">
-                    {workforceTotal.toLocaleString()}
-                  </span>
-                  <span className="mt-0.5 text-xs text-muted-foreground">
-                    employees
-                  </span>
-                </div>
-              </div>
-
-              <div className="mt-3 grid grid-cols-1 gap-x-3 gap-y-2 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
-                {jobSummaries.map((item, index) => (
-                  <div
-                    key={item.jobTitle}
-                    className="flex min-w-0 items-center justify-between gap-2 text-xs"
-                  >
-                    <span className="flex min-w-0 items-center gap-2">
                       <span
-                        className="size-2.5 shrink-0 rounded-sm"
-                        style={{
-                          background:
-                            CHART_COLORS[index % CHART_COLORS.length],
-                        }}
+                        className="size-2 shrink-0 rounded-[2px]"
+                        style={{ background: COLORS[index % COLORS.length] }}
                       />
-                      <span className="truncate text-muted-foreground">
-                        {item.jobTitle}
+                      <span className="min-w-0 flex-1 truncate text-[10px] text-foreground">
+                        {role.jobTitle}
                       </span>
-                    </span>
-                    <span className="shrink-0 font-medium tabular-nums">
-                      {item.employeeCount.toLocaleString()}
-                    </span>
-                  </div>
-                ))}
+                      <span className="shrink-0 text-[10px] text-muted-foreground tabular-nums">
+                        {share.toFixed(1)}%
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+              <div className="mt-2 flex items-center justify-between border-t border-border pt-2">
+                <p className="text-[10px] text-muted-foreground">
+                  {workforceFocusRole
+                    ? "Focused: " + workforceFocusRole
+                    : "Select a bar or role to highlight workforce mix"}
+                </p>
+                {workforceFocusRole && (
+                  <button
+                    type="button"
+                    onClick={() => setWorkforceFocusRole(null)}
+                    className="text-[10px] font-semibold text-primary hover:underline"
+                  >
+                    Clear filter
+                  </button>
+                )}
               </div>
             </div>
           )}
-        </ChartCard>
+        </Panel>
       </div>
-
-      <section className="overflow-hidden rounded-lg border border-[#E7EAF2] bg-white shadow-none">
-        <div className="flex flex-col gap-2 border-b border-[#E7EAF2] px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+      <section className="peopleops-data-panel overflow-hidden rounded-[12px] border border-[var(--border)] bg-[var(--card)]">
+        <header className="flex items-center justify-between gap-3 px-[22px] py-[19px]">
           <div>
-            <h2 className="font-heading text-base font-semibold">
-              Role-level compensation details
+            <h2 className="text-[16px] font-semibold tracking-[-0.25px] text-[var(--foreground)]">
+              Compensation by role
             </h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              India · job-title compensation summary.
+            <p className="mt-[4px] text-[11px] text-[var(--muted-foreground)]">
+              {selectedCountry} ·{" "}
+              {roles.length + " job titles"}
             </p>
           </div>
-          <span className="w-fit rounded-md bg-[#EDEBFF] px-2.5 py-1 text-[10px] font-semibold tracking-wide text-[#5146D8]">
-            {selectedCountry} · {currency}
-          </span>
-        </div>
-
-        {areJobAveragesError ? (
-          <div role="alert" className="px-5 py-10 text-center">
-            <p className="font-medium">Couldn't load job-title averages</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {jobAveragesErrorMessage}
-            </p>
-            <button
-              type="button"
-              onClick={() => void refetchJobAverages()}
-              className="mt-4 rounded-md border px-3 py-2 text-sm font-medium transition-colors hover:bg-muted"
-            >
-              Try again
-            </button>
-          </div>
-        ) : areJobAveragesPending ? (
-          <div className="flex min-h-40 items-center justify-center gap-2 text-sm text-muted-foreground">
-            <LoaderCircle className="size-4 animate-spin" />
-            Loading role details...
-          </div>
-        ) : jobSummaries.length > 0 ? (
+          <Link
+            to="/employees"
+            className="inline-flex items-center gap-2 text-[12px] font-semibold text-[var(--primary)] hover:text-[var(--primary)]"
+          >
+            View employees <ArrowUpRight className="size-[14px]" />
+          </Link>
+        </header>
+        {rolesQuery.isPending ? (
+          <EmptyState>Loading role details…</EmptyState>
+        ) : rolesQuery.isError ? (
+          <EmptyState>Unable to load compensation details.</EmptyState>
+        ) : roles.length === 0 ? (
+          <EmptyState>No active employees for {selectedCountry}.</EmptyState>
+        ) : (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-120 text-left text-sm">
-              <thead className="bg-[#F7F8FC] text-[10px] tracking-wide text-[#777F92]">
+            <table className="w-full min-w-[560px] border-collapse text-left">
+              <thead className="bg-[var(--surface-subtle)] text-[9px] font-semibold text-[var(--muted-foreground)] uppercase">
                 <tr>
-                  <th className="px-6 py-3 font-semibold">Job title</th>
-                  <th className="px-6 py-3 text-right font-semibold">
-                    Employees
-                  </th>
-                  <th className="px-5 py-3 text-right font-medium">
-                    Average salary
+                  <th className="px-[22px] py-[10px]">Job title</th>
+                  <th className="px-[22px] py-[10px] text-right">Employees</th>
+                  <th className="px-[22px] py-[10px] text-right">
+                    Average annual salary
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y">
-                {jobSummaries.map((summary) => (
-                  <tr
-                    key={summary.jobTitle}
-                    className="transition-colors hover:bg-muted/30"
-                  >
-                    <td className="px-6 py-3.5 font-medium text-[#25283A]">
-                      {summary.jobTitle}
-                    </td>
-                    <td className="px-6 py-3.5 text-right text-[#777F92] tabular-nums">
-                      {summary.employeeCount.toLocaleString()}
-                    </td>
-                    <td className="px-6 py-3.5 text-right font-semibold text-[#25283A] tabular-nums">
-                      {money(summary.averageSalary)}
-                    </td>
-                  </tr>
-                ))}
+              <tbody>
+                {roles.map((role, index) => (
+                    <tr
+                      key={role.jobTitle}
+                      className="peopleops-table-row border-t border-[var(--border)] hover:bg-[var(--hover-surface)]"
+                    >
+                      <td className="px-[22px] py-[7px]">
+                        <span className="inline-flex items-center gap-[13px] text-[12px] text-[var(--foreground)]">
+                          <span
+                            className="size-[7px] rounded-[2px]"
+                            style={{
+                              background: COLORS[index % COLORS.length],
+                            }}
+                          />
+                          {role.jobTitle}
+                        </span>
+                      </td>
+                      <td className="px-[22px] py-[7px] text-right text-[12px] text-[var(--foreground)] tabular-nums">
+                        {role.employeeCount.toLocaleString("en-IN")}
+                      </td>
+                      <td className="px-[22px] py-[7px] text-right text-[12px] font-medium text-[var(--foreground)] tabular-nums">
+                        {money(role.averageSalary, currency)} {currency}
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
-        ) : (
-          <div className="px-5 py-12 text-center">
-            <p className="font-medium">No employee data available</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              There are no active employees for {selectedCountry} yet.
-            </p>
-          </div>
         )}
-
-        <div className="flex items-center gap-2 border-t border-[#E7EAF2] bg-[#F7F8FC] px-6 py-3 text-[11px] text-[#777F92]">
-          Salary values are annual and shown only in {currency}. Deleted
-          employees are excluded.
-        </div>
       </section>
-    </div>
+    </main>
   )
 }
-
-export default OverviewPage
