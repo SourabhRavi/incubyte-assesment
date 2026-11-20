@@ -19,11 +19,11 @@ test.each([
   expect(countryQuerySchema.safeParse(input).success).toBe(false);
 });
 
-test("rejects unexpected query fields rather than silently treating them as filters", () => {
+test("strips unknown query fields instead of accepting them as filters", () => {
   expect(
-    countryQuerySchema.safeParse({
+    countryQuerySchema.parse({
       country: "India",
       includeDeleted: true,
-    }).success,
-  ).toBe(true);
+    }),
+  ).toEqual({ country: "India" });
 });
