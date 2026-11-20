@@ -63,7 +63,7 @@ export default function AppLoadingScreen() {
               </div>
             </aside>
 
-            <div className="min-w-0 p-5 sm:p-7">
+            <div className="min-w-0 animate-pulse p-5 motion-reduce:animate-none sm:p-7">
               <div className="mb-7 flex items-start justify-between gap-4">
                 <div className="space-y-2.5">
                   <div className="h-5 w-36 rounded-md bg-foreground/10 sm:w-48" />
