@@ -111,8 +111,8 @@ function MetricCard({
         <p className="truncate text-[13px] font-medium text-[var(--muted-foreground)]">
           {title}
         </p>
-        <span className={`inline-flex size-10 shrink-0 items-center justify-center rounded-xl ${styles.icon}`}>
-          <Icon aria-hidden="true" className="size-[18px]" />
+        <span aria-hidden="true" className={`inline-flex size-10 shrink-0 items-center justify-center rounded-xl ${styles.icon}`}>
+          <Icon className="size-[18px]" />
         </span>
       </div>
 
