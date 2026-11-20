@@ -62,7 +62,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarGroupLabel>
           <SidebarMenu className="gap-[5px]">
             {navigation.map(({ title, url, icon: Icon }) => (
-              <SidebarMenuItem key={url} className="group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
+              <SidebarMenuItem
+                key={url}
+                className="group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center"
+              >
                 <SidebarMenuButton
                   isActive={pathname === url}
                   tooltip={title}
@@ -89,15 +92,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem className="group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
             <SidebarMenuButton
               size="lg"
-              tooltip="Alex Morgan"
-              className="h-auto min-h-0 cursor-default gap-[12px] p-0 hover:bg-transparent"
+              tooltip="Admin"
+              className="h-auto min-h-0 cursor-default gap-[12px] p-0 hover:bg-transparent!"
             >
               <span className="flex size-[31px] shrink-0 items-center justify-center rounded-full bg-[var(--secondary)] text-[11px] font-semibold text-[var(--primary)]">
                 AM
               </span>
               <span className="flex min-w-0 flex-col items-start gap-[3px] group-data-[collapsible=icon]:hidden">
                 <span className="text-[12px] font-semibold text-[var(--foreground)]">
-                  Alex Morgan
+                  Admin
                 </span>
                 <span className="text-[10px] text-[var(--muted-foreground)]">
                   HR Manager
