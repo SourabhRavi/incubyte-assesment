@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { useSearchParams } from "react-router"
 import {
   Eye,
@@ -147,15 +147,22 @@ type EmployeeSearchInputProps = {
 
 const EmployeeSearchInput = ({ search, onCommit }: EmployeeSearchInputProps) => {
   const [searchInput, setSearchInput] = useState(search)
+  const onCommitRef = useRef(onCommit)
 
   useEffect(() => {
+    onCommitRef.current = onCommit
+  }, [onCommit])
+
+  useEffect(() => {
+    const value = searchInput.trim()
+    if (value === search) return
+
     const timeout = window.setTimeout(() => {
-      const value = searchInput.trim()
-      if (value !== search) onCommit(value)
+      onCommitRef.current(value)
     }, 300)
 
     return () => window.clearTimeout(timeout)
-  }, [searchInput, search, onCommit])
+  }, [searchInput, search])
 
   return (
     <div className="relative w-full sm:w-64">
