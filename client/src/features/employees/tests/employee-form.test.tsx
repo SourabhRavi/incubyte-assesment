@@ -63,8 +63,8 @@ describe("EmployeeForm", () => {
       />
     )
 
-    await user.type(screen.getByLabelText("Full name"), "  Ada Lovelace  ")
-    await user.type(screen.getByLabelText("Work email"), "ada@acme.com")
+    await user.type(screen.getByLabelText(/Full name/), "  Ada Lovelace  ")
+    await user.type(screen.getByLabelText(/Work email/), "ada@acme.com")
     await user.selectOptions(
       screen.getByLabelText(/Job title/),
       "Software Engineer"
