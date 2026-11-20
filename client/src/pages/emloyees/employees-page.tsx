@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useSearchParams } from "react-router"
 import {
   Eye,
@@ -140,37 +140,65 @@ const EmployeeRow = ({
   </tr>
 )
 
-const EmployeesPage = () => {
-  const [searchParams, setSearchParams] = useSearchParams()
+type EmployeeSearchInputProps = {
+  search: string
+  onCommit: (value: string) => void
+}
 
-  const search = searchParams.get("search") ?? ""
+const EmployeeSearchInput = ({ search, onCommit }: EmployeeSearchInputProps) => {
   const [searchInput, setSearchInput] = useState(search)
-
-  useEffect(() => {
-    setSearchInput(search)
-  }, [search])
 
   useEffect(() => {
     const timeout = window.setTimeout(() => {
       const value = searchInput.trim()
-
-      if (value === search) return
-
-      const nextParams = new URLSearchParams(searchParams)
-
-      if (value) {
-        nextParams.set("search", value)
-      } else {
-        nextParams.delete("search")
-      }
-
-      nextParams.delete("page")
-
-      setSearchParams(nextParams, { replace: true })
+      if (value !== search) onCommit(value)
     }, 300)
 
     return () => window.clearTimeout(timeout)
-  }, [searchInput, search, searchParams, setSearchParams])
+  }, [searchInput, search, onCommit])
+
+  return (
+    <div className="relative w-full sm:w-64">
+      <Search
+        aria-hidden="true"
+        className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
+      />
+      <Input
+        type="search"
+        aria-label="Search employees"
+        placeholder="Search name or email..."
+        value={searchInput}
+        onChange={(event) => setSearchInput(event.target.value)}
+        className="h-9 pr-9 pl-9 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none"
+      />
+      {search && (
+        <button
+          type="button"
+          aria-label="Clear search"
+          onClick={() => {
+            setSearchInput("")
+            onCommit("")
+          }}
+          className="absolute top-1/2 right-2 flex size-6 -translate-y-1/2 items-center justify-center rounded text-muted-foreground hover:bg-muted hover:text-foreground"
+        >
+          <X aria-hidden="true" className="size-4" />
+        </button>
+      )}
+    </div>
+  )
+}
+const EmployeesPage = () => {
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const search = searchParams.get("search") ?? ""
+
+  const commitSearch = useCallback((value: string) => {
+    const nextParams = new URLSearchParams(searchParams)
+    if (value) nextParams.set("search", value)
+    else nextParams.delete("search")
+    nextParams.delete("page")
+    setSearchParams(nextParams, { replace: true })
+  }, [searchParams, setSearchParams])
 
   const [isEmployeeDialogOpen, setIsEmployeeDialogOpen] = useState(false)
   const [selectedEmployee, setSelectedEmployee] = useState<
@@ -300,7 +328,6 @@ const EmployeesPage = () => {
                 aria-label="Clear filters"
                 title="Clear filters"
                 onClick={() => {
-                  setSearchInput("")
                   updateParams({
                     country: "",
                     jobTitle: "",
@@ -337,35 +364,7 @@ const EmployeesPage = () => {
               </button>
             )}
 
-            <div className="relative w-full sm:w-64">
-              <Search
-                aria-hidden="true"
-                className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
-              />
-
-              <Input
-                type="search"
-                aria-label="Search employees"
-                placeholder="Search name or email..."
-                value={searchInput}
-                onChange={(event) => setSearchInput(event.target.value)}
-                className="h-9 pr-9 pl-9 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none"
-              />
-
-              {search && (
-                <button
-                  type="button"
-                  aria-label="Clear search"
-                  onClick={() => {
-                    setSearchInput("")
-                    updateParams({ search: "", page: "" }, { replace: true })
-                  }}
-                  className="absolute top-1/2 right-2 flex size-6 -translate-y-1/2 items-center justify-center rounded text-muted-foreground hover:bg-muted hover:text-foreground"
-                >
-                  <X aria-hidden="true" className="size-4" />
-                </button>
-              )}
-            </div>
+            <EmployeeSearchInput key={search} search={search} onCommit={commitSearch} />
 
             <NativeSelect
               aria-label="Filter by country"
