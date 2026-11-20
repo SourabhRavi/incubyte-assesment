@@ -11,6 +11,9 @@ Employee and salary management application built for the Incubyte engineering as
 
 - [Product requirements](docs/requirements.md)
 - [Dashboard design and interaction notes](docs/dashboard-design.md)
+- [System architecture and trade-offs](docs/architecture.md)
+- [AI development log](docs/ai-development-log.md)
+- [Performance methodology and benchmark results](docs/performance.md)
 
 ## Features
 
@@ -103,12 +106,25 @@ Backend integration tests require a separate PostgreSQL test database. Configure
 npm --prefix server run test:integration
 ```
 
+Use a dedicated disposable database for integration tests. The test file loads `server/.env.test` and requires its `DATABASE_URL` to point to that database. Do not use production data.
+
 Generate coverage reports:
 
 ```bash
 npm --prefix server run test:coverage
 npm --prefix client run test:coverage
 ```
+
+## 10,000-employee performance benchmark
+
+With the API running against a database containing at least 10,000 active seeded employees, run:
+
+```bash
+cd server
+BENCHMARK_API_URL=http://localhost:3000/api/v1 npm run benchmark
+```
+
+Optional settings: `BENCHMARK_ITERATIONS` (default 30) and `BENCHMARK_WARMUP` (default 5). The runner reports mean, p50 and p95 API latency for listing, substring search, combined filters, country salary aggregates, job-title averages and the dashboard analytics pair. It is read-only. Record the runtime, database tier and output in [performance.md](docs/performance.md); do not treat unmeasured values as results.
 
 ## Assumptions and Trade-offs
 
