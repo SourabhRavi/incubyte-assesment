@@ -13,7 +13,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { isMobile, setOpenMobile } = useSidebar()
 
   return (
-    <Sidebar collapsible="icon" className="peopleops-sidebar border-r border-[var(--sidebar-border)] bg-white" {...props}>
+    <Sidebar collapsible="icon" className="peopleops-sidebar border-r border-[var(--sidebar-border)] bg-[var(--sidebar)]" {...props}>
       <SidebarHeader className="border-b-0 px-[27px] pb-[30px] pt-[29px] group-data-[collapsible=icon]:px-3">
         <SidebarMenu>
           <SidebarMenuItem>
