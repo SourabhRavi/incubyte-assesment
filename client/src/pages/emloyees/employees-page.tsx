@@ -94,12 +94,12 @@ const EmployeeRow = ({
     </td>
 
     <td className="px-5 py-4">
-      <span className="text-sm">{employee.jobTitle}</span>
+      <span className="block truncate text-sm" title={employee.jobTitle}>{employee.jobTitle}</span>
     </td>
 
-    <td className="px-5 py-4 text-sm">{employee.country}</td>
+    <td className="px-5 py-4 text-sm"><span className="block truncate" title={employee.country}>{employee.country}</span></td>
 
-    <td className="px-5 py-4 text-right text-sm font-medium tabular-nums">
+    <td className="whitespace-nowrap px-5 py-4 text-right text-sm font-medium tabular-nums">
       {formatSalary(employee.salary, COUNTRY_CURRENCIES[employee.country])}
     </td>
 
@@ -448,7 +448,14 @@ const EmployeesPage = () => {
         )}
 
         <div className="overflow-x-auto md:min-h-0 md:flex-1 md:overflow-auto">
-          <table className="w-full min-w-212.5 text-left">
+          <table className="w-full min-w-[900px] table-fixed text-left">
+            <colgroup>
+              <col className="w-[34%]" />
+              <col className="w-[22%]" />
+              <col className="w-[14%]" />
+              <col className="w-[18%]" />
+              <col className="w-[12%]" />
+            </colgroup>
             <thead className="border-b bg-surface-subtle/60 text-xs tracking-wide text-muted-foreground uppercase backdrop-blur-xl md:sticky md:top-0 md:z-10 md:shadow-sm md:shadow-muted">
               <tr>
                 <th className="px-5 py-3 font-medium">Employee</th>
