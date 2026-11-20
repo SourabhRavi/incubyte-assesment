@@ -88,6 +88,10 @@ npm run dev
 
 Open the local URL printed by Vite, usually `http://localhost:5173`.
 
+## Automated quality checks
+
+The [Quality checks workflow](.github/workflows/quality.yml) runs backend unit tests and type checking, plus frontend linting, tests and a production build for pull requests targeting `main` and pushes to `main`. PostgreSQL integration tests remain a separate command because they require an explicitly configured disposable database.
+
 ## Tests
 
 Run unit tests and type checks:
