@@ -376,7 +376,7 @@ const EmployeesPage = () => {
               </button>
             )}
 
-            <EmployeeSearchInput key={search} search={search} onCommit={commitSearch} />
+            <EmployeeSearchInput key={`${search}:${page}`} search={search} onCommit={commitSearch} />
 
             <NativeSelect
               aria-label="Filter by country"
