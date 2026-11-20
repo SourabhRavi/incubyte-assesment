@@ -13,9 +13,6 @@ import {
   BarChart,
   CartesianGrid,
   Cell,
-  LabelList,
-  Pie,
-  PieChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -409,8 +406,8 @@ export default function OverviewPage() {
                       angle={0}
                       textAnchor="middle"
                       height={34}
-                      tickFormatter={(value: string) =>
-                        ({
+                      tickFormatter={(value: string) => {
+                        const labels: Record<string, string> = {
                           "Backend Developer": "Backend",
                           "Data Analyst": "Data",
                           "DevOps Engineer": "DevOps",
@@ -421,8 +418,9 @@ export default function OverviewPage() {
                           "QA Engineer": "QA",
                           "Software Engineer": "Software",
                           "UI/UX Designer": "UI/UX",
-                        })[value] ?? value
-                      }
+                        }
+                        return labels[value] ?? value
+                      }}
                       tick={{ fill: "var(--muted-foreground)", fontSize: 9 }}
                       axisLine={false}
                       tickLine={false}
