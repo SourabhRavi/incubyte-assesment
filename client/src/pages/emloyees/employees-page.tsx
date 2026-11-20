@@ -349,8 +349,6 @@ const EmployeesPage = () => {
                 aria-label="Clear filters"
                 title="Clear filters"
                 onClick={() => {
-                  setSearchInput("")
-
                   updateParams({
                     country: "",
                     jobTitle: "",
