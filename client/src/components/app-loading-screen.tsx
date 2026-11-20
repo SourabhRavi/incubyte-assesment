@@ -26,13 +26,6 @@ export default function AppLoadingScreen() {
             Getting things ready
           </span>
         </div>
-
-        <div
-          aria-hidden="true"
-          className="mt-5 h-[2px] w-36 overflow-hidden rounded-full bg-muted"
-        >
-          <div className="h-full w-1/3 animate-[loading-progress_1.6s_ease-in-out_infinite] rounded-full bg-foreground/60 motion-reduce:animate-none" />
-        </div>
       </div>
     </main>
   )
