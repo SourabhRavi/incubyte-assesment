@@ -34,21 +34,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton
               size="lg"
-              tooltip="PeopleOps"
-              className="h-auto min-h-0 gap-[10px] p-0 group-data-[collapsible=icon]:!justify-center group-data-[collapsible=icon]:!px-0 hover:bg-transparent data-[slot=sidebar-menu-button]:p-0"
+              tooltip="ACME"
+              className="h-auto min-h-0 gap-[10px] p-0 group-data-[collapsible=icon]:!mx-auto group-data-[collapsible=icon]:!justify-center group-data-[collapsible=icon]:!px-0 hover:bg-transparent data-[slot=sidebar-menu-button]:p-0"
             >
               <NavLink
                 to="/overview"
-                className="flex items-center gap-[10px] group-data-[collapsible=icon]:justify-center"
+                className="flex w-full items-center gap-[10px] group-data-[collapsible=icon]:justify-center"
                 onClick={() => isMobile && setOpenMobile(false)}
               >
                 <span className="flex size-[31px] shrink-0 items-center justify-center rounded-[9px] bg-[var(--primary)] text-white">
                   <span className="text-[22px] leading-none font-semibold">
-                    p
+                    A
                   </span>
                 </span>
                 <span className="text-[21px] font-semibold tracking-[-0.55px] text-[var(--foreground)] group-data-[collapsible=icon]:hidden">
-                  PeopleOps
+                  ACME
                 </span>
               </NavLink>
             </SidebarMenuButton>
@@ -66,7 +66,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <SidebarMenuButton
                   isActive={pathname === url}
                   tooltip={title}
-                  className="relative h-[43px] rounded-[8px] px-[15px] text-[13px] font-medium text-[var(--sidebar-foreground)] group-data-[collapsible=icon]:!justify-center group-data-[collapsible=icon]:!px-0 before:absolute before:top-[12px] before:bottom-[12px] before:left-0 before:w-[3px] before:rounded-r before:bg-transparent hover:bg-[var(--sidebar-accent)] hover:text-[var(--primary)] data-[active=true]:bg-[var(--secondary)] data-[active=true]:font-semibold data-[active=true]:text-[var(--primary)] data-[active=true]:shadow-none data-[active=true]:before:bg-[var(--primary)]"
+                  className="relative h-[43px] rounded-[8px] px-[15px] text-[13px] font-medium text-[var(--sidebar-foreground)] group-data-[collapsible=icon]:!mx-auto group-data-[collapsible=icon]:!justify-center group-data-[collapsible=icon]:!px-0 before:absolute before:top-[12px] before:bottom-[12px] before:left-0 before:w-[3px] before:rounded-r before:bg-transparent hover:bg-[var(--sidebar-accent)] hover:text-[var(--primary)] data-[active=true]:bg-[var(--secondary)] data-[active=true]:font-semibold data-[active=true]:text-[var(--primary)] data-[active=true]:shadow-none data-[active=true]:before:bg-[var(--primary)]"
                   render={
                     <NavLink
                       to={url}
@@ -90,7 +90,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenuButton
               size="lg"
               tooltip="Alex Morgan"
-              className="h-auto min-h-0 cursor-default gap-[12px] p-0 group-data-[collapsible=icon]:!justify-center group-data-[collapsible=icon]:!px-0 hover:bg-transparent"
+              className="h-auto min-h-0 cursor-default gap-[12px] p-0 group-data-[collapsible=icon]:!mx-auto group-data-[collapsible=icon]:!justify-center group-data-[collapsible=icon]:!px-0 hover:bg-transparent"
             >
               <span className="flex size-[31px] shrink-0 items-center justify-center rounded-full bg-[var(--secondary)] text-[11px] font-semibold text-[var(--primary)]">
                 AM
