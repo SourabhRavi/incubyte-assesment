@@ -6,12 +6,14 @@ Employee and salary management application built for the Incubyte engineering as
 
 - **Live Application:** [ACME People](https://incubyte.sourabhravi.site)
 - **Demo Video:** [Watch the Loom walkthrough](https://www.loom.com/share/77c3471354f74b9ba38ba96c64132a64)
+- **Source Code:** [GitHub repository](https://github.com/SourabhRavi/incubyte-assesment)
 
 ## Product artifacts
 
 - [Product requirements](docs/requirements.md)
 - [Dashboard design and interaction notes](docs/dashboard-design.md)
 - [System architecture and trade-offs](docs/architecture.md)
+- [Testing guide](docs/testing.md)
 - [AI development log](docs/ai-development-log.md)
 - [Performance methodology and benchmark results](docs/performance.md)
 
@@ -34,7 +36,7 @@ Employee and salary management application built for the Incubyte engineering as
 ## Prerequisites
 
 - Node.js and npm
-- PostgreSQL 15 or newer
+- PostgreSQL 15 or newer for local development
 
 ## Setup and Run
 
@@ -90,27 +92,35 @@ Open the local URL printed by Vite, usually `http://localhost:5173`.
 
 ## Automated quality checks
 
-The [Quality checks workflow](.github/workflows/quality.yml) runs backend unit tests and type checking, plus frontend linting, tests and a production build for pull requests targeting `main` and pushes to `main`. PostgreSQL integration tests remain a separate command because they require an explicitly configured disposable database.
+The [Quality checks workflow](.github/workflows/quality.yml) runs backend unit tests and type checking, plus frontend linting, tests and a production build for pull requests targeting `main` and pushes to `main`. PostgreSQL integration tests are run separately against the dedicated assessment test database.
 
 ## Tests
 
-Run unit tests and type checks:
+Run the fast checks from the repository root:
 
 ```bash
 npm --prefix server test
-npm --prefix client test
 npm --prefix server run typecheck
-npm --prefix client run typecheck
+npm --prefix client run lint
+npm --prefix client test
 npm --prefix client run build
 ```
 
-Backend integration tests require a separate PostgreSQL test database. Configure `server/.env.test` with its `DATABASE_URL` and initialize the test schema before running:
+### PostgreSQL integration test
+
+The repository includes a preconfigured `server/.env.test` for the dedicated, disposable Neon test branch used by this assessment. **Evaluators do not need to create a database, provision a Neon project, or run the seed script to execute this integration test.**
+
+From the repository root, run:
 
 ```bash
 npm --prefix server run test:integration
 ```
 
-Use a dedicated disposable database for integration tests. The test file loads `server/.env.test` and requires its `DATABASE_URL` to point to that database. Do not use production data.
+The test exercises employee creation, retrieval, update, soft deletion, name/email search, combined filters, pagination, country salary summaries, and job-title averages through the real API and PostgreSQL database. It creates a uniquely named employee and soft-deletes it during cleanup, including when an assertion fails.
+
+The Neon database is shared assessment infrastructure, not a production database. It contains no production employee data. The test role is intended only for the integration-test operations. Do not use this connection for application deployments, production workloads, schema migrations, or seeding.
+
+See [docs/testing.md](docs/testing.md) for the full test matrix, commands, and database notes.
 
 Generate coverage reports:
 
