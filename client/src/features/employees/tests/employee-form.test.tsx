@@ -133,7 +133,11 @@ describe("EmployeeForm", () => {
     await user.clear(salaryInput)
     await user.type(salaryInput, "125.50")
 
-    expect(screen.getByText("Salary change preview")).toBeInTheDocument()
-    expect(screen.getByText("+25.5% increase")).toBeInTheDocument()
+    const salaryPreview = screen
+      .getByText("Salary change preview")
+      .closest("div.rounded-md")
+
+    expect(salaryPreview).toBeInTheDocument()
+    expect(salaryPreview).toHaveTextContent("+25.5% increase")
   })
 })
