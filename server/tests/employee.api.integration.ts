@@ -23,7 +23,7 @@ after(async () => {
 
 test("employee CRUD, search, listing and salary analytics work against PostgreSQL", async () => {
   const uniqueToken = String(Date.now());
-  const email = `integration.${uniqueToken}@example.com`;
+  const email = `integration.${uniqueToken}@acme.com`;
   const fullName = `Integration Test Employee ${uniqueToken}`;
   const testSalary = 1_234_567;
 
