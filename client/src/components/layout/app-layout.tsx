@@ -93,7 +93,7 @@ export default function AppLayout() {
           <span className="flex size-[32px] shrink-0 items-center justify-center rounded-full bg-secondary text-[10px] font-semibold text-secondary-foreground">AM</span>
         </div>
       </header>
-      <div className={`min-w-0 flex-1 ${isEmployeesPage ? "min-h-0 overflow-hidden" : ""}`}><Outlet /></div>
+      <div className={`min-w-0 flex-1 ${isEmployeesPage ? "min-h-0 overflow-y-auto overflow-x-hidden overscroll-y-contain md:overflow-hidden" : ""}`}><Outlet /></div>
     </SidebarInset>
   </SidebarProvider>
 }
