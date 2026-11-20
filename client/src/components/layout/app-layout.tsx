@@ -25,12 +25,17 @@ export default function AppLayout() {
     const value = searchValue.trim()
     const timeout = window.setTimeout(() => {
       const params = new URLSearchParams(pathname === "/employees" ? search : "")
+      const currentValue = params.get("search") ?? ""
+
+      // Pagination and other filters also change the URL search string.
+      // Only reset the page when the actual search term has changed.
+      if (pathname === "/employees" && value === currentValue) return
+
       if (value) params.set("search", value)
       else params.delete("search")
       params.delete("page")
+
       const nextSearch = params.toString()
-      const currentSearch = new URLSearchParams(search).toString()
-      if (pathname === "/employees" && nextSearch === currentSearch) return
       if (pathname !== "/employees" && !value) return
       navigate({ pathname: "/employees", search: nextSearch ? `?${nextSearch}` : "" }, { replace: true })
     }, 250)
