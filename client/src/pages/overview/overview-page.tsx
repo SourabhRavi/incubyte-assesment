@@ -373,14 +373,14 @@ export default function OverviewPage() {
         <Panel
           title="Workforce mix"
           subtitle={"Active employees by job title · " + selectedCountry}
-          className="flex flex-col"
+          className="flex h-full flex-col"
         >
           {rolesQuery.isPending ? (
             <EmptyState>Loading workforce mix…</EmptyState>
           ) : rolesQuery.isError || roles.length === 0 ? (
             <EmptyState>No workforce data to display yet.</EmptyState>
           ) : (
-            <div className="peopleops-chart-body flex flex-col px-4 pt-4 pb-4">
+            <div className="peopleops-chart-body flex flex-1 min-h-0 flex-col px-4 pt-4 pb-4">
               <div className="mb-2 flex items-center justify-between gap-3 px-1">
                 <span className="text-[10px] text-muted-foreground">
                   Employee distribution
@@ -389,8 +389,8 @@ export default function OverviewPage() {
                   {totalRoleEmployees.toLocaleString("en-IN")} employees
                 </span>
               </div>
-              <div className="min-h-[210px] w-full min-w-0 flex-1">
-                <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={210}>
+              <div className="min-h-[300px] w-full min-w-0 flex-1">
+                <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={300}>
                   <BarChart
                     data={roles}
                     margin={{ top: 12, right: 4, bottom: 12, left: 0 }}
@@ -462,7 +462,7 @@ export default function OverviewPage() {
                     <Bar
                       dataKey="employeeCount"
                       name="Employees"
-                      maxBarSize={30}
+                      maxBarSize={42}
                       radius={[5, 5, 0, 0]}
                       onClick={(_, index) => {
                         const role = roles[index]
