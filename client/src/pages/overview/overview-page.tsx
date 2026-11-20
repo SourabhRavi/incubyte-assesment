@@ -133,12 +133,10 @@ function EmptyState({ children }: { children: ReactNode }) {
 
 export default function OverviewPage() {
   const [selectedCountry, setSelectedCountry] = useState<Country>(COUNTRIES[0])
-  const [salaryFocusRole, setSalaryFocusRole] = useState<string | null>(null)
-  const [salaryHoveredRole, setSalaryHoveredRole] = useState<string | null>(null)
-  const [workforceFocusRole, setWorkforceFocusRole] = useState<string | null>(null)
-  const [workforceHoveredRole, setWorkforceHoveredRole] = useState<string | null>(null)
-  const salaryHighlightedRole = salaryFocusRole ?? salaryHoveredRole
-  const workforceHighlightedRole = workforceFocusRole ?? workforceHoveredRole
+  // Shared role focus links both charts while keeping the compensation table independent.
+  const [focusedRole, setFocusedRole] = useState<string | null>(null)
+  const [hoveredRole, setHoveredRole] = useState<string | null>(null)
+  const highlightedRole = focusedRole ?? hoveredRole
   const allMarkets = useAllSalarySummaries()
   const summaryQuery = useSalarySummary(selectedCountry)
   const rolesQuery = useJobTitleAverages(selectedCountry)
@@ -197,10 +195,8 @@ export default function OverviewPage() {
               value={selectedCountry}
               onChange={(event) => {
                 setSelectedCountry(event.target.value as Country)
-                setSalaryFocusRole(null)
-                setSalaryHoveredRole(null)
-                setWorkforceFocusRole(null)
-                setWorkforceHoveredRole(null)
+                setFocusedRole(null)
+                setHoveredRole(null)
               }}
               selectClassName="h-[43px] w-full rounded-[8px] border-[var(--border)] bg-[var(--card)] pl-[40px] pr-9 text-[12px] font-semibold text-[var(--foreground)] shadow-none focus-visible:border-[var(--primary)] focus-visible:ring-2 focus-visible:ring-[var(--primary)]/15"
             >
@@ -289,10 +285,10 @@ export default function OverviewPage() {
                 <span className="text-[10px] text-[var(--muted-foreground)]">
                   Average annual salary by job title
                 </span>
-                {salaryFocusRole && (
+                {focusedRole && (
                   <button
                     type="button"
-                    onClick={() => setSalaryFocusRole(null)}
+                    onClick={() => setFocusedRole(null)}
                     className="inline-flex items-center gap-1 text-[10px] font-medium text-[var(--primary)] hover:underline"
                   >
                     Clear focus <X className="size-3" />
@@ -311,19 +307,19 @@ export default function OverviewPage() {
                     <div className="flex flex-1 flex-col justify-between gap-2">
                       {roles.map((role, index) => {
                         const averageSalary = Number(role.averageSalary ?? 0)
-                        const isFocused = salaryHighlightedRole === role.jobTitle
-                        const isDimmed = Boolean(salaryHighlightedRole && !isFocused)
+                        const isFocused = highlightedRole === role.jobTitle
+                        const isDimmed = Boolean(highlightedRole && !isFocused)
                         return (
                           <button
                             key={role.jobTitle}
                             type="button"
                             onClick={() =>
-                              setSalaryFocusRole(salaryFocusRole === role.jobTitle ? null : role.jobTitle)
+                              setFocusedRole(focusedRole === role.jobTitle ? null : role.jobTitle)
                             }
-                            onMouseEnter={() => setSalaryHoveredRole(role.jobTitle)}
-                            onMouseLeave={() => setSalaryHoveredRole(null)}
+                            onMouseEnter={() => setHoveredRole(role.jobTitle)}
+                            onMouseLeave={() => setHoveredRole(null)}
                             aria-label={`${role.jobTitle}, average annual salary ${money(role.averageSalary, currency)}. Select to focus this role.`}
-                            aria-pressed={salaryFocusRole === role.jobTitle}
+                            aria-pressed={focusedRole === role.jobTitle}
                             className={`group grid w-full grid-cols-[minmax(112px,150px)_minmax(0,1fr)_minmax(92px,112px)] items-center gap-3 rounded-lg border px-2 py-2 text-left transition-all duration-150 focus-visible:ring-2 focus-visible:ring-[var(--primary)]/40 focus-visible:outline-none ${isFocused ? "border-[var(--primary)]/30 bg-[var(--active-surface)] shadow-sm" : "border-transparent hover:border-[var(--border)] hover:bg-[var(--hover-surface)]"}`}
                           >
                             <span
@@ -467,8 +463,8 @@ export default function OverviewPage() {
                       onClick={(_, index) => {
                         const role = roles[index]
                         if (!role) return
-                        setWorkforceFocusRole(
-                          workforceFocusRole === role.jobTitle
+                        setFocusedRole(
+                          focusedRole === role.jobTitle
                             ? null
                             : role.jobTitle
                         )
@@ -479,9 +475,9 @@ export default function OverviewPage() {
                         <Cell
                           key={role.jobTitle}
                           fill={COLORS[index % COLORS.length]}
-                          opacity={workforceHighlightedRole && workforceHighlightedRole !== role.jobTitle ? 0.22 : 1}
-                          onMouseEnter={() => setWorkforceHoveredRole(role.jobTitle)}
-                          onMouseLeave={() => setWorkforceHoveredRole(null)}
+                          opacity={highlightedRole && highlightedRole !== role.jobTitle ? 0.22 : 1}
+                          onMouseEnter={() => setHoveredRole(role.jobTitle)}
+                          onMouseLeave={() => setHoveredRole(null)}
                           cursor="pointer"
                         />
                       ))}
@@ -494,16 +490,16 @@ export default function OverviewPage() {
                   const share = totalRoleEmployees
                     ? (role.employeeCount / totalRoleEmployees) * 100
                     : 0
-                  const selected = workforceHighlightedRole === role.jobTitle
-                  const pinned = workforceFocusRole === role.jobTitle
+                  const selected = highlightedRole === role.jobTitle
+                  const pinned = focusedRole === role.jobTitle
                   return (
                     <button
                       type="button"
                       key={role.jobTitle}
                       aria-pressed={pinned}
-                      onClick={() => setWorkforceFocusRole(pinned ? null : role.jobTitle)}
-                      onMouseEnter={() => setWorkforceHoveredRole(role.jobTitle)}
-                      onMouseLeave={() => setWorkforceHoveredRole(null)}
+                      onClick={() => setFocusedRole(pinned ? null : role.jobTitle)}
+                      onMouseEnter={() => setHoveredRole(role.jobTitle)}
+                      onMouseLeave={() => setHoveredRole(null)}
                       className={
                         "flex min-w-0 items-center gap-2 rounded-md border px-2 py-1.5 text-left transition-all " +
                         (selected
@@ -527,14 +523,14 @@ export default function OverviewPage() {
               </div>
               <div className="mt-2 flex items-center justify-between border-t border-border pt-2">
                 <p className="text-[10px] text-muted-foreground">
-                  {workforceFocusRole
-                    ? "Focused: " + workforceFocusRole
+                  {focusedRole
+                    ? "Focused: " + focusedRole
                     : "Select a bar or role to highlight workforce mix"}
                 </p>
-                {workforceFocusRole && (
+                {focusedRole && (
                   <button
                     type="button"
-                    onClick={() => setWorkforceFocusRole(null)}
+                    onClick={() => setFocusedRole(null)}
                     className="text-[10px] font-semibold text-primary hover:underline"
                   >
                     Clear filter
