@@ -35,11 +35,11 @@ function normalizeName(value: string): string {
 function generateEmail(firstName: string, lastName: string): string {
   const base = `${normalizeName(firstName)}.${normalizeName(lastName)}`;
 
-  let email = `${base}@example.com`;
+  let email = `${base}@acme.com`;
   let suffix = 2;
 
   while (usedEmails.has(email)) {
-    email = `${base}${suffix}@example.com`;
+    email = `${base}${suffix}@acme.com`;
     suffix++;
   }
 
