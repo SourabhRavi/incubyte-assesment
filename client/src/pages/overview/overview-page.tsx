@@ -301,7 +301,7 @@ export default function OverviewPage() {
               </div>
               {(() => {
                 const maxSalary = Math.max(
-                  ...roles.map((role) => role.averageSalary),
+                  ...roles.map((role) => Number(role.averageSalary ?? 0)),
                   1
                 )
                 const axisMax = Math.ceil(maxSalary / 500000) * 500000
@@ -310,6 +310,7 @@ export default function OverviewPage() {
                   <>
                     <div className="flex flex-1 flex-col justify-between gap-2">
                       {roles.map((role, index) => {
+                        const averageSalary = Number(role.averageSalary ?? 0)
                         const isFocused = salaryHighlightedRole === role.jobTitle
                         const isDimmed = Boolean(salaryHighlightedRole && !isFocused)
                         return (
@@ -334,7 +335,7 @@ export default function OverviewPage() {
                               <span
                                 className="absolute inset-y-0 left-0 rounded-[5px] transition-[width,opacity] duration-300"
                                 style={{
-                                  width: `${Math.max(2, (role.averageSalary / axisMax) * 100)}%`,
+                                  width: `${Math.max(2, (averageSalary / axisMax) * 100)}%`,
                                   backgroundColor: COLORS[index % COLORS.length],
                                   opacity: isDimmed ? 0.22 : 1,
                                   boxShadow: isFocused ? "0 0 0 2px color-mix(in srgb, var(--primary) 18%, transparent)" : "none",
@@ -463,13 +464,15 @@ export default function OverviewPage() {
                       name="Employees"
                       maxBarSize={30}
                       radius={[5, 5, 0, 0]}
-                      onClick={(entry) =>
+                      onClick={(_, index) => {
+                        const role = roles[index]
+                        if (!role) return
                         setWorkforceFocusRole(
-                          workforceFocusRole === String(entry.jobTitle)
+                          workforceFocusRole === role.jobTitle
                             ? null
-                            : String(entry.jobTitle)
+                            : role.jobTitle
                         )
-                      }
+                      }}
                       className="cursor-pointer"
                     >
                       {roles.map((role, index) => (
