@@ -317,10 +317,10 @@ const EmployeesPage = () => {
             type="button"
             onClick={() => void refetch()}
             disabled={isFetching}
-            className="inline-flex h-10 items-center justify-center gap-2 rounded-md border px-4 text-sm font-medium transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
+            className="peopleops-action-button inline-flex h-[43px] items-center gap-2 rounded-[8px] border border-[var(--border)] bg-[var(--card)] px-[14px] text-[12px] font-medium text-[var(--foreground)] hover:bg-[var(--hover-surface)] disabled:opacity-60"
           >
             <RefreshCw
-              className={`size-4 ${isFetching ? "animate-spin" : ""}`}
+              className={`size-[14px] ${isFetching ? "animate-spin" : ""}`}
             />
             {isFetching ? "Refreshing..." : "Refresh"}
           </button>
