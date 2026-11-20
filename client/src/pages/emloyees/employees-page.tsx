@@ -193,12 +193,14 @@ const EmployeesPage = () => {
   const search = searchParams.get("search") ?? ""
 
   const commitSearch = useCallback((value: string) => {
-    const nextParams = new URLSearchParams(searchParams)
-    if (value) nextParams.set("search", value)
-    else nextParams.delete("search")
-    nextParams.delete("page")
-    setSearchParams(nextParams, { replace: true })
-  }, [searchParams, setSearchParams])
+    setSearchParams((currentParams) => {
+      const nextParams = new URLSearchParams(currentParams)
+      if (value) nextParams.set("search", value)
+      else nextParams.delete("search")
+      nextParams.delete("page")
+      return nextParams
+    }, { replace: true })
+  }, [setSearchParams])
 
   const [isEmployeeDialogOpen, setIsEmployeeDialogOpen] = useState(false)
   const [selectedEmployee, setSelectedEmployee] = useState<
@@ -230,17 +232,19 @@ const EmployeesPage = () => {
     updates: Record<string, string>,
     options?: { replace?: boolean }
   ) => {
-    const nextParams = new URLSearchParams(searchParams)
+    setSearchParams((currentParams) => {
+      const nextParams = new URLSearchParams(currentParams)
 
-    Object.entries(updates).forEach(([key, value]) => {
-      if (value) {
-        nextParams.set(key, value)
-      } else {
-        nextParams.delete(key)
-      }
-    })
+      Object.entries(updates).forEach(([key, value]) => {
+        if (value) {
+          nextParams.set(key, value)
+        } else {
+          nextParams.delete(key)
+        }
+      })
 
-    setSearchParams(nextParams, options)
+      return nextParams
+    }, options)
   }
 
   const updateFilter = (key: "country" | "jobTitle", value: string) => {
