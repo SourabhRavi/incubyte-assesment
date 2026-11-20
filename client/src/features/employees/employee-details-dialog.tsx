@@ -139,7 +139,7 @@ const EmployeeDetailsDialog = ({
                 {getInitials(employee.fullName)}
               </div>
               <div className="min-w-0 flex-1 space-y-1">
-                <DialogTitle className="truncate text-lg">
+                <DialogTitle className="mb-0 truncate text-lg leading-tight">
                   {employee.fullName}
                 </DialogTitle>
                 <DialogDescription className="flex flex-wrap items-center gap-x-2 gap-y-1">
@@ -147,10 +147,18 @@ const EmployeeDetailsDialog = ({
                   <span aria-hidden="true">·</span>
                   <span>{employee.country}</span>
                 </DialogDescription>
-                <div className="pt-1">
-                  <span className="inline-flex items-center rounded-full border border-emerald-600/20 bg-emerald-600/10 px-2 py-0.5 text-xs font-medium text-emerald-700 dark:text-emerald-400">
-                    Employee record
-                  </span>
+                <div className="mt-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onOpenChange(false)
+                      onEdit(employee)
+                    }}
+                    className="inline-flex h-6 items-center justify-center gap-2 rounded-sm bg-primary px-2 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
+                  >
+                    <Pencil className="size-3" aria-hidden="true" />
+                    Edit details
+                  </button>
                 </div>
               </div>
             </div>
@@ -268,21 +276,6 @@ const EmployeeDetailsDialog = ({
                 It does not necessarily indicate a salary revision date.
               </p> */}
             </section>
-
-            <Separator />
-            <div className="flex justify-end">
-              <button
-                type="button"
-                onClick={() => {
-                  onOpenChange(false)
-                  onEdit(employee)
-                }}
-                className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
-              >
-                <Pencil className="size-4" aria-hidden="true" />
-                Edit details
-              </button>
-            </div>
           </div>
         </>
       )}
