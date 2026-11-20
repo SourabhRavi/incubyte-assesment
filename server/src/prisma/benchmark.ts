@@ -104,7 +104,7 @@ async function main() {
     {
       name: "employee-email-substring-search",
       operation: () =>
-        request("/employees?page=1&limit=25&search=example.com"),
+        request("/employees?page=1&limit=25&search=acme.com"),
     },
     {
       name: "employee-country-job-title-filter",
