@@ -197,8 +197,6 @@ export default function OverviewPage() {
                 setSelectedCountry(event.target.value as Country)
                 setFocusedRole(null)
                 setHoveredRole(null)
-                setFocusedRole(null)
-                setHoveredRole(null)
               }}
               selectClassName="h-[43px] w-full rounded-[8px] border-[var(--border)] bg-[var(--card)] pl-[40px] pr-9 text-[12px] font-semibold text-[var(--foreground)] shadow-none focus-visible:border-[var(--primary)] focus-visible:ring-2 focus-visible:ring-[var(--primary)]/15"
             >
