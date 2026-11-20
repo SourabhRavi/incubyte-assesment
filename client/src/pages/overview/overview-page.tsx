@@ -76,20 +76,20 @@ type MetricProps = {
 
 const metricToneClasses: Record<MetricTone, { icon: string; accent: string }> = {
   people: {
-    icon: "bg-blue-50 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300",
-    accent: "before:bg-blue-500",
+    icon: "bg-[var(--primary)]/10 text-[var(--primary)]",
+    accent: "before:bg-[var(--primary)]",
   },
   minimum: {
-    icon: "bg-teal-50 text-teal-700 dark:bg-teal-950/50 dark:text-teal-300",
-    accent: "before:bg-teal-500",
+    icon: "bg-[var(--primary)]/10 text-[var(--primary)]",
+    accent: "before:bg-[var(--primary)]",
   },
   average: {
-    icon: "bg-violet-50 text-violet-700 dark:bg-violet-950/50 dark:text-violet-300",
-    accent: "before:bg-violet-500",
+    icon: "bg-[var(--primary)]/10 text-[var(--primary)]",
+    accent: "before:bg-[var(--primary)]",
   },
   maximum: {
-    icon: "bg-orange-50 text-orange-700 dark:bg-orange-950/50 dark:text-orange-300",
-    accent: "before:bg-orange-500",
+    icon: "bg-[var(--primary)]/10 text-[var(--primary)]",
+    accent: "before:bg-[var(--primary)]",
   },
 }
 
