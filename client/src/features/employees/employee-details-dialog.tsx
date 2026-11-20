@@ -88,7 +88,7 @@ const DetailItem = ({
     </div>
     <div className="min-w-0 space-y-1">
       <p className="text-xs font-medium text-muted-foreground">{label}</p>
-      <p className="break-words text-sm font-medium text-foreground">
+      <p className="text-sm font-medium break-words text-foreground">
         {value || "Not available"}
       </p>
     </div>
@@ -157,9 +157,15 @@ const EmployeeDetailsDialog = ({
           <Separator />
 
           <div className="space-y-6 p-6">
-            <section className="space-y-4" aria-labelledby="employee-overview-heading">
+            <section
+              className="space-y-4"
+              aria-labelledby="employee-overview-heading"
+            >
               <div>
-                <h3 id="employee-overview-heading" className="text-sm font-semibold">
+                <h3
+                  id="employee-overview-heading"
+                  className="text-sm font-semibold"
+                >
                   Employee information
                 </h3>
                 <p className="mt-1 text-xs text-muted-foreground">
@@ -167,17 +173,39 @@ const EmployeeDetailsDialog = ({
                 </p>
               </div>
               <div className="grid gap-5 sm:grid-cols-2">
-                <DetailItem icon={Mail} label="Work email" value={employee.email} />
-                <DetailItem icon={BriefcaseBusiness} label="Job title" value={employee.jobTitle} />
-                <DetailItem icon={MapPin} label="Country" value={employee.country} />
-                <DetailItem icon={Fingerprint} label="Employee ID" value={employee.id} />
+                <DetailItem
+                  icon={Mail}
+                  label="Work email"
+                  value={employee.email}
+                />
+                <DetailItem
+                  icon={BriefcaseBusiness}
+                  label="Job title"
+                  value={employee.jobTitle}
+                />
+                <DetailItem
+                  icon={MapPin}
+                  label="Country"
+                  value={employee.country}
+                />
+                <DetailItem
+                  icon={Fingerprint}
+                  label="Employee ID"
+                  value={employee.id}
+                />
               </div>
             </section>
 
-            <section className="space-y-4" aria-labelledby="employee-compensation-heading">
+            <section
+              className="space-y-4"
+              aria-labelledby="employee-compensation-heading"
+            >
               <Separator />
               <div>
-                <h3 id="employee-compensation-heading" className="text-sm font-semibold">
+                <h3
+                  id="employee-compensation-heading"
+                  className="text-sm font-semibold"
+                >
                   Compensation
                 </h3>
                 <p className="mt-1 text-xs text-muted-foreground">
@@ -199,15 +227,22 @@ const EmployeeDetailsDialog = ({
                   </div>
                 </div>
                 <p className="mt-3 border-t pt-3 text-xs text-muted-foreground">
-                  Currency: {COUNTRY_CURRENCIES[employee.country]} · Salary figures are not converted between countries.
+                  Currency: {COUNTRY_CURRENCIES[employee.country]} · Salary
+                  figures are not converted between countries.
                 </p>
               </div>
             </section>
 
-            <section className="space-y-4" aria-labelledby="employee-record-heading">
+            <section
+              className="space-y-4"
+              aria-labelledby="employee-record-heading"
+            >
               <Separator />
               <div>
-                <h3 id="employee-record-heading" className="text-sm font-semibold">
+                <h3
+                  id="employee-record-heading"
+                  className="text-sm font-semibold"
+                >
                   Record activity
                 </h3>
                 <p className="mt-1 text-xs text-muted-foreground">
@@ -226,9 +261,10 @@ const EmployeeDetailsDialog = ({
                   value={employee.updatedAt}
                 />
               </div>
-              <p className="text-xs leading-relaxed text-muted-foreground">
-                The last record update may reflect any employee detail change. It does not necessarily indicate a salary revision date.
-              </p>
+              {/* <p className="text-xs leading-relaxed text-muted-foreground">
+                The last record update may reflect any employee detail change.
+                It does not necessarily indicate a salary revision date.
+              </p> */}
             </section>
           </div>
         </>
