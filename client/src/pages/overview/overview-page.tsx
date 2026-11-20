@@ -81,7 +81,7 @@ function MetricCard({
   highlighted,
 }: MetricProps) {
   return (
-    <section className="peopleops-metric min-w-0 rounded-[8px] border border-[var(--border)] bg-white px-[18px] py-[18px]">
+    <section className="peopleops-metric min-w-0 rounded-[8px] border border-[var(--border)] bg-[var(--card)] px-[18px] py-[18px]">
       <div className="flex items-center justify-between gap-2">
         <p className="text-[13px] font-medium text-[var(--muted-foreground)]">{title}</p>
         <Icon
@@ -114,7 +114,7 @@ function Panel({
 }) {
   return (
     <section
-      className={`peopleops-chart-panel min-w-0 overflow-hidden rounded-[12px] border border-[var(--border)] bg-white ${className}`}
+      className={`peopleops-chart-panel min-w-0 overflow-hidden rounded-[12px] border border-[var(--border)] bg-[var(--card)] ${className}`}
     >
       <header className="px-[22px] pt-[20px]">
         <h2 className="text-[16px] font-semibold tracking-[-0.25px] text-[var(--foreground)]">
@@ -197,7 +197,7 @@ export default function OverviewPage() {
                 setSelectedCountry(event.target.value as Country)
                 setActiveRole(null)
               }}
-              selectClassName="h-[43px] w-full rounded-[8px] border-[var(--border)] bg-white pl-[40px] pr-9 text-[12px] font-semibold text-[var(--foreground)] shadow-none focus-visible:border-[var(--primary)] focus-visible:ring-2 focus-visible:ring-[var(--primary)]/15"
+              selectClassName="h-[43px] w-full rounded-[8px] border-[var(--border)] bg-[var(--card)] pl-[40px] pr-9 text-[12px] font-semibold text-[var(--foreground)] shadow-none focus-visible:border-[var(--primary)] focus-visible:ring-2 focus-visible:ring-[var(--primary)]/15"
             >
               {COUNTRIES.map((country) => (
                 <NativeSelectOption key={country} value={country}>
@@ -210,7 +210,7 @@ export default function OverviewPage() {
             type="button"
             onClick={() => void refresh()}
             disabled={isRefreshing}
-            className="peopleops-action-button inline-flex h-[43px] items-center gap-2 rounded-[8px] border border-[var(--border)] bg-white px-[14px] text-[12px] font-medium text-[var(--foreground)] hover:bg-[var(--surface-subtle)] disabled:opacity-60"
+            className="peopleops-action-button inline-flex h-[43px] items-center gap-2 rounded-[8px] border border-[var(--border)] bg-[var(--card)] px-[14px] text-[12px] font-medium text-[var(--foreground)] hover:bg-[var(--hover-surface)] disabled:opacity-60"
           >
             <RefreshCw
               className={`size-[14px] ${isRefreshing ? "animate-spin" : ""}`}
@@ -320,7 +320,7 @@ export default function OverviewPage() {
                               money(role.averageSalary, currency)
                             }
                             aria-pressed={isFocused}
-                            className={`group grid w-full grid-cols-[minmax(112px,150px)_minmax(0,1fr)_minmax(92px,112px)] items-center gap-3 rounded-md py-1.5 text-left transition-colors hover:bg-[var(--surface-subtle)] focus-visible:ring-2 focus-visible:ring-[var(--primary)]/40 focus-visible:outline-none ${isFocused ? "bg-[var(--accent)]" : ""}`}
+                            className={`group grid w-full grid-cols-[minmax(112px,150px)_minmax(0,1fr)_minmax(92px,112px)] items-center gap-3 rounded-md py-1.5 text-left transition-colors hover:bg-[var(--hover-surface)] focus-visible:ring-2 focus-visible:ring-[var(--primary)]/40 focus-visible:outline-none ${isFocused ? "bg-[var(--accent)]" : ""}`}
                           >
                             <span
                               className={`truncate text-[11px] font-medium ${isDimmed ? "text-[var(--muted-foreground)]" : "text-[var(--foreground)]"}`}
@@ -538,7 +538,7 @@ export default function OverviewPage() {
           )}
         </Panel>
       </div>
-      <section className="peopleops-data-panel overflow-hidden rounded-[12px] border border-[var(--border)] bg-white">
+      <section className="peopleops-data-panel overflow-hidden rounded-[12px] border border-[var(--border)] bg-[var(--card)]">
         <header className="flex items-center justify-between gap-3 px-[22px] py-[19px]">
           <div>
             <h2 className="text-[16px] font-semibold tracking-[-0.25px] text-[var(--foreground)]">
@@ -582,7 +582,7 @@ export default function OverviewPage() {
                   .map((role, index) => (
                     <tr
                       key={role.jobTitle}
-                      className="peopleops-table-row border-t border-[var(--border)] hover:bg-[var(--surface-subtle)]"
+                      className="peopleops-table-row border-t border-[var(--border)] hover:bg-[var(--hover-surface)]"
                     >
                       <td className="px-[22px] py-[7px]">
                         <span className="inline-flex items-center gap-[13px] text-[12px] text-[var(--foreground)]">
