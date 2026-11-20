@@ -12,7 +12,7 @@ import { countryQuerySchema } from "../src/modules/analytics/analytics.validator
 
 const validEmployee = {
   fullName: "Ada Lovelace",
-  email: "Ada@Example.com",
+  email: "Ada@Acme.com",
   jobTitle: "Software Engineer",
   country: "India",
   salary: 1_000_000,
@@ -22,11 +22,11 @@ test("accepts valid employee data and normalizes input", () => {
   const result = createEmployeeSchema.parse({
     ...validEmployee,
     fullName: "  Ada Lovelace  ",
-    email: " Ada@Example.com ",
+    email: " Ada@Acme.com ",
   });
 
   expect(result.fullName).toBe("Ada Lovelace");
-  expect(result.email).toBe("ada@example.com");
+  expect(result.email).toBe("ada@acme.com");
 });
 
 test("rejects invalid email addresses", () => {

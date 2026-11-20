@@ -8,7 +8,7 @@ import type { Employee } from "../employee-types"
 const existingEmployee: Employee = {
   id: "employee-1",
   fullName: "Isai Kling",
-  email: "isai.kling@example.com",
+  email: "isai.kling@acme.com",
   jobTitle: "QA Engineer",
   country: "Canada",
   salary: 100,
@@ -43,7 +43,9 @@ describe("EmployeeForm", () => {
 
     expect(screen.getByText("Enter a valid email address.")).toBeInTheDocument()
     expect(
-      screen.getByText("Enter a valid amount greater than zero with no more than 2 decimal places.")
+      screen.getByText(
+        "Enter a valid amount greater than zero with no more than 2 decimal places."
+      )
     ).toBeInTheDocument()
     expect(onSubmit).not.toHaveBeenCalled()
   })
@@ -62,7 +64,7 @@ describe("EmployeeForm", () => {
     )
 
     await user.type(screen.getByLabelText("Full name"), "  Ada Lovelace  ")
-    await user.type(screen.getByLabelText("Work email"), "ada@example.com")
+    await user.type(screen.getByLabelText("Work email"), "ada@acme.com")
     await user.selectOptions(
       screen.getByLabelText("Job title"),
       "Software Engineer"
@@ -77,7 +79,7 @@ describe("EmployeeForm", () => {
     await waitFor(() => {
       expect(onSubmit).toHaveBeenCalledWith({
         fullName: "Ada Lovelace",
-        email: "ada@example.com",
+        email: "ada@acme.com",
         jobTitle: "Software Engineer",
         country: "Canada",
         salary: 123456,
@@ -107,7 +109,9 @@ describe("EmployeeForm", () => {
     await user.click(screen.getByRole("button", { name: "Save changes" }))
 
     expect(
-      screen.getByText("Enter a valid amount greater than zero with no more than 2 decimal places.")
+      screen.getByText(
+        "Enter a valid amount greater than zero with no more than 2 decimal places."
+      )
     ).toBeInTheDocument()
     expect(onSubmit).not.toHaveBeenCalled()
   })
