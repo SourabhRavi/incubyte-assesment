@@ -80,7 +80,9 @@ function MetricCard({
   return (
     <section className="peopleops-metric min-w-0 rounded-[8px] border border-[var(--border)] bg-[var(--card)] px-[18px] py-[18px]">
       <div className="flex items-center justify-between gap-2">
-        <p className="text-[13px] font-medium text-[var(--muted-foreground)]">{title}</p>
+        <p className="text-[13px] font-medium text-[var(--muted-foreground)]">
+          {title}
+        </p>
         <Icon
           className={`size-[17px] ${highlighted ? "text-[var(--primary)]" : "text-[var(--muted-foreground)]"}`}
         />
@@ -94,7 +96,9 @@ function MetricCard({
           </p>
         )}
       </div>
-      <p className="mt-[11px] text-[11px] text-[var(--muted-foreground)]">{detail}</p>
+      <p className="mt-[11px] text-[11px] text-[var(--muted-foreground)]">
+        {detail}
+      </p>
     </section>
   )
 }
@@ -117,7 +121,9 @@ function Panel({
         <h2 className="text-[16px] font-semibold tracking-[-0.25px] text-[var(--foreground)]">
           {title}
         </h2>
-        <p className="mt-[5px] text-[12px] text-[var(--muted-foreground)]">{subtitle}</p>
+        <p className="mt-[5px] text-[12px] text-[var(--muted-foreground)]">
+          {subtitle}
+        </p>
       </header>
       {children}
     </section>
@@ -304,7 +310,7 @@ export default function OverviewPage() {
                 const ticks = [0, 0.25, 0.5, 0.75, 1]
                 return (
                   <>
-                    <div className="flex flex-1 flex-col justify-between gap-2">
+                    <div className="flex flex-1 flex-col gap-0">
                       {roles.map((role, index) => {
                         const averageSalary = Number(role.averageSalary ?? 0)
                         const isFocused = highlightedRole === role.jobTitle
@@ -314,27 +320,37 @@ export default function OverviewPage() {
                             key={role.jobTitle}
                             type="button"
                             onClick={() =>
-                              setFocusedRole(focusedRole === role.jobTitle ? null : role.jobTitle)
+                              setFocusedRole(
+                                focusedRole === role.jobTitle
+                                  ? null
+                                  : role.jobTitle
+                              )
                             }
                             onMouseEnter={() => setHoveredRole(role.jobTitle)}
                             onMouseLeave={() => setHoveredRole(null)}
                             aria-label={`${role.jobTitle}, average annual salary ${money(role.averageSalary, currency)}. Select to focus this role.`}
                             aria-pressed={focusedRole === role.jobTitle}
-                            className={`group grid w-full grid-cols-[minmax(112px,150px)_minmax(0,1fr)_minmax(92px,112px)] items-center gap-3 rounded-lg border px-2 py-2 text-left transition-all duration-150 focus-visible:ring-2 focus-visible:ring-[var(--primary)]/40 focus-visible:outline-none ${isFocused ? "border-[var(--primary)]/30 bg-[var(--active-surface)] shadow-sm" : "border-transparent hover:border-[var(--border)] hover:bg-[var(--hover-surface)]"}`}
+                            className={`group grid w-full flex-1 grid-cols-[minmax(112px,150px)_minmax(0,1fr)_minmax(92px,112px)] items-center gap-3 rounded-lg px-2 py-2 text-left transition-all duration-150 ...`}
                           >
                             <span
                               className={`truncate text-[11px] font-medium ${isDimmed ? "text-[var(--muted-foreground)]" : "text-[var(--foreground)]"}`}
                             >
                               {role.jobTitle}
                             </span>
-                            <span className={`relative block h-5 min-w-0 overflow-hidden rounded-[5px] bg-[var(--muted)] transition-shadow ${isFocused ? "ring-2 ring-[var(--primary)]/25" : ""}`}>
+                            <span
+                              // className={`relative block h-5 min-w-0 overflow-hidden rounded-[5px] bg-[var(--muted)] transition-shadow ${isFocused ? "ring-10 ring-[var(--primary)]/25" : ""}`}
+                              className={`relative block h-5 min-w-0 overflow-hidden rounded-[5px] transition-shadow ${isFocused ? "bg-muted-foreground/10" : "bg-muted-foreground/10"}`}
+                            >
                               <span
                                 className="absolute inset-y-0 left-0 rounded-[5px] transition-[width,opacity] duration-300"
                                 style={{
                                   width: `${Math.max(2, (averageSalary / axisMax) * 100)}%`,
-                                  backgroundColor: COLORS[index % COLORS.length],
+                                  backgroundColor:
+                                    COLORS[index % COLORS.length],
                                   opacity: isDimmed ? 0.22 : 1,
-                                  boxShadow: isFocused ? "0 0 0 2px color-mix(in srgb, var(--primary) 18%, transparent)" : "none",
+                                  // boxShadow: isFocused
+                                  //   ? "0 0 0 2px color-mix(in srgb, var(--primary) 18%, transparent)"
+                                  //   : "none",
                                   filter: isFocused ? "saturate(1.15)" : "none",
                                 }}
                               />
@@ -376,7 +392,7 @@ export default function OverviewPage() {
           ) : rolesQuery.isError || roles.length === 0 ? (
             <EmptyState>No workforce data to display yet.</EmptyState>
           ) : (
-            <div className="peopleops-chart-body flex flex-1 min-h-0 flex-col px-4 pt-4 pb-4">
+            <div className="peopleops-chart-body flex min-h-0 flex-1 flex-col px-4 pt-4 pb-4">
               <div className="mb-2 flex items-center justify-between gap-3 px-1">
                 <span className="text-[10px] text-muted-foreground">
                   Employee distribution
@@ -386,7 +402,12 @@ export default function OverviewPage() {
                 </span>
               </div>
               <div className="min-h-[300px] w-full min-w-0 flex-1">
-                <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={300}>
+                <ResponsiveContainer
+                  width="100%"
+                  height="100%"
+                  minWidth={0}
+                  minHeight={300}
+                >
                   <BarChart
                     data={roles}
                     margin={{ top: 12, right: 4, bottom: 12, left: 0 }}
@@ -464,9 +485,7 @@ export default function OverviewPage() {
                         const role = roles[index]
                         if (!role) return
                         setFocusedRole(
-                          focusedRole === role.jobTitle
-                            ? null
-                            : role.jobTitle
+                          focusedRole === role.jobTitle ? null : role.jobTitle
                         )
                       }}
                       className="cursor-pointer"
@@ -475,7 +494,11 @@ export default function OverviewPage() {
                         <Cell
                           key={role.jobTitle}
                           fill={COLORS[index % COLORS.length]}
-                          opacity={highlightedRole && highlightedRole !== role.jobTitle ? 0.22 : 1}
+                          opacity={
+                            highlightedRole && highlightedRole !== role.jobTitle
+                              ? 0.22
+                              : 1
+                          }
                           onMouseEnter={() => setHoveredRole(role.jobTitle)}
                           onMouseLeave={() => setHoveredRole(null)}
                           cursor="pointer"
@@ -497,7 +520,9 @@ export default function OverviewPage() {
                       type="button"
                       key={role.jobTitle}
                       aria-pressed={pinned}
-                      onClick={() => setFocusedRole(pinned ? null : role.jobTitle)}
+                      onClick={() =>
+                        setFocusedRole(pinned ? null : role.jobTitle)
+                      }
                       onMouseEnter={() => setHoveredRole(role.jobTitle)}
                       onMouseLeave={() => setHoveredRole(null)}
                       className={
@@ -548,8 +573,7 @@ export default function OverviewPage() {
               Compensation by role
             </h2>
             <p className="mt-[4px] text-[11px] text-[var(--muted-foreground)]">
-              {selectedCountry} ·{" "}
-              {roles.length + " job titles"}
+              {selectedCountry} · {roles.length + " job titles"}
             </p>
           </div>
           <Link
@@ -579,29 +603,29 @@ export default function OverviewPage() {
               </thead>
               <tbody>
                 {roles.map((role, index) => (
-                    <tr
-                      key={role.jobTitle}
-                      className="peopleops-table-row border-t border-[var(--border)] hover:bg-[var(--hover-surface)]"
-                    >
-                      <td className="px-[22px] py-[7px]">
-                        <span className="inline-flex items-center gap-[13px] text-[12px] text-[var(--foreground)]">
-                          <span
-                            className="size-[7px] rounded-[2px]"
-                            style={{
-                              background: COLORS[index % COLORS.length],
-                            }}
-                          />
-                          {role.jobTitle}
-                        </span>
-                      </td>
-                      <td className="px-[22px] py-[7px] text-right text-[12px] text-[var(--foreground)] tabular-nums">
-                        {role.employeeCount.toLocaleString("en-IN")}
-                      </td>
-                      <td className="px-[22px] py-[7px] text-right text-[12px] font-medium text-[var(--foreground)] tabular-nums">
-                        {money(role.averageSalary, currency)} {currency}
-                      </td>
-                    </tr>
-                  ))}
+                  <tr
+                    key={role.jobTitle}
+                    className="peopleops-table-row border-t border-[var(--border)] hover:bg-[var(--hover-surface)]"
+                  >
+                    <td className="px-[22px] py-[7px]">
+                      <span className="inline-flex items-center gap-[13px] text-[12px] text-[var(--foreground)]">
+                        <span
+                          className="size-[7px] rounded-[2px]"
+                          style={{
+                            background: COLORS[index % COLORS.length],
+                          }}
+                        />
+                        {role.jobTitle}
+                      </span>
+                    </td>
+                    <td className="px-[22px] py-[7px] text-right text-[12px] text-[var(--foreground)] tabular-nums">
+                      {role.employeeCount.toLocaleString("en-IN")}
+                    </td>
+                    <td className="px-[22px] py-[7px] text-right text-[12px] font-medium text-[var(--foreground)] tabular-nums">
+                      {money(role.averageSalary, currency)} {currency}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
