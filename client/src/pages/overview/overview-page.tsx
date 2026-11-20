@@ -389,8 +389,8 @@ export default function OverviewPage() {
                   {totalRoleEmployees.toLocaleString("en-IN")} employees
                 </span>
               </div>
-              <div className="h-[210px] w-full min-w-0">
-                <ResponsiveContainer width="100%" height={210} minWidth={0} minHeight={210}>
+              <div className="min-h-[210px] w-full min-w-0 flex-1">
+                <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={210}>
                   <BarChart
                     data={roles}
                     margin={{ top: 12, right: 4, bottom: 12, left: 0 }}
