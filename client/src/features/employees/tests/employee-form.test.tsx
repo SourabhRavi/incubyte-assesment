@@ -30,14 +30,14 @@ describe("EmployeeForm", () => {
       />
     )
 
-    await user.type(screen.getByLabelText("Full name"), "Test Employee")
-    await user.type(screen.getByLabelText("Work email"), "invalid-email")
+    await user.type(screen.getByLabelText(/Full name/), "Test Employee")
+    await user.type(screen.getByLabelText(/Work email/), "invalid-email")
     await user.selectOptions(
-      screen.getByLabelText("Job title"),
+      screen.getByLabelText(/Job title/),
       "Software Engineer"
     )
-    await user.selectOptions(screen.getByLabelText("Country"), "India")
-    await user.type(screen.getByLabelText("Annual salary"), "0")
+    await user.selectOptions(screen.getByLabelText(/Country/), "India")
+    await user.type(screen.getByLabelText(/Annual salary/), "0")
 
     await user.click(screen.getByRole("button", { name: "Add employee" }))
 
@@ -63,17 +63,17 @@ describe("EmployeeForm", () => {
       />
     )
 
-    await user.type(screen.getByLabelText("Full name"), "  Ada Lovelace  ")
-    await user.type(screen.getByLabelText("Work email"), "ada@acme.com")
+    await user.type(screen.getByLabelText(/Full name/), "  Ada Lovelace  ")
+    await user.type(screen.getByLabelText(/Work email/), "ada@acme.com")
     await user.selectOptions(
-      screen.getByLabelText("Job title"),
+      screen.getByLabelText(/Job title/),
       "Software Engineer"
     )
-    await user.selectOptions(screen.getByLabelText("Country"), "Canada")
+    await user.selectOptions(screen.getByLabelText(/Country/), "Canada")
 
     expect(screen.getByText("CAD")).toBeInTheDocument()
 
-    await user.type(screen.getByLabelText("Annual salary"), "123456")
+    await user.type(screen.getByLabelText(/Annual salary/), "123456")
     await user.click(screen.getByRole("button", { name: "Add employee" }))
 
     await waitFor(() => {
@@ -100,7 +100,7 @@ describe("EmployeeForm", () => {
       />
     )
 
-    const salaryInput = screen.getByLabelText("Annual salary")
+    const salaryInput = screen.getByLabelText(/Annual salary/)
     await user.clear(salaryInput)
     await user.type(salaryInput, "14.123")
 
@@ -129,7 +129,7 @@ describe("EmployeeForm", () => {
       />
     )
 
-    const salaryInput = screen.getByLabelText("Annual salary")
+    const salaryInput = screen.getByLabelText(/Annual salary/)
     await user.clear(salaryInput)
     await user.type(salaryInput, "125.50")
 
