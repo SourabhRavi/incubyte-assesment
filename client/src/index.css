@@ -605,7 +605,6 @@
   font-variant-numeric: tabular-nums lining-nums;
 }
 
-
 /* PeopleOps button scale: shared actions use one predictable control height. */
 @layer components {
   .peopleops-overview .overview-heading button,
@@ -630,7 +629,6 @@
     line-height: 1.25;
   }
 }
-
 
 /* --------------------------------------------------------------------------
    PeopleOps design tokens v2
@@ -814,21 +812,53 @@
 
 /* Semantic utility hooks for charts, status labels and consistent controls. */
 @layer components {
-  .peopleops-chart-color-1 { color: var(--chart-1); }
-  .peopleops-chart-color-2 { color: var(--chart-2); }
-  .peopleops-chart-color-3 { color: var(--chart-3); }
-  .peopleops-chart-color-4 { color: var(--chart-4); }
-  .peopleops-chart-color-5 { color: var(--chart-5); }
-  .peopleops-chart-color-6 { color: var(--chart-6); }
-  .peopleops-chart-color-7 { color: var(--chart-7); }
-  .peopleops-chart-color-8 { color: var(--chart-8); }
-  .peopleops-chart-color-9 { color: var(--chart-9); }
-  .peopleops-chart-color-10 { color: var(--chart-10); }
+  .peopleops-chart-color-1 {
+    color: var(--chart-1);
+  }
+  .peopleops-chart-color-2 {
+    color: var(--chart-2);
+  }
+  .peopleops-chart-color-3 {
+    color: var(--chart-3);
+  }
+  .peopleops-chart-color-4 {
+    color: var(--chart-4);
+  }
+  .peopleops-chart-color-5 {
+    color: var(--chart-5);
+  }
+  .peopleops-chart-color-6 {
+    color: var(--chart-6);
+  }
+  .peopleops-chart-color-7 {
+    color: var(--chart-7);
+  }
+  .peopleops-chart-color-8 {
+    color: var(--chart-8);
+  }
+  .peopleops-chart-color-9 {
+    color: var(--chart-9);
+  }
+  .peopleops-chart-color-10 {
+    color: var(--chart-10);
+  }
 
-  .peopleops-status-success { color: var(--success); background: var(--success-soft); }
-  .peopleops-status-warning { color: var(--warning); background: var(--warning-soft); }
-  .peopleops-status-danger { color: var(--destructive); background: var(--destructive-soft); }
-  .peopleops-status-info { color: var(--info); background: var(--info-soft); }
+  .peopleops-status-success {
+    color: var(--success);
+    background: var(--success-soft);
+  }
+  .peopleops-status-warning {
+    color: var(--warning);
+    background: var(--warning-soft);
+  }
+  .peopleops-status-danger {
+    color: var(--destructive);
+    background: var(--destructive-soft);
+  }
+  .peopleops-status-info {
+    color: var(--info);
+    background: var(--info-soft);
+  }
 
   .peopleops-overview :is(button, a, input, select, textarea):focus-visible,
   .peopleops-employees :is(button, a, input, select, textarea):focus-visible {
@@ -858,7 +888,6 @@
   --color-chart-10: var(--chart-10);
 }
 
-
 /* PeopleOps final component polish: consistent spacing, hover and theme behavior. */
 @layer components {
   :root {
@@ -879,7 +908,11 @@
   [data-slot="button"] {
     min-height: var(--control-height);
     border-radius: var(--control-radius);
-    transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+    transition:
+      color 150ms ease,
+      background-color 150ms ease,
+      border-color 150ms ease,
+      box-shadow 150ms ease;
   }
 
   [data-slot="button"][data-variant="outline"],
@@ -927,7 +960,9 @@
     padding: 0.375rem 0.625rem;
     border-radius: 0.375rem;
     color: var(--popover-foreground);
-    transition: background-color 120ms ease, color 120ms ease;
+    transition:
+      background-color 120ms ease,
+      color 120ms ease;
   }
 
   [data-slot="dropdown-menu-item"]:hover,
@@ -975,7 +1010,15 @@
     color: var(--sidebar-foreground);
   }
 
-  :is(button, a, input, select, textarea, [role="button"], [role="menuitem"]):focus-visible {
+  :is(
+    button,
+    a,
+    input,
+    select,
+    textarea,
+    [role="button"],
+    [role="menuitem"]
+  ):focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
   }
@@ -987,5 +1030,10 @@
     [data-slot="dropdown-menu-radio-item"] {
       transition-duration: 0.01ms;
     }
+  }
+  *,
+  *::before,
+  *::after {
+    outline-color: transparent !important;
   }
 }
