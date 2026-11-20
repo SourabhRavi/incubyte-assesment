@@ -136,9 +136,12 @@ function EmptyState({ children }: { children: ReactNode }) {
 
 export default function OverviewPage() {
   const [selectedCountry, setSelectedCountry] = useState<Country>(COUNTRIES[0])
-  const [activeRole, setActiveRole] = useState<string | null>(null)
-  const [hoveredRole, setHoveredRole] = useState<string | null>(null)
-  const focusedRole = activeRole ?? hoveredRole
+  const [salaryFocusRole, setSalaryFocusRole] = useState<string | null>(null)
+  const [salaryHoveredRole, setSalaryHoveredRole] = useState<string | null>(null)
+  const [workforceFocusRole, setWorkforceFocusRole] = useState<string | null>(null)
+  const [workforceHoveredRole, setWorkforceHoveredRole] = useState<string | null>(null)
+  const salaryHighlightedRole = salaryFocusRole ?? salaryHoveredRole
+  const workforceHighlightedRole = workforceFocusRole ?? workforceHoveredRole
   const allMarkets = useAllSalarySummaries()
   const summaryQuery = useSalarySummary(selectedCountry)
   const rolesQuery = useJobTitleAverages(selectedCountry)
@@ -197,8 +200,10 @@ export default function OverviewPage() {
               value={selectedCountry}
               onChange={(event) => {
                 setSelectedCountry(event.target.value as Country)
-                setActiveRole(null)
-                setHoveredRole(null)
+                setSalaryFocusRole(null)
+                setSalaryHoveredRole(null)
+                setWorkforceFocusRole(null)
+                setWorkforceHoveredRole(null)
               }}
               selectClassName="h-[43px] w-full rounded-[8px] border-[var(--border)] bg-[var(--card)] pl-[40px] pr-9 text-[12px] font-semibold text-[var(--foreground)] shadow-none focus-visible:border-[var(--primary)] focus-visible:ring-2 focus-visible:ring-[var(--primary)]/15"
             >
@@ -287,10 +292,10 @@ export default function OverviewPage() {
                 <span className="text-[10px] text-[var(--muted-foreground)]">
                   Average annual salary by job title
                 </span>
-                {activeRole && (
+                {salaryFocusRole && (
                   <button
                     type="button"
-                    onClick={() => setActiveRole(null)}
+                    onClick={() => setSalaryFocusRole(null)}
                     className="inline-flex items-center gap-1 text-[10px] font-medium text-[var(--primary)] hover:underline"
                   >
                     Clear focus <X className="size-3" />
@@ -308,19 +313,19 @@ export default function OverviewPage() {
                   <>
                     <div className="flex flex-1 flex-col justify-between gap-2">
                       {roles.map((role, index) => {
-                        const isFocused = focusedRole === role.jobTitle
-                        const isDimmed = Boolean(focusedRole && !isFocused)
+                        const isFocused = salaryHighlightedRole === role.jobTitle
+                        const isDimmed = Boolean(salaryHighlightedRole && !isFocused)
                         return (
                           <button
                             key={role.jobTitle}
                             type="button"
                             onClick={() =>
-                              setActiveRole(activeRole === role.jobTitle ? null : role.jobTitle)
+                              setSalaryFocusRole(salaryFocusRole === role.jobTitle ? null : role.jobTitle)
                             }
-                            onMouseEnter={() => setHoveredRole(role.jobTitle)}
-                            onMouseLeave={() => setHoveredRole(null)}
+                            onMouseEnter={() => setSalaryHoveredRole(role.jobTitle)}
+                            onMouseLeave={() => setSalaryHoveredRole(null)}
                             aria-label={`${role.jobTitle}, average annual salary ${money(role.averageSalary, currency)}. Select to focus this role.`}
-                            aria-pressed={activeRole === role.jobTitle}
+                            aria-pressed={salaryFocusRole === role.jobTitle}
                             className={`group grid w-full grid-cols-[minmax(112px,150px)_minmax(0,1fr)_minmax(92px,112px)] items-center gap-3 rounded-lg border px-2 py-2 text-left transition-all duration-150 focus-visible:ring-2 focus-visible:ring-[var(--primary)]/40 focus-visible:outline-none ${isFocused ? "border-[var(--primary)]/30 bg-[var(--active-surface)] shadow-sm" : "border-transparent hover:border-[var(--border)] hover:bg-[var(--hover-surface)]"}`}
                           >
                             <span
@@ -461,8 +466,8 @@ export default function OverviewPage() {
                       maxBarSize={30}
                       radius={[5, 5, 0, 0]}
                       onClick={(entry) =>
-                        setActiveRole(
-                          activeRole === String(entry.jobTitle)
+                        setWorkforceFocusRole(
+                          workforceFocusRole === String(entry.jobTitle)
                             ? null
                             : String(entry.jobTitle)
                         )
@@ -473,9 +478,9 @@ export default function OverviewPage() {
                         <Cell
                           key={role.jobTitle}
                           fill={COLORS[index % COLORS.length]}
-                          opacity={focusedRole && focusedRole !== role.jobTitle ? 0.22 : 1}
-                          onMouseEnter={() => setHoveredRole(role.jobTitle)}
-                          onMouseLeave={() => setHoveredRole(null)}
+                          opacity={workforceHighlightedRole && workforceHighlightedRole !== role.jobTitle ? 0.22 : 1}
+                          onMouseEnter={() => setWorkforceHoveredRole(role.jobTitle)}
+                          onMouseLeave={() => setWorkforceHoveredRole(null)}
                           cursor="pointer"
                         />
                       ))}
@@ -488,14 +493,14 @@ export default function OverviewPage() {
                   const share = totalRoleEmployees
                     ? (role.employeeCount / totalRoleEmployees) * 100
                     : 0
-                  const selected = focusedRole === role.jobTitle
-                  const pinned = activeRole === role.jobTitle
+                  const selected = workforceHighlightedRole === role.jobTitle
+                  const pinned = workforceFocusRole === role.jobTitle
                   return (
                     <button
                       type="button"
                       key={role.jobTitle}
                       aria-pressed={pinned}
-                      onClick={() => setActiveRole(pinned ? null : role.jobTitle)}
+                      onClick={() => setWorkforceFocusRole(pinned ? null : role.jobTitle)}
                       onMouseEnter={() => setHoveredRole(role.jobTitle)}
                       onMouseLeave={() => setHoveredRole(null)}
                       className={
@@ -521,14 +526,14 @@ export default function OverviewPage() {
               </div>
               <div className="mt-2 flex items-center justify-between border-t border-border pt-2">
                 <p className="text-[10px] text-muted-foreground">
-                  {activeRole
-                    ? "Filtered: " + activeRole
-                    : "Select a bar or role to filter the table"}
+                  {workforceFocusRole
+                    ? "Focused: " + workforceFocusRole
+                    : "Select a bar or role to highlight workforce mix"}
                 </p>
-                {activeRole && (
+                {workforceFocusRole && (
                   <button
                     type="button"
-                    onClick={() => setActiveRole(null)}
+                    onClick={() => setWorkforceFocusRole(null)}
                     className="text-[10px] font-semibold text-primary hover:underline"
                   >
                     Clear filter
@@ -547,9 +552,7 @@ export default function OverviewPage() {
             </h2>
             <p className="mt-[4px] text-[11px] text-[var(--muted-foreground)]">
               {selectedCountry} ·{" "}
-              {activeRole
-                ? "Filtered: " + activeRole
-                : roles.length + " job titles"}
+              {roles.length + " job titles"}
             </p>
           </div>
           <Link
@@ -578,9 +581,7 @@ export default function OverviewPage() {
                 </tr>
               </thead>
               <tbody>
-                {roles
-                  .filter((role) => !activeRole || role.jobTitle === activeRole)
-                  .map((role, index) => (
+                {roles.map((role, index) => (
                     <tr
                       key={role.jobTitle}
                       className="peopleops-table-row border-t border-[var(--border)] hover:bg-[var(--hover-surface)]"
