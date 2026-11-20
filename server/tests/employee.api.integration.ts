@@ -379,6 +379,58 @@ test("employee CRUD, search, listing and salary analytics work against PostgreSQ
       Number(summaryAfterDeleteResponse.body.data.employeeCount),
       countBefore,
     );
+    assert.equal(
+      summaryAfterDeleteResponse.body.data.minSalary == null
+        ? null
+        : Number(summaryAfterDeleteResponse.body.data.minSalary),
+      minBefore,
+      "Soft deletion should restore the country minimum salary",
+    );
+    assert.equal(
+      summaryAfterDeleteResponse.body.data.maxSalary == null
+        ? null
+        : Number(summaryAfterDeleteResponse.body.data.maxSalary),
+      maxBefore,
+      "Soft deletion should restore the country maximum salary",
+    );
+    assert.ok(
+      summaryAfterDeleteResponse.body.data.averageSalary == null
+        ? averageBefore === null
+        : Math.abs(
+            Number(summaryAfterDeleteResponse.body.data.averageSalary) -
+              (averageBefore ?? 0),
+          ) < 0.01,
+      "Soft deletion should restore the country average salary",
+    );
+
+    // Role-level analytics must also return to their original values.
+    const jobAveragesAfterDeleteResponse = await request(app)
+      .get("/api/v1/analytics/job-title-average")
+      .query({ country: "Canada" });
+
+    assert.equal(jobAveragesAfterDeleteResponse.status, 200);
+    const jobGroupsAfterDelete =
+      jobAveragesAfterDeleteResponse.body.data.data;
+    const dataAnalystAfterDelete = jobGroupsAfterDelete.find(
+      (group: { jobTitle: string }) => group.jobTitle === "Data Analyst",
+    );
+
+    if (jobCountBefore === 0) {
+      assert.equal(dataAnalystAfterDelete, undefined);
+    } else {
+      assert.ok(dataAnalystAfterDelete);
+      assert.equal(
+        Number(dataAnalystAfterDelete.employeeCount),
+        jobCountBefore,
+      );
+      assert.ok(
+        Math.abs(
+          Number(dataAnalystAfterDelete.averageSalary) -
+            (jobAverageBefore ?? 0),
+        ) < 0.01,
+        "Soft deletion should restore the role average salary",
+      );
+    }
   } finally {
     // Clean up if an assertion fails before normal deletion.
     if (employeeId) {

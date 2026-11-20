@@ -14,12 +14,26 @@ export default function AppLayout() {
   const isEmployeesPage = pathname === "/employees"
   const { theme, setTheme } = useTheme()
   const isDark = theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-  const [searchValue, setSearchValue] = useState(() => new URLSearchParams(search).get("search") ?? "")
-  const searchRef = useRef<HTMLInputElement>(null)
+  const locationKey = `${pathname}${search}`
+  const [searchState, setSearchState] = useState(() => ({
+    locationKey,
+    value: new URLSearchParams(search).get("search") ?? "",
+  }))
 
-  useEffect(() => {
-    setSearchValue(new URLSearchParams(search).get("search") ?? "")
-  }, [search, pathname])
+  // Derive the input value from navigation changes without an effect-driven
+  // state update. This also keeps browser back/forward navigation in sync.
+  if (searchState.locationKey !== locationKey) {
+    setSearchState({
+      locationKey,
+      value: new URLSearchParams(search).get("search") ?? "",
+    })
+  }
+
+  const searchValue = searchState.value
+  const setSearchValue = (value: string) => {
+    setSearchState((current) => ({ ...current, value }))
+  }
+  const searchRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     const value = searchValue.trim()

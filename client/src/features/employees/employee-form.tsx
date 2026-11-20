@@ -438,15 +438,17 @@ const EmployeeForm = ({
                   >
                     {salaryDelta > 0 ? "↑" : salaryDelta < 0 ? "↓" : "•"}
                     {salaryDelta > 0 ? "+" : ""}
-                    {new Intl.NumberFormat("en-IN", {
-                      maximumFractionDigits: 2,
-                    }).format(salaryDelta)}
-                    %
-                    {salaryDelta > 0
-                      ? " increase"
-                      : salaryDelta < 0
-                        ? " decrease"
-                        : " unchanged"}
+                    <span>
+                      {new Intl.NumberFormat("en-IN", {
+                        maximumFractionDigits: 2,
+                      }).format(salaryDelta)}
+                      %
+                      {salaryDelta > 0
+                        ? " increase"
+                        : salaryDelta < 0
+                          ? " decrease"
+                          : " unchanged"}
+                    </span>
                   </span>
                 </div>
               </div>
