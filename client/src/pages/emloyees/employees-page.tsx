@@ -180,6 +180,7 @@ const EmployeeSearchInput = ({
         value={searchInput}
         onChange={(event) => setSearchInput(event.target.value)}
         className="h-9 pr-9 pl-9 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none"
+        autoFocus
       />
       {search && (
         <button
@@ -189,7 +190,7 @@ const EmployeeSearchInput = ({
             setSearchInput("")
             onCommit("")
           }}
-          className="absolute top-1/2 right-2 flex size-6 -translate-y-1/2 items-center justify-center rounded text-muted-foreground hover:bg-muted hover:text-foreground"
+          className="absolute top-4.5 right-2 flex size-6 -translate-y-1/2 items-center justify-center rounded text-muted-foreground hover:bg-muted hover:text-foreground"
         >
           <X aria-hidden="true" className="size-4" />
         </button>

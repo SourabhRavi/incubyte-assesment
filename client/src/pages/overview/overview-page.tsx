@@ -105,9 +105,7 @@ function MetricCard({
   const styles = metricToneClasses[tone]
 
   return (
-    <section
-      className="peopleops-metric relative flex min-w-0 flex-col overflow-hidden rounded-tr-xl border border-[var(--border)] bg-[var(--card)] p-5 transition-shadow duration-200 hover:shadow-[0_8px_24px_rgb(15_23_42/8%)]"
-    >
+    <section className="peopleops-metric relative flex min-w-0 flex-col overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--card)] p-5 transition-shadow duration-200 hover:shadow-[0_8px_24px_rgb(15_23_42/8%)]">
       <div className="flex min-w-0 items-center justify-between gap-3">
         <p className="truncate text-[13px] font-medium text-[var(--muted-foreground)]">
           {title}
