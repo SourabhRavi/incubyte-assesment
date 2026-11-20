@@ -220,7 +220,7 @@ export default function OverviewPage() {
               {selectedCountry.toUpperCase()} / {currency} · ANNUAL
             </span>
             <span className="text-[10px] text-[var(--muted-foreground)]">
-              Salary figures reflect {selectedCountry} only. Sample data.
+              Salary figures reflect {selectedCountry} only.
             </span>
           </div>
         </div>
@@ -404,7 +404,7 @@ export default function OverviewPage() {
                     </div>
                     <div className="mt-3 border-t border-[var(--border)] pt-2 sm:grid sm:grid-cols-[minmax(112px,150px)_minmax(0,1fr)_minmax(92px,112px)] sm:gap-3">
                       <span className="hidden sm:block" />
-                      <div className="flex justify-between text-[9px] text-[var(--muted-foreground)] tabular-nums [&>span:nth-child(2)]:hidden [&>span:nth-child(4)]:hidden sm:[&>span:nth-child(2)]:inline sm:[&>span:nth-child(4)]:inline">
+                      <div className="flex justify-between text-[9px] text-[var(--muted-foreground)] tabular-nums [&>span:nth-child(2)]:hidden sm:[&>span:nth-child(2)]:inline [&>span:nth-child(4)]:hidden sm:[&>span:nth-child(4)]:inline">
                         {ticks.map((tick) => (
                           <span key={tick}>
                             {compactMoney(axisMax * tick, currency)}
