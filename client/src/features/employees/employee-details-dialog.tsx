@@ -2,7 +2,6 @@ import {
   BriefcaseBusiness,
   CalendarDays,
   Clock3,
-  Fingerprint,
   Mail,
   MapPin,
   Wallet,
@@ -87,7 +86,7 @@ const DetailItem = ({
       <Icon className="size-4" aria-hidden="true" />
     </div>
     <div className="min-w-0 space-y-1">
-      <p className="text-xs font-medium text-muted-foreground">{label}</p>
+      <p className="mb-0 text-xs font-medium text-muted-foreground">{label}</p>
       <p className="text-sm font-medium break-words text-foreground">
         {value || "Not available"}
       </p>
@@ -188,11 +187,11 @@ const EmployeeDetailsDialog = ({
                   label="Country"
                   value={employee.country}
                 />
-                <DetailItem
+                {/* <DetailItem
                   icon={Fingerprint}
                   label="Employee ID"
                   value={employee.id}
-                />
+                /> */}
               </div>
             </section>
 

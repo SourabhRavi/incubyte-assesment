@@ -1,5 +1,12 @@
 import { useState } from "react"
-import { BriefcaseBusiness, CalendarClock, Mail, MapPin, UserRound, Wallet } from "lucide-react"
+import {
+  BriefcaseBusiness,
+  CalendarClock,
+  Mail,
+  MapPin,
+  UserRound,
+  Wallet,
+} from "lucide-react"
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 
 import {
@@ -77,7 +84,8 @@ const EmployeeForm = ({
 
   const formatMoney = (
     amount: number,
-    currencyCode = currency ?? (employee ? COUNTRY_CURRENCIES[employee.country] : "USD")
+    currencyCode = currency ??
+      (employee ? COUNTRY_CURRENCIES[employee.country] : "USD")
   ) =>
     new Intl.NumberFormat("en-IN", {
       style: "currency",
@@ -91,8 +99,12 @@ const EmployeeForm = ({
     return Number.isNaN(date.getTime())
       ? "Not available"
       : new Intl.DateTimeFormat("en-IN", {
-          day: "2-digit", month: "short", year: "numeric",
-          hour: "2-digit", minute: "2-digit", hour12: true,
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
           timeZone: "Asia/Kolkata",
         }).format(date)
   }
@@ -131,7 +143,8 @@ const EmployeeForm = ({
     if (!values.salary.trim()) {
       nextErrors.salary = "Salary is required."
     } else if (!salaryInputValid) {
-      nextErrors.salary = "Enter a valid amount greater than zero with no more than 2 decimal places."
+      nextErrors.salary =
+        "Enter a valid amount greater than zero with no more than 2 decimal places."
     }
 
     setErrors(nextErrors)
@@ -176,7 +189,8 @@ const EmployeeForm = ({
           <div className="min-w-0">
             <p className="text-sm font-medium">Editing employee record</p>
             <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
-              Update the employee's details. Changes are saved to the existing record.
+              Update the employee's details. Changes are saved to the existing
+              record.
             </p>
           </div>
         </div>
@@ -188,14 +202,18 @@ const EmployeeForm = ({
             <UserRound className="size-4" aria-hidden="true" />
           </div>
           <div>
-            <h3 className="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">Personal information</h3>
+            <h3 className="text-[11px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
+              Personal information
+            </h3>
             <p className="hidden">Employee identity and contact details</p>
           </div>
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2">
           <div className={fieldShell}>
-            <label htmlFor="employee-full-name" className={labelClassName}>Full name <span className="text-destructive">*</span></label>
+            <label htmlFor="employee-full-name" className={labelClassName}>
+              Full name <span className="text-destructive">*</span>
+            </label>
             <input
               id="employee-full-name"
               autoComplete="name"
@@ -204,17 +222,31 @@ const EmployeeForm = ({
               onChange={(event) => updateField("fullName", event.target.value)}
               disabled={isSubmitting}
               aria-invalid={Boolean(errors.fullName)}
-              aria-describedby={errors.fullName ? "employee-full-name-error" : undefined}
+              aria-describedby={
+                errors.fullName ? "employee-full-name-error" : undefined
+              }
               placeholder="e.g. Priya Sharma"
               className={inputClassName}
             />
-            {errors.fullName && <p id="employee-full-name-error" className="text-xs text-destructive">{errors.fullName}</p>}
+            {errors.fullName && (
+              <p
+                id="employee-full-name-error"
+                className="text-xs text-destructive"
+              >
+                {errors.fullName}
+              </p>
+            )}
           </div>
 
           <div className={fieldShell}>
-            <label htmlFor="employee-email" className={labelClassName}>Work email <span className="text-destructive">*</span></label>
+            <label htmlFor="employee-email" className={labelClassName}>
+              Work email <span className="text-destructive">*</span>
+            </label>
             <div className="relative">
-              <Mail className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+              <Mail
+                className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground"
+                aria-hidden="true"
+              />
               <input
                 id="employee-email"
                 type="email"
@@ -223,12 +255,18 @@ const EmployeeForm = ({
                 onChange={(event) => updateField("email", event.target.value)}
                 disabled={isSubmitting}
                 aria-invalid={Boolean(errors.email)}
-                aria-describedby={errors.email ? "employee-email-error" : undefined}
+                aria-describedby={
+                  errors.email ? "employee-email-error" : undefined
+                }
                 placeholder="name@company.com"
                 className={`${inputClassName} pl-10`}
               />
             </div>
-            {errors.email && <p id="employee-email-error" className="text-xs text-destructive">{errors.email}</p>}
+            {errors.email && (
+              <p id="employee-email-error" className="text-xs text-destructive">
+                {errors.email}
+              </p>
+            )}
           </div>
         </div>
       </section>
@@ -239,47 +277,86 @@ const EmployeeForm = ({
             <BriefcaseBusiness className="size-4" aria-hidden="true" />
           </div>
           <div>
-            <h3 className="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">Role & location</h3>
+            <h3 className="text-[11px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
+              Role & location
+            </h3>
             <p className="hidden">Position and employing country</p>
           </div>
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2">
           <div className={fieldShell}>
-            <label htmlFor="employee-job-title" className={labelClassName}>Job title <span className="text-destructive">*</span></label>
+            <label htmlFor="employee-job-title" className={labelClassName}>
+              Job title <span className="text-destructive">*</span>
+            </label>
             <NativeSelect
               id="employee-job-title"
               value={values.jobTitle}
-              onChange={(event) => updateField("jobTitle", event.target.value as JobTitle | "")}
+              onChange={(event) =>
+                updateField("jobTitle", event.target.value as JobTitle | "")
+              }
               disabled={isSubmitting}
               aria-invalid={Boolean(errors.jobTitle)}
-              aria-describedby={errors.jobTitle ? "employee-job-title-error" : undefined}
+              aria-describedby={
+                errors.jobTitle ? "employee-job-title-error" : undefined
+              }
               className="w-full"
             >
               <NativeSelectOption value="">Select job title</NativeSelectOption>
-              {JOB_TITLES.map((jobTitle) => <NativeSelectOption key={jobTitle} value={jobTitle}>{jobTitle}</NativeSelectOption>)}
+              {JOB_TITLES.map((jobTitle) => (
+                <NativeSelectOption key={jobTitle} value={jobTitle}>
+                  {jobTitle}
+                </NativeSelectOption>
+              ))}
             </NativeSelect>
-            {errors.jobTitle && <p id="employee-job-title-error" className="text-xs text-destructive">{errors.jobTitle}</p>}
+            {errors.jobTitle && (
+              <p
+                id="employee-job-title-error"
+                className="text-xs text-destructive"
+              >
+                {errors.jobTitle}
+              </p>
+            )}
           </div>
 
           <div className={fieldShell}>
-            <label htmlFor="employee-country" className={labelClassName}>Country <span className="text-destructive">*</span></label>
+            <label htmlFor="employee-country" className={labelClassName}>
+              Country <span className="text-destructive">*</span>
+            </label>
             <div className="relative">
-              <MapPin className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+              <MapPin
+                className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground"
+                aria-hidden="true"
+              />
               <NativeSelect
                 id="employee-country"
                 value={values.country}
-                onChange={(event) => updateField("country", event.target.value as Country | "")}
+                onChange={(event) =>
+                  updateField("country", event.target.value as Country | "")
+                }
                 disabled={isSubmitting}
                 aria-invalid={Boolean(errors.country)}
-                aria-describedby={errors.country ? "employee-country-error" : undefined}
-                className="w-full" selectClassName="pl-10"
+                aria-describedby={
+                  errors.country ? "employee-country-error" : undefined
+                }
+                className="w-full"
               >
                 <NativeSelectOption value="">Select country</NativeSelectOption>
-                {COUNTRIES.map((country) => <NativeSelectOption key={country} value={country}>{country}</NativeSelectOption>)}
+                {COUNTRIES.map((country) => (
+                  <NativeSelectOption key={country} value={country}>
+                    {country}
+                  </NativeSelectOption>
+                ))}
               </NativeSelect>
             </div>
-            {errors.country && <p id="employee-country-error" className="text-xs text-destructive">{errors.country}</p>}
+            {errors.country && (
+              <p
+                id="employee-country-error"
+                className="text-xs text-destructive"
+              >
+                {errors.country}
+              </p>
+            )}
           </div>
         </div>
       </section>
@@ -290,13 +367,17 @@ const EmployeeForm = ({
             <Wallet className="size-4" aria-hidden="true" />
           </div>
           <div>
-            <h3 className="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">Compensation</h3>
+            <h3 className="text-[11px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
+              Compensation
+            </h3>
             <p className="hidden">Annual base salary in local currency</p>
           </div>
         </div>
 
         <div className={fieldShell}>
-          <label htmlFor="employee-salary" className={labelClassName}>Annual salary <span className="text-destructive">*</span></label>
+          <label htmlFor="employee-salary" className={labelClassName}>
+            Annual salary <span className="text-destructive">*</span>
+          </label>
           <div className="flex">
             <div className="flex h-9 min-w-[52px] items-center justify-center rounded-l-md border border-r-0 bg-muted/40 px-3 text-xs font-medium text-muted-foreground">
               {currency ?? "CUR"}
@@ -310,43 +391,76 @@ const EmployeeForm = ({
               onChange={(event) => updateField("salary", event.target.value)}
               disabled={isSubmitting}
               aria-invalid={Boolean(errors.salary)}
-              aria-describedby={errors.salary ? "employee-salary-error" : "employee-salary-help"}
+              aria-describedby={
+                errors.salary ? "employee-salary-error" : "employee-salary-help"
+              }
               placeholder="0.00"
               className={`${inputClassName} min-w-0 rounded-l-none`}
             />
           </div>
-          {errors.salary && <p id="employee-salary-error" className="text-xs text-destructive">{errors.salary}</p>}
-          <p id="employee-salary-help" className="text-xs text-muted-foreground">
-            Currency is automatically set to {currency ?? "the selected country's currency"} based on the employee's country.
+          {errors.salary && (
+            <p id="employee-salary-error" className="text-xs text-destructive">
+              {errors.salary}
+            </p>
+          )}
+          <p
+            id="employee-salary-help"
+            className="text-xs text-muted-foreground"
+          >
+            Currency is automatically set to{" "}
+            {currency ?? "the selected country's currency"} based on the
+            employee's country.
           </p>
 
-          {employee && salaryInputValid && salaryDelta !== null && Number.isFinite(salaryDelta) && (
-            <div className="rounded-md border border-border/70 bg-muted/20 px-3 py-2">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <div className="min-w-0 space-y-1">
-                  <p className="text-xs font-medium text-muted-foreground">Salary change preview</p>
-                  <p className="text-sm font-semibold tabular-nums">
-                    {formatMoney(originalSalary!)}
-                    <span className="mx-2 text-muted-foreground">→</span>
-                    {formatMoney(revisedSalary)}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {salaryDelta === 0 ? "No change to current salary" : `${formatMoney(Math.abs(revisedSalary - originalSalary!))} ${salaryDelta > 0 ? "increase" : "decrease"}`}
-                  </p>
+          {employee &&
+            salaryInputValid &&
+            salaryDelta !== null &&
+            Number.isFinite(salaryDelta) && (
+              <div className="rounded-md border border-border/70 bg-muted/20 px-3 py-2">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="min-w-0 space-y-1">
+                    <p className="text-xs font-medium text-muted-foreground">
+                      Salary change preview
+                    </p>
+                    <p className="text-sm font-semibold tabular-nums">
+                      {formatMoney(originalSalary!)}
+                      <span className="mx-2 text-muted-foreground">→</span>
+                      {formatMoney(revisedSalary)}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {salaryDelta === 0
+                        ? "No change to current salary"
+                        : `${formatMoney(Math.abs(revisedSalary - originalSalary!))} ${salaryDelta > 0 ? "increase" : "decrease"}`}
+                    </p>
+                  </div>
+                  <span
+                    className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold tabular-nums ${salaryDelta > 0 ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400" : salaryDelta < 0 ? "bg-rose-500/10 text-rose-700 dark:text-rose-400" : "bg-muted text-muted-foreground"}`}
+                  >
+                    {salaryDelta > 0 ? "↑" : salaryDelta < 0 ? "↓" : "•"}
+                    {salaryDelta > 0 ? "+" : ""}
+                    {new Intl.NumberFormat("en-IN", {
+                      maximumFractionDigits: 2,
+                    }).format(salaryDelta)}
+                    %
+                    {salaryDelta > 0
+                      ? " increase"
+                      : salaryDelta < 0
+                        ? " decrease"
+                        : " unchanged"}
+                  </span>
                 </div>
-                <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold tabular-nums ${salaryDelta > 0 ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400" : salaryDelta < 0 ? "bg-rose-500/10 text-rose-700 dark:text-rose-400" : "bg-muted text-muted-foreground"}`}>
-                  {salaryDelta > 0 ? "↑" : salaryDelta < 0 ? "↓" : "•"}
-                  {salaryDelta > 0 ? "+" : ""}{new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(salaryDelta)}%
-                  {salaryDelta > 0 ? " increase" : salaryDelta < 0 ? " decrease" : " unchanged"}
-                </span>
               </div>
-            </div>
-          )}
+            )}
 
           {employee && (
             <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
               <CalendarClock className="size-3.5 shrink-0" aria-hidden="true" />
-              <span>Last record update: <span className="font-medium text-foreground">{formatDate(employee.updatedAt)}</span></span>
+              <span>
+                Last record update:{" "}
+                <span className="font-medium text-foreground">
+                  {formatDate(employee.updatedAt)}
+                </span>
+              </span>
             </div>
           )}
         </div>
@@ -366,7 +480,11 @@ const EmployeeForm = ({
           disabled={isSubmitting}
           className="inline-flex h-9 items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50 sm:min-w-36"
         >
-          {isSubmitting ? "Saving..." : employee ? "Save changes" : "Add employee"}
+          {isSubmitting
+            ? "Saving..."
+            : employee
+              ? "Save changes"
+              : "Add employee"}
         </button>
       </div>
     </form>
