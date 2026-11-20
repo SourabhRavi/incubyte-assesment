@@ -501,8 +501,8 @@ export default function OverviewPage() {
                       key={role.jobTitle}
                       aria-pressed={pinned}
                       onClick={() => setWorkforceFocusRole(pinned ? null : role.jobTitle)}
-                      onMouseEnter={() => setHoveredRole(role.jobTitle)}
-                      onMouseLeave={() => setHoveredRole(null)}
+                      onMouseEnter={() => setWorkforceHoveredRole(role.jobTitle)}
+                      onMouseLeave={() => setWorkforceHoveredRole(null)}
                       className={
                         "flex min-w-0 items-center gap-2 rounded-md border px-2 py-1.5 text-left transition-all " +
                         (selected
