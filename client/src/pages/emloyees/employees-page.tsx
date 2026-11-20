@@ -94,12 +94,18 @@ const EmployeeRow = ({
     </td>
 
     <td className="px-5 py-4">
-      <span className="block truncate text-sm" title={employee.jobTitle}>{employee.jobTitle}</span>
+      <span className="block truncate text-sm" title={employee.jobTitle}>
+        {employee.jobTitle}
+      </span>
     </td>
 
-    <td className="px-5 py-4 text-sm"><span className="block truncate" title={employee.country}>{employee.country}</span></td>
+    <td className="px-5 py-4 text-sm">
+      <span className="block truncate" title={employee.country}>
+        {employee.country}
+      </span>
+    </td>
 
-    <td className="whitespace-nowrap px-5 py-4 text-right text-sm font-medium tabular-nums">
+    <td className="px-5 py-4 text-right text-sm font-medium whitespace-nowrap tabular-nums">
       {formatSalary(employee.salary, COUNTRY_CURRENCIES[employee.country])}
     </td>
 
@@ -312,7 +318,7 @@ const EmployeesPage = () => {
           </p>
         </div>
 
-        <div className="flex flex-col items-center gap-2 sm:flex-row">
+        <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={() => void refetch()}
